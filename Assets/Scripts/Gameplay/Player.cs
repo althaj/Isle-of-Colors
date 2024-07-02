@@ -7,7 +7,9 @@ namespace PSG.IsleOfColors.Gameplay
     public class Player : MonoBehaviour
     {
         public string Name { get; set; }
-        public List<PencilColor> Colors { get; private set; } = new List<PencilColor>();
+        public List<PencilColor> Colors { get; private set; }
+
+        [SerializeField] private Map map;
         public PlayerSheet PlayerSheet { get; private set; }
 
         public UnityEvent OnPlayerColorsChanged;
@@ -15,6 +17,14 @@ namespace PSG.IsleOfColors.Gameplay
         private void Awake()
         {
             Name = gameObject.name;
+
+            Colors = new List<PencilColor>();
+            PlayerSheet = new PlayerSheet();
+        }
+
+        private void Start()
+        {
+            PlayerSheet.GenerateMap(map);
         }
 
         public void UseColor(PencilColor color)
@@ -27,7 +37,7 @@ namespace PSG.IsleOfColors.Gameplay
             }
 
             Colors.Remove(color);
-            OnPlayerColorsChanged.Invoke();
+            OnPlayerColorsChanged?.Invoke();
         }
 
         public void AddColor(PencilColor color)
@@ -40,7 +50,7 @@ namespace PSG.IsleOfColors.Gameplay
             }
 
             Colors.Add(color);
-            OnPlayerColorsChanged.Invoke();
+            OnPlayerColorsChanged?.Invoke();
         }
     }
 }
