@@ -20,6 +20,12 @@ namespace PSG.IsleOfColors.Gameplay
 		public UnityEvent<PencilColor> OnColorChanged;
 		public UnityEvent<bool> OnEnabledChanged;
 
+		public PlayerSheetSpace()
+		{
+			OnColorChanged = new UnityEvent<PencilColor>();
+			OnEnabledChanged = new UnityEvent<bool>();
+		}
+
 		public void SetColor(PencilColor color, int moveIndex)
 		{
 			Color = color;
@@ -33,5 +39,11 @@ namespace PSG.IsleOfColors.Gameplay
 		{
 			IsNew = false;
 		}
+
+		public void Undo()
+		{
+			SetColor(null, 0);
+			IsNew = false;
+        }
 	}
 }

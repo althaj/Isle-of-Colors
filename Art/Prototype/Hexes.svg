@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="6.8449984"
-     inkscape:cx="184.07601"
-     inkscape:cy="151.93575"
+     inkscape:zoom="1.2100362"
+     inkscape:cx="319.41193"
+     inkscape:cy="172.72211"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="1912"
@@ -53,42 +53,42 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:4, 2;stroke-opacity:1;stroke-dashoffset:0;stroke-miterlimit:4"
+       style="fill:#fffee5;stroke:#999012;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:4, 2;stroke-opacity:1;stroke-dashoffset:0;stroke-miterlimit:4;fill-opacity:1"
        d="m 51.961524,10 -8.660254,5 v 10 l 8.660254,5 8.660254,-5 V 15 Z"
        id="path850"
        inkscape:export-filename="..\..\Assets\UI\Prototype\Sprites\Hex enabled.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4,2;stroke-dashoffset:1;stroke-opacity:1"
+       style="fill:#fffee5;stroke:#8c8410;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4, 2;stroke-dashoffset:1;stroke-opacity:1;fill-opacity:1"
        d="m 86.60254,10 -8.660254,5 v 10 l 8.660254,5 8.660254,-5 V 15 Z"
        id="path906"
        inkscape:export-filename="..\..\Assets\Sprites\Prototype\Hex enabled 2.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4,2;stroke-dashoffset:2;stroke-opacity:1"
+       style="fill:#fffee5;stroke:#80790e;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4, 2;stroke-dashoffset:2;stroke-opacity:1;fill-opacity:1"
        d="m 121.24356,10 -8.66026,5 v 10 l 8.66026,5 8.66025,-5 V 15 Z"
        id="path908"
        inkscape:export-filename="..\..\Assets\Sprites\Prototype\Hex enabled 3.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4,2;stroke-dashoffset:3;stroke-opacity:1"
+       style="fill:#fffee5;stroke:#736c0d;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4, 2;stroke-dashoffset:3;stroke-opacity:1;fill-opacity:1"
        d="m 155.88458,10 -8.66026,5 v 10 l 8.66026,5 8.66025,-5 V 15 Z"
        id="path910"
        inkscape:export-filename="..\..\Assets\Sprites\Prototype\Hex enabled 4.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4,2;stroke-dashoffset:4;stroke-opacity:1"
+       style="fill:#fffee5;stroke:#80790e;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4, 2;stroke-dashoffset:4;stroke-opacity:1;fill-opacity:1"
        d="m 190.52559,10 -8.66026,5 v 10 l 8.66026,5 8.66025,-5 V 15 Z"
        id="path300"
        inkscape:export-filename="..\..\Assets\UI\Prototype\Sprites\Hex enabled 5.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4,2;stroke-dashoffset:5;stroke-opacity:1"
+       style="fill:#fffee5;stroke:#8c8410;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4, 2;stroke-dashoffset:5;stroke-opacity:1;fill-opacity:1"
        d="m 51.961528,40 -8.66026,5 v 10 l 8.66026,5 8.66025,-5 V 45 Z"
        id="path856"
        inkscape:export-filename="..\..\Assets\UI\Prototype\Sprites\Hex enabled 6.png"

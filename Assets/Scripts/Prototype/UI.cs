@@ -16,17 +16,12 @@ namespace PSG.IsleOfColors.Prototype
 
         private void SetupMap()
         {
-            for (int x = 0; x < player.PlayerSheet.Spaces.Length; x++)
+            for (int y = 0; y < player.PlayerSheet.Spaces.Length; y++)
             {
-                var rowGO = CreateRow(x + 1);
-                for (int y = 0; y < player.PlayerSheet.Spaces[x].Length; y++)
+                var rowGO = CreateRow(y + 1);
+                for (int x = 0; x < player.PlayerSheet.Spaces[y].Length; x++)
                 {
-                    if (player.PlayerSheet.Spaces[x][y] != null)
-                    {
-                        var hex = CreateObject(hexPrefab, y + 1, rowGO, true);
-                    }
-                    else
-                        CreateObject(emptyPrefab, y + 1, rowGO, false);
+                    var hex = CreateObject(player.PlayerSheet.Spaces[y][x], rowGO, x, y);
                 }
             }
         }
@@ -51,13 +46,17 @@ namespace PSG.IsleOfColors.Prototype
             return row;
         }
 
-        private GameObject CreateObject(GameObject prefab, int index, GameObject row, bool isHex)
+        private GameObject CreateObject(PlayerSheetSpace space, GameObject row, int x, int y)
         {
-            GameObject obj = Instantiate(prefab, row.transform);
+            int index = x + 1;
+            bool isHex = space != null;
+            GameObject obj = Instantiate(isHex ? hexPrefab : emptyPrefab, row.transform);
             if (isHex)
             {
                 obj.name = $"Hex {index}";
                 obj.GetComponentInChildren<TextMeshProUGUI>().text = index.ToString();
+                obj.GetComponent<HexButton>().AttachSpace(space);
+                obj.GetComponent<Button>().onClick.AddListener(() => ColorSpace(x, y));
             }
             else
             {
@@ -70,6 +69,26 @@ namespace PSG.IsleOfColors.Prototype
         internal void Initialize()
         {
             player.PlayerSheet.OnMapGenerated.AddListener(SetupMap);
+        }
+
+        public void StartColoring(PencilColor color)
+        {
+            player.PlayerSheet.StartColoring(color);
+        }
+
+        public void ColorSpace(int x, int y)
+        {
+            player.PlayerSheet.SetColor(x, y);
+        }
+
+        public void Undo()
+        {
+            player.PlayerSheet.Undo();
+        }
+
+        public void Confirm()
+        {
+            player.PlayerSheet.Confirm();
         }
     }
 }
