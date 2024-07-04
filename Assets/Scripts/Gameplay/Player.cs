@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,19 +14,6 @@ namespace PSG.IsleOfColors.Gameplay
         public PlayerSheet PlayerSheet { get; private set; }
 
         public UnityEvent OnPlayerColorsChanged;
-
-        private void Awake()
-        {
-            Name = gameObject.name;
-
-            Colors = new List<PencilColor>();
-            PlayerSheet = new PlayerSheet();
-        }
-
-        private void Start()
-        {
-            PlayerSheet.GenerateMap(map);
-        }
 
         public void UseColor(PencilColor color)
         {
@@ -51,6 +39,19 @@ namespace PSG.IsleOfColors.Gameplay
 
             Colors.Add(color);
             OnPlayerColorsChanged?.Invoke();
+        }
+
+        internal void Initialize()
+        {
+            Name = gameObject.name;
+
+            Colors = new List<PencilColor>();
+            PlayerSheet = new PlayerSheet();
+        }
+
+        internal void GenerateMap()
+        {
+            PlayerSheet.GenerateMap(map);
         }
     }
 }

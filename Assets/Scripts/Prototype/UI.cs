@@ -14,11 +14,6 @@ namespace PSG.IsleOfColors.Prototype
 
         [SerializeField] private GameObject hexPanel;
 
-        void Start()
-        {
-            player.PlayerSheet.OnMapGenerated.AddListener(SetupMap);
-        }
-
         private void SetupMap()
         {
             for (int x = 0; x < player.PlayerSheet.Spaces.Length; x++)
@@ -70,6 +65,11 @@ namespace PSG.IsleOfColors.Prototype
             }
 
             return obj;
+        }
+
+        internal void Initialize()
+        {
+            player.PlayerSheet.OnMapGenerated.AddListener(SetupMap);
         }
     }
 }
