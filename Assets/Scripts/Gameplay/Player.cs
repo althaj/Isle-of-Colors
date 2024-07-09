@@ -9,10 +9,9 @@ namespace PSG.IsleOfColors.Gameplay
     {
         public string Name { get => playerName; }
         [SerializeField] private string playerName;
+        [SerializeField] private Map map;
 
         public List<PencilColor> Colors { get; private set; }
-
-        [SerializeField] private Map map;
         public PlayerSheet PlayerSheet { get; private set; }
 
         public UnityEvent OnPlayerColorsChanged;
@@ -52,6 +51,7 @@ namespace PSG.IsleOfColors.Gameplay
         internal void GenerateMap()
         {
             PlayerSheet.GenerateMap(map);
+            GetComponent<GameMap>().CreateMap();
         }
     }
 }

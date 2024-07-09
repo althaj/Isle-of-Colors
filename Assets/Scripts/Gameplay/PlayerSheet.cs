@@ -14,13 +14,6 @@ namespace PSG.IsleOfColors.Gameplay
         private bool isColoring = false;
         private PencilColor coloringColor;
 
-        public UnityEvent OnMapGenerated;
-
-        public PlayerSheet()
-        {
-            OnMapGenerated = new UnityEvent();
-        }
-
         public void GenerateMap(Map map)
         {
             Spaces = new PlayerSheetSpace[map.rows.Count][];
@@ -36,8 +29,6 @@ namespace PSG.IsleOfColors.Gameplay
                         Spaces[y][x] = new PlayerSheetSpace();
                 }
             }
-
-            OnMapGenerated?.Invoke();
         }
 
         public void SetColor(int x, int y)

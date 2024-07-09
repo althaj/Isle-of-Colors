@@ -68,7 +68,7 @@ namespace PSG.IsleOfColors.Prototype
 
         internal void Initialize()
         {
-            player.PlayerSheet.OnMapGenerated.AddListener(SetupMap);
+            //player.PlayerSheet.OnMapGenerated.AddListener(SetupMap);
         }
 
         public void StartColoring(PencilColor color)
