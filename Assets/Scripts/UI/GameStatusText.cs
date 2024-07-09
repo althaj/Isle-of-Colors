@@ -1,7 +1,10 @@
+using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Gameplay.StateMachine;
 using PSG.IsleOfColors.Gameplay.StateMachine.States;
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -18,17 +21,17 @@ namespace PSG.IsleOfColors.UI
 
         private void OnEnable()
         {
-            stateMachine.OnStateChanged.AddListener(OnStateChanged);
+            stateMachine.OnStateDescriptionChanged.AddListener(OnStatusTextChanged);
         }
 
         private void OnDisable()
         {
-            stateMachine.OnStateChanged.RemoveListener(OnStateChanged);
+            stateMachine.OnStateDescriptionChanged.RemoveListener(OnStatusTextChanged);
         }
 
-        private void OnStateChanged(IState newState)
+        private void OnStatusTextChanged(string description)
         {
-            text.text = newState.GetDescription();
+            text.text = description;
         }
     }
 }

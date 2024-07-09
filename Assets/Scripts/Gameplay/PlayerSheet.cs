@@ -1,19 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using Unity.VisualScripting;
-using UnityEngine.Events;
 
 namespace PSG.IsleOfColors.Gameplay
 {
     public class PlayerSheet
     {
         public PlayerSheetSpace[][] Spaces { get; private set; }
-
-        private int currentMoveIndex = 0;
-        private bool isColoring = false;
-        private PencilColor coloringColor;
-
+        
         public void GenerateMap(Map map)
         {
             Spaces = new PlayerSheetSpace[map.rows.Count][];
@@ -31,73 +24,7 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
-        public void SetColor(int x, int y)
-        {
-            if (!isColoring)
-                return;
-
-            if (Spaces[y][x] == null)
-                return;
-
-            Spaces[y][x].SetColor(coloringColor, currentMoveIndex++);
-            UpdateAvailableMoves();
-        }
-
-        public void StartColoring(PencilColor color)
-        {
-            if (isColoring)
-                return;
-
-            isColoring = true;
-            coloringColor = color;
-            UpdateAvailableMoves();
-        }
-
-        public void Undo()
-        {
-            if (!isColoring)
-                return;
-
-            if (currentMoveIndex > 0)
-            {
-                foreach (var spaceY in Spaces)
-                {
-                    foreach (var space in spaceY)
-                    {
-                        if (space != null && space.MoveIndex == currentMoveIndex - 1)
-                            space.Undo();
-                    }
-                }
-
-                currentMoveIndex--;
-            }
-            else
-            {
-                isColoring = false;
-            }
-
-            UpdateAvailableMoves();
-        }
-
-        public void Confirm()
-        {
-            foreach (var spaceY in Spaces)
-            {
-                foreach (var space in spaceY)
-                {
-                    if (space != null && space.IsNew)
-                        space.Confirm();
-                }
-            }
-
-            currentMoveIndex = 0;
-            coloringColor = null;
-            isColoring = false;
-
-            UpdateAvailableMoves();
-        }
-
-        private void UpdateAvailableMoves()
+        internal void UpdateAvailableMoves(bool isColoring, int currentMoveIndex)
         {
             if (isColoring)
             {

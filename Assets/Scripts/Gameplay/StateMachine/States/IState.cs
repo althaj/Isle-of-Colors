@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 {
 	public interface IState

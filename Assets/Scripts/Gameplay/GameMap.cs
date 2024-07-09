@@ -47,6 +47,8 @@ namespace PSG.IsleOfColors.Gameplay
                 obj.transform.localPosition = position;
 
                 obj.name = $"Hex {x} {y}";
+
+                obj.GetComponent<Hex>().AttachSpace(space, player, x, y);
                 return obj;
             }
 

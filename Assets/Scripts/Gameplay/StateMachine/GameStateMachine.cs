@@ -8,7 +8,9 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
     public class GameStateMachine : MonoBehaviour
     {
         private IState currentState;
+
         public UnityEvent<IState> OnStateChanged;
+        public UnityEvent<string> OnStateDescriptionChanged;
 
         private GameManager gameManager;
 
@@ -36,7 +38,6 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
         {
             currentState?.Exit();
 
-
             if (currentState == null)
             {
                 currentState = new SetupState(gameManager.Player1, gameManager.Player2, gameManager.Colors);
@@ -45,15 +46,28 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
             {
                 switch (currentState)
                 {
-                    case SetupState: currentState = new RoundState(); break;
+                    case SetupState: currentState = NewRound(); break;
                     case RoundState:
-                            currentState = gameManager.IsGameFinished() ? new EndGameState() : new RoundState();
-                            break;
+                            currentState = gameManager.IsGameFinished() ? new EndGameState() : NewRound();
+                        break;
                     default: throw new ArgumentException($"NextState: Cannot exit from state {currentState.GetType().Name}.");
                 }
             }
 
             OnStateChanged?.Invoke(currentState);
+            OnDescriptionChanged();
+        }
+
+        private IState NewRound()
+        {
+            var state = new RoundState(gameManager.Player1, gameManager.Player2);
+            state.OnDescriptionChanged.AddListener(OnDescriptionChanged);
+            return state;
+        }
+
+        private void OnDescriptionChanged()
+        {
+            OnStateDescriptionChanged?.Invoke(currentState.GetDescription());
         }
     }
 }

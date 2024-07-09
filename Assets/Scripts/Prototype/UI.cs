@@ -73,22 +73,22 @@ namespace PSG.IsleOfColors.Prototype
 
         public void StartColoring(PencilColor color)
         {
-            player.PlayerSheet.StartColoring(color);
+            player.StartColoring(color);
         }
 
         public void ColorSpace(int x, int y)
         {
-            player.PlayerSheet.SetColor(x, y);
+            player.SetColor(x, y);
         }
 
         public void Undo()
         {
-            player.PlayerSheet.Undo();
+            player.Undo();
         }
 
         public void Confirm()
         {
-            player.PlayerSheet.Confirm();
+            player.Confirm();
         }
     }
 }

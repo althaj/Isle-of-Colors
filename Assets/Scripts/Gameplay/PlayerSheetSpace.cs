@@ -5,7 +5,7 @@ namespace PSG.IsleOfColors.Gameplay
 	public class PlayerSheetSpace
 	{
 		public PencilColor Color { get; private set; }
-		public int MoveIndex { get; private set; } = 0;
+		public int MoveIndex { get; private set; } = -1;
 		public bool IsNew { get; private set; } = false;
 
 		public bool IsEnabled { get => isEnabled; set
@@ -38,11 +38,12 @@ namespace PSG.IsleOfColors.Gameplay
 		public void Confirm()
 		{
 			IsNew = false;
-		}
+			MoveIndex = -1;
+        }
 
 		public void Undo()
 		{
-			SetColor(null, 0);
+			SetColor(null, -1);
 			IsNew = false;
         }
 	}

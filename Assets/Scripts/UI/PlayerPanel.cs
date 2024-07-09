@@ -12,7 +12,7 @@ namespace PSG.IsleOfColors.UI
 
         private Transform colorsPanel;
 
-        private void Start()
+        private void Awake()
         {
             GetComponentInChildren<TextMeshProUGUI>().text = player.Name;
 
@@ -37,6 +37,7 @@ namespace PSG.IsleOfColors.UI
         {
             GameObject button = Instantiate(colorButton, colorsPanel);
             button.GetComponent<Image>().color = color.Color;
+            button.GetComponent<Button>().onClick.AddListener(() => player.StartColoring(color));
         }
     }
 }
