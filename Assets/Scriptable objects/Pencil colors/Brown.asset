@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Brown
   m_EditorClassIdentifier: 
   Name: Brown
+  Color: {r: 0.5377358, g: 0.30597192, b: 0.088777125, a: 1}

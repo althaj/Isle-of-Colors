@@ -7,7 +7,9 @@ namespace PSG.IsleOfColors.Gameplay
 {
     public class Player : MonoBehaviour
     {
-        public string Name { get; set; }
+        public string Name { get => playerName; }
+        [SerializeField] private string playerName;
+
         public List<PencilColor> Colors { get; private set; }
 
         [SerializeField] private Map map;
@@ -43,8 +45,6 @@ namespace PSG.IsleOfColors.Gameplay
 
         internal void Initialize()
         {
-            Name = gameObject.name;
-
             Colors = new List<PencilColor>();
             PlayerSheet = new PlayerSheet();
         }

@@ -6,6 +6,6 @@ namespace PSG.IsleOfColors.Gameplay
 	public class PencilColor : ScriptableObject
 	{
 		public string Name;
-
+		public Color Color;
 	}
 }
