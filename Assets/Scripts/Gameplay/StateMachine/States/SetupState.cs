@@ -14,9 +14,6 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
             player1.Initialize();
             player2.Initialize();
 
-            player1.GenerateMap();
-            player2.GenerateMap();
-
             if (colors.Count != 4)
                 throw new ArgumentException($"SetupState: Incorrect number of colors. Expecting 4, got {colors.Count}.");
 

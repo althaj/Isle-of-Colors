@@ -14,7 +14,6 @@ namespace PSG.IsleOfColors.Prototype
             players.ForEach(p => p.Initialize());
 
             ui.Initialize();
-            players.ForEach(p => p.GenerateMap());
         }
     }
 }

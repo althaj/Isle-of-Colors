@@ -9,27 +9,27 @@ namespace PSG.IsleOfColors.Gameplay
     {
         [SerializeField] private GameObject hexPrefab;
 
-        private Player player;
-
         private float deltaY = Mathf.Cos(Mathf.Deg2Rad * 30);
 
-        private void Start()
-        {
-            player = GetComponent<Player>();
-        }
 
         internal void CreateMap()
         {
+            Player player = GetComponent<Player>();
+
+            Transform parent = new GameObject("Map").transform;
+            parent.SetParent(transform);
+            parent.localPosition = Vector3.zero;
+
             for (int y = 0; y < player.PlayerSheet.Spaces.Length; y++)
             {
                 for (int x = 0; x < player.PlayerSheet.Spaces[y].Length; x++)
                 {
-                    var hex = CreateObject(x, y);
+                    var hex = CreateObject(player, x, y, parent);
                 }
             }
         }
 
-        private GameObject CreateObject(int x, int y)
+        private GameObject CreateObject(Player player, int x, int y, Transform parent)
         {
             var space = player.PlayerSheet.Spaces[y][x];
 
@@ -38,7 +38,7 @@ namespace PSG.IsleOfColors.Gameplay
 
             if (space != null)
             {
-                GameObject obj = Instantiate(hexPrefab, transform);
+                GameObject obj = Instantiate(hexPrefab, parent);
 
                 Vector3 position = new Vector3(startX + x, startY + y * deltaY, 0);
                 if (y % 2 == 1)

@@ -16,7 +16,7 @@ namespace PSG.IsleOfColors.UI
         {
             GetComponentInChildren<TextMeshProUGUI>().text = player.Name;
 
-            // TODO upraviù?
+            // TODO upraviª?
             colorsPanel = transform.GetChild(1);
 
             player.OnPlayerColorsChanged.AddListener(OnPlayerColorsChanged);

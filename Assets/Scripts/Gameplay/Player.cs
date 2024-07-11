@@ -69,10 +69,6 @@ namespace PSG.IsleOfColors.Gameplay
         {
             Colors = new List<PencilColor>();
             PlayerSheet = new PlayerSheet();
-        }
-
-        internal void GenerateMap()
-        {
             PlayerSheet.GenerateMap(map);
             GetComponent<GameMap>().CreateMap();
         }
