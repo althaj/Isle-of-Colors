@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay
 {
@@ -19,7 +21,7 @@ namespace PSG.IsleOfColors.Gameplay
                     if (map.rows[y].Length <= x || map.rows[y][x] == 'x')
                         Spaces[y][x] = null;
                     else
-                        Spaces[y][x] = new PlayerSheetSpace();
+                        Spaces[y][x] = new PlayerSheetSpace(x, y);
                 }
             }
         }
@@ -28,7 +30,7 @@ namespace PSG.IsleOfColors.Gameplay
         {
             if (isColoring)
             {
-                if (currentMoveIndex == 0)
+                if (currentMoveIndex == 0 && maxMoves != 0)
                 {
                     foreach (var spaceY in Spaces)
                     {
@@ -77,6 +79,39 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
+        public List<List<PlayerSheetSpace>> GetAllGroups(PencilColor color)
+        {
+            List<List<PlayerSheetSpace>> result = new();
+
+            foreach (var spaceY in Spaces)
+            {
+                foreach (var space in spaceY)
+                {
+                    if (space == null || result.Any(x => x.Any(y => y.X == space.X && y.Y == space.Y)) || space.Color != color)
+                        continue;
+
+                    result.Add(new());
+                    var group = result.Last();
+                    AddToGroup(group, space);
+                }
+            }
+
+            return result;
+        }
+
+        private void AddToGroup(List<PlayerSheetSpace> group, PlayerSheetSpace space)
+        {
+            if (!group.Contains(space))
+            {
+                group.Add(space);
+
+                foreach (var adjescentSpace in GetAllNeighboursOfColor(space.X, space.Y, space.Color))
+                {
+                    AddToGroup(group, adjescentSpace);
+                }
+            }
+        }
+
         private void ClearAllSpaces()
         {
             foreach (var spaceY in Spaces)
@@ -89,32 +124,51 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
+        private List<PlayerSheetSpace> GetAllNeighboursOfColor(int x, int y, PencilColor color)
+        {
+            bool isEven = y % 2 == 0;
+
+            List<PlayerSheetSpace> result = new();
+            AddHexIfColor(result, isEven ? x - 1 : x, y - 1, color);
+            AddHexIfColor(result, isEven ? x : x + 1, y - 1, color);
+            AddHexIfColor(result, x - 1, y, color);
+            AddHexIfColor(result, x + 1, y, color);
+            AddHexIfColor(result, isEven ? x - 1 : x, y + 1, color);
+            AddHexIfColor(result, isEven ? x : x + 1, y + 1, color);
+
+            return result;
+        }
+
+        private void AddHexIfColor(List<PlayerSheetSpace> list, int x, int y, PencilColor color)
+        {
+            if (!DoesSpaceExist(x, y))
+                return;
+
+            if (Spaces[y][x].Color == color)
+                list.Add(Spaces[y][x]);
+        }
+
         private List<PlayerSheetSpace> GetAllAvailableNeighbours(int x, int y)
         {
             bool isEven = y % 2 == 0;
 
             List<PlayerSheetSpace> result = new();
-            AddHexIfAvailible(result, isEven ? x - 1 : x, y - 1);
-            AddHexIfAvailible(result, isEven ? x : x + 1, y - 1);
-            AddHexIfAvailible(result, x - 1, y);
-            AddHexIfAvailible(result, x + 1, y);
-            AddHexIfAvailible(result, isEven ? x - 1 : x, y + 1);
-            AddHexIfAvailible(result, isEven ? x : x + 1, y + 1);
+            AddHexIfColor(result, isEven ? x - 1 : x, y - 1, null);
+            AddHexIfColor(result, isEven ? x : x + 1, y - 1, null);
+            AddHexIfColor(result, x - 1, y, null);
+            AddHexIfColor(result, x + 1, y, null);
+            AddHexIfColor(result, isEven ? x - 1 : x, y + 1, null);
+            AddHexIfColor(result, isEven ? x : x + 1, y + 1, null);
 
             return result;
         }
 
-        private bool IsAvailableHex(int x, int y)
+        private bool DoesSpaceExist(int x, int y)
         {
             if (y < 0 || y >= Spaces.Length || x < 0 || x >= Spaces[y].Length || Spaces[y][x] == null)
                 return false;
-            return Spaces[y][x].Color == null;
-        }
 
-        private void AddHexIfAvailible(List<PlayerSheetSpace> list, int x, int y)
-        {
-            if (IsAvailableHex(x, y))
-                list.Add(Spaces[y][x]);
+            return true;
         }
     }
 }

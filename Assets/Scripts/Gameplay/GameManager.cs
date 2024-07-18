@@ -22,10 +22,16 @@ namespace PSG.IsleOfColors.Gameplay
         private PencilColor player2Color;
 
         private bool lastRound = false;
+        private bool noMoves = false;
 
         private void Awake()
         {
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
+        }
+
+        public void NoMoves()
+        {
+            noMoves = true;
         }
 
         public bool IsGameFinished()
@@ -33,7 +39,7 @@ namespace PSG.IsleOfColors.Gameplay
             if(lastRound)
                 return true;
 
-            if(Player1.ColorUsage.Any(x => x.Value >= 6) || Player2.ColorUsage.Any(x => x.Value >= 6))
+            if(Player1.ColorUsage.Any(x => x.Value >= 6) || Player2.ColorUsage.Any(x => x.Value >= 6) || noMoves)
                 lastRound = true;
 
             return false;
@@ -68,7 +74,7 @@ namespace PSG.IsleOfColors.Gameplay
 
         public int RollDie()
         {
-            int result = RNGManager.RNGManager.Manager["Game"].NextInt(1, 6);
+            int result = RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
             OnDieRolled?.Invoke(result);
             return result;
         }

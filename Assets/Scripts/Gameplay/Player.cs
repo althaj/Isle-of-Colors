@@ -176,6 +176,13 @@ namespace PSG.IsleOfColors.Gameplay
             isColoring = false;
             currentMoveIndex = 0;
             coloringColor = null;
+
+            if (!PlayerSheet.GetAllGroups(null).Any(x => x.Count >= dieValue))
+            {
+                Debug.Log("No more moves.", gameObject);
+                gameManager.NoMoves();
+                this.dieValue = 0;
+            }
         }
     }
 }
