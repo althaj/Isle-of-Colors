@@ -16,9 +16,11 @@ namespace PSG.IsleOfColors.Gameplay
 
         public List<PencilColor> Colors { get; private set; }
         public PlayerSheet PlayerSheet { get; private set; }
+        public Dictionary<PencilColor, int> ColorUsage { get; private set; }
 
         public UnityEvent OnPlayerColorsChanged;
         public UnityEvent OnPlayerStateChanged;
+        public UnityEvent OnColorUsageChanged;
 
 
         private int dieValue;
@@ -30,7 +32,7 @@ namespace PSG.IsleOfColors.Gameplay
         private GameManager gameManager;
 
         public EPlayerState PlayerState
-        { 
+        {
             get
             {
                 if (turnFinished)
@@ -43,9 +45,28 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
+        void Awake()
+        {
+            gameManager = FindFirstObjectByType<GameManager>();
+
+            ColorUsage = new();
+            foreach (PencilColor color in gameManager.Colors)
+            {
+                ColorUsage.Add(color, 0);
+            }
+        }
+
+        internal void Initialize()
+        {
+            Colors = new List<PencilColor>();
+            PlayerSheet = new PlayerSheet();
+            PlayerSheet.GenerateMap(map);
+            GetComponent<GameMap>().CreateMap();
+        }
+
         public void UseColor(PencilColor color)
         {
-            if(!Colors.Contains(color))
+            if (!Colors.Contains(color))
             {
                 string message = $"UseColor: Player {Name} does not own the color {color}.";
                 Debug.LogError(message, this);
@@ -53,6 +74,8 @@ namespace PSG.IsleOfColors.Gameplay
             }
 
             Colors.Remove(color);
+            ColorUsage[color]++;
+            OnColorUsageChanged?.Invoke();
             OnPlayerColorsChanged?.Invoke();
         }
 
@@ -67,16 +90,6 @@ namespace PSG.IsleOfColors.Gameplay
 
             Colors.Add(color);
             OnPlayerColorsChanged?.Invoke();
-        }
-
-        internal void Initialize()
-        {
-            Colors = new List<PencilColor>();
-            PlayerSheet = new PlayerSheet();
-            PlayerSheet.GenerateMap(map);
-            GetComponent<GameMap>().CreateMap();
-
-            gameManager = FindFirstObjectByType<GameManager>();
         }
 
         public void SetColor(int x, int y)
@@ -132,7 +145,7 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void Confirm()
         {
-            if(PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) != dieValue)
+            if (PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) != dieValue)
                 return;
 
             foreach (var spaceY in PlayerSheet.Spaces)
@@ -152,7 +165,7 @@ namespace PSG.IsleOfColors.Gameplay
             turnFinished = true;
 
             PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, dieValue);
-            
+
             OnPlayerStateChanged.Invoke();
         }
 
