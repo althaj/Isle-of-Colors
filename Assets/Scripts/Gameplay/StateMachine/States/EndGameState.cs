@@ -6,22 +6,22 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
     {
         public void Execute()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void Exit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public string GetDescription()
         {
-            throw new System.NotImplementedException();
+            return "End of the game triggered.";
         }
 
         public bool IsDone()
         {
-            throw new System.NotImplementedException();
+            return false;
         }
     }
 }

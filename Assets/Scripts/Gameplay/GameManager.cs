@@ -1,5 +1,6 @@
 using RNGManager;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +21,8 @@ namespace PSG.IsleOfColors.Gameplay
         private PencilColor player1Color;
         private PencilColor player2Color;
 
+        private bool lastRound = false;
+
         private void Awake()
         {
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
@@ -27,6 +30,12 @@ namespace PSG.IsleOfColors.Gameplay
 
         public bool IsGameFinished()
         {
+            if(lastRound)
+                return true;
+
+            if(Player1.ColorUsage.Any(x => x.Value >= 6) || Player2.ColorUsage.Any(x => x.Value >= 6))
+                lastRound = true;
+
             return false;
         }
 
