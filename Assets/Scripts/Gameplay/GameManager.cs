@@ -1,6 +1,7 @@
 using RNGManager;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace PSG.IsleOfColors.Gameplay
 {
@@ -13,6 +14,8 @@ namespace PSG.IsleOfColors.Gameplay
         public Player Player1 { get => player1; }
         public Player Player2 { get => player2; }
         public List<PencilColor> Colors { get => colors; set => colors = value; }
+
+        public UnityEvent<int> OnDieRolled;
 
         private PencilColor player1Color;
         private PencilColor player2Color;
@@ -34,7 +37,8 @@ namespace PSG.IsleOfColors.Gameplay
                 Player1.UseColor(color);
                 player1Color = color;
             }
-            else
+
+            if (Player2.Colors.Contains(color))
             {
                 Player2.UseColor(color);
                 player2Color = color;
@@ -51,6 +55,13 @@ namespace PSG.IsleOfColors.Gameplay
             Player1.AddColor(player2Color);
             Player2.AddColor(player1Color);
             player1Color = player2Color = null;
+        }
+
+        public int RollDie()
+        {
+            int result = RNGManager.RNGManager.Manager["Game"].NextInt(1, 6);
+            OnDieRolled?.Invoke(result);
+            return result;
         }
     }
 }

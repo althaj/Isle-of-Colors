@@ -6,24 +6,28 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
     {
         public UnityEvent OnDescriptionChanged;
 
+        private GameManager gameManager;
         private Player player1;
         private Player player2;
 
         private bool isDone = false;
         private string description;
 
-        public RoundState(Player player1, Player player2)
+        public RoundState(GameManager gameManager)
         {
             OnDescriptionChanged = new();
 
-            this.player1 = player1;
-            this.player2 = player2;
+            this.gameManager = gameManager;
+            player1 = gameManager.Player1;
+            player2 = gameManager.Player2;
 
             player1.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
             player2.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
 
-            player1.StartTurn();
-            player2.StartTurn();
+            int dieValue = gameManager.RollDie();
+
+            player1.StartTurn(dieValue);
+            player2.StartTurn(dieValue);
 
             OnPlayerStateChanged();
         }

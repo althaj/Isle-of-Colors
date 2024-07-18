@@ -1,6 +1,7 @@
 using PSG.IsleOfColors.Gameplay.StateMachine.States;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using static UnityEditor.VersionControl.Asset;
@@ -20,6 +21,7 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent OnPlayerStateChanged;
 
 
+        private int dieValue;
         private int currentMoveIndex = 0;
         private bool isColoring = false;
         private bool turnFinished = true;
@@ -86,7 +88,7 @@ namespace PSG.IsleOfColors.Gameplay
                 return;
 
             PlayerSheet.Spaces[y][x].SetColor(coloringColor, currentMoveIndex++);
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex);
+            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, dieValue);
         }
 
         public void StartColoring(PencilColor color)
@@ -96,7 +98,7 @@ namespace PSG.IsleOfColors.Gameplay
 
             isColoring = true;
             coloringColor = color;
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex);
+            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, dieValue);
             OnPlayerStateChanged.Invoke();
         }
 
@@ -125,11 +127,14 @@ namespace PSG.IsleOfColors.Gameplay
                 OnPlayerStateChanged.Invoke();
             }
 
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex);
+            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, dieValue);
         }
 
         public void Confirm()
         {
+            if(PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) != dieValue)
+                return;
+
             foreach (var spaceY in PlayerSheet.Spaces)
             {
                 foreach (var space in spaceY)
@@ -146,13 +151,14 @@ namespace PSG.IsleOfColors.Gameplay
             isColoring = false;
             turnFinished = true;
 
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex);
+            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, dieValue);
             
             OnPlayerStateChanged.Invoke();
         }
 
-        public void StartTurn()
+        public void StartTurn(int dieValue)
         {
+            this.dieValue = dieValue;
             turnFinished = false;
             isColoring = false;
             currentMoveIndex = 0;

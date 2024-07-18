@@ -60,7 +60,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
 
         private IState NewRound()
         {
-            var state = new RoundState(gameManager.Player1, gameManager.Player2);
+            var state = new RoundState(gameManager);
             state.OnDescriptionChanged.AddListener(OnDescriptionChanged);
             return state;
         }

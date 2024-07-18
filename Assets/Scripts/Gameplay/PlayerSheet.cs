@@ -6,7 +6,7 @@ namespace PSG.IsleOfColors.Gameplay
     public class PlayerSheet
     {
         public PlayerSheetSpace[][] Spaces { get; private set; }
-        
+
         public void GenerateMap(Map map)
         {
             Spaces = new PlayerSheetSpace[map.rows.Count][];
@@ -24,55 +24,67 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
-        internal void UpdateAvailableMoves(bool isColoring, int currentMoveIndex)
+        internal void UpdateAvailableMoves(bool isColoring, int currentMoveIndex, int maxMoves)
         {
             if (isColoring)
             {
-                if(currentMoveIndex == 0)
+                if (currentMoveIndex == 0)
                 {
                     foreach (var spaceY in Spaces)
                     {
                         foreach (var space in spaceY)
                         {
-                            if(space != null)
+                            if (space != null)
                                 space.IsEnabled = space.Color == null;
                         }
                     }
                 }
                 else
                 {
-                    List<PlayerSheetSpace> spacesToEnable = new();
-                    for (int y = 0; y < Spaces.Length; y++)
+                    if (currentMoveIndex >= maxMoves)
                     {
-                        for (int x = 0; x < Spaces[y].Length; x++)
+                        ClearAllSpaces();
+                    }
+                    else
+                    {
+                        List<PlayerSheetSpace> spacesToEnable = new();
+                        for (int y = 0; y < Spaces.Length; y++)
                         {
-                            if (Spaces[y][x] == null)
-                                continue;
-
-                            Spaces[y][x].IsEnabled = false;
-
-                            if (Spaces[y][x].IsNew)
+                            for (int x = 0; x < Spaces[y].Length; x++)
                             {
-                                spacesToEnable.AddRange(GetAllAvailableNeighbours(x, y));
+                                if (Spaces[y][x] == null)
+                                    continue;
+
+                                Spaces[y][x].IsEnabled = false;
+
+                                if (Spaces[y][x].IsNew)
+                                {
+                                    spacesToEnable.AddRange(GetAllAvailableNeighbours(x, y));
+                                }
                             }
                         }
-                    }
 
-                    foreach(var space in spacesToEnable.Distinct())
-                    {
-                        space.IsEnabled = true;
+                        foreach (var space in spacesToEnable.Distinct())
+                        {
+                            space.IsEnabled = true;
+                        }
                     }
                 }
             }
             else
             {
-                foreach (var spaceY in Spaces)
+                ClearAllSpaces();
+            }
+        }
+
+        private void ClearAllSpaces()
+        {
+            foreach (var spaceY in Spaces)
+            {
+                foreach (var space in spaceY)
                 {
-                    foreach (var space in spaceY)
-                    {
-                        if(space != null)
-                            space.IsEnabled = false;
-                    }
+                    if (space != null)
+                        space.IsEnabled = false;
                 }
             }
         }
