@@ -25,6 +25,8 @@ namespace PSG.IsleOfColors.Gameplay
         private bool turnFinished = true;
         private PencilColor coloringColor;
 
+        private GameManager gameManager;
+
         public EPlayerState PlayerState
         { 
             get
@@ -71,6 +73,8 @@ namespace PSG.IsleOfColors.Gameplay
             PlayerSheet = new PlayerSheet();
             PlayerSheet.GenerateMap(map);
             GetComponent<GameMap>().CreateMap();
+
+            gameManager = FindFirstObjectByType<GameManager>();
         }
 
         public void SetColor(int x, int y)
@@ -135,12 +139,15 @@ namespace PSG.IsleOfColors.Gameplay
                 }
             }
 
+            gameManager.UseColor(coloringColor);
+
             currentMoveIndex = 0;
             coloringColor = null;
             isColoring = false;
             turnFinished = true;
 
             PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex);
+            
             OnPlayerStateChanged.Invoke();
         }
 
