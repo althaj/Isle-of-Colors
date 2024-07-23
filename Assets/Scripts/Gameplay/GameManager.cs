@@ -1,3 +1,4 @@
+using PSG.IsleOfColors.Gameplay.Scoring;
 using RNGManager;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,30 @@ namespace PSG.IsleOfColors.Gameplay
         private bool lastRound = false;
         private bool noMoves = false;
 
+        public IScoring GreenScoring { get; private set; }
+        public IScoring BlueScoring { get; private set; }
+        public IScoring BrownScoring { get; private set; }
+        public IScoring RedScoring { get; private set; }
+
         private void Awake()
         {
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
+        }
+
+        public void SetupScoring()
+        {
+            GreenScoring = new GrassScoring(Colors.Single(x => x.Name.CompareTo("Green") == 0));
+            BlueScoring = new ShoreScoring(Colors.Single(x => x.Name.CompareTo("Blue") == 0));
+            BrownScoring = new BeachScoring(
+                Colors.Single(x => x.Name.CompareTo("Brown") == 0),
+                Colors.Single(x => x.Name.CompareTo("Green") == 0),
+                Colors.Single(x => x.Name.CompareTo("Blue") == 0));
+            RedScoring = new HamletScoring(Colors.Single(x => x.Name.CompareTo("Red") == 0));
+
+            Debug.Log($"Green - {GreenScoring.GetName()}: {GreenScoring.GetDescription()}");
+            Debug.Log($"Blue - {BlueScoring.GetName()}: {BlueScoring.GetDescription()}");
+            Debug.Log($"Brown - {BrownScoring.GetName()}: {BrownScoring.GetDescription()}");
+            Debug.Log($"Red - {RedScoring.GetName()}: {RedScoring.GetDescription()}");
         }
 
         public void NoMoves()

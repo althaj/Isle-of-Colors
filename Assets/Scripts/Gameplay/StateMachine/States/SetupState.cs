@@ -9,8 +9,14 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
     {
         private bool isDone = false;
 
-        public SetupState(Player player1, Player player2, List<PencilColor> colors)
+        public SetupState(GameManager gameManager)
         {
+            gameManager.SetupScoring();
+
+            Player player1 = gameManager.Player1;
+            Player player2 = gameManager.Player2;
+            List<PencilColor> colors = gameManager.Colors;
+
             player1.Initialize();
             player2.Initialize();
 

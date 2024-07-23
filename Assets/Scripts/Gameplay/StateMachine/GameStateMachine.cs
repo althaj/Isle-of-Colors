@@ -40,7 +40,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
 
             if (currentState == null)
             {
-                currentState = new SetupState(gameManager.Player1, gameManager.Player2, gameManager.Colors);
+                currentState = new SetupState(gameManager);
             }
             else
             {

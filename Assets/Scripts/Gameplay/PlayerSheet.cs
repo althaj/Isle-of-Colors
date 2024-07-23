@@ -99,6 +99,34 @@ namespace PSG.IsleOfColors.Gameplay
             return result;
         }
 
+        public List<PlayerSheetSpace> GetEdgeSpaces()
+        {
+            List<PlayerSheetSpace> result = new();
+            foreach (var spaceY in Spaces)
+            {
+                foreach (var space in spaceY)
+                {
+                    if (space != null && GetAllNeighbours(space.X, space.Y).Count < 6)
+                        result.Add(space);
+                }
+            }
+            return result;
+        }
+
+        public List<PlayerSheetSpace> GetAllSpacesOfColor(PencilColor color)
+        {
+            List<PlayerSheetSpace> result = new();
+            foreach (var spaceY in Spaces)
+            {
+                foreach (var space in spaceY)
+                {
+                    if (space != null && space.Color == color)
+                        result.Add(space);
+                }
+            }
+            return result;
+        }
+
         private void AddToGroup(List<PlayerSheetSpace> group, PlayerSheetSpace space)
         {
             if (!group.Contains(space))
@@ -124,7 +152,7 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
-        private List<PlayerSheetSpace> GetAllNeighboursOfColor(int x, int y, PencilColor color)
+        public List<PlayerSheetSpace> GetAllNeighboursOfColor(int x, int y, PencilColor color)
         {
             bool isEven = y % 2 == 0;
 
@@ -147,6 +175,28 @@ namespace PSG.IsleOfColors.Gameplay
             if (Spaces[y][x].Color == color)
                 list.Add(Spaces[y][x]);
         }
+
+        private void AddHexIfExists(List<PlayerSheetSpace> list, int x, int y)
+        {
+            if (DoesSpaceExist(x, y))
+                list.Add(Spaces[y][x]);
+        }
+
+        public List<PlayerSheetSpace> GetAllNeighbours(int x, int y)
+        {
+            bool isEven = y % 2 == 0;
+
+            List<PlayerSheetSpace> result = new();
+            AddHexIfExists(result, isEven ? x - 1 : x, y - 1);
+            AddHexIfExists(result, isEven ? x : x + 1, y - 1);
+            AddHexIfExists(result, x - 1, y);
+            AddHexIfExists(result, x + 1, y);
+            AddHexIfExists(result, isEven ? x - 1 : x, y + 1);
+            AddHexIfExists(result, isEven ? x : x + 1, y + 1);
+
+            return result;
+        }
+
 
         private List<PlayerSheetSpace> GetAllAvailableNeighbours(int x, int y)
         {
