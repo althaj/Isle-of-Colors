@@ -35,15 +35,14 @@ namespace PSG.IsleOfColors.Gameplay
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
         }
 
+        public PencilColor GetColorByName(string name) => Colors.Single(x => x.Name.CompareTo(name) == 0);
+
         public void SetupScoring()
         {
-            GreenScoring = new GrassScoring(Colors.Single(x => x.Name.CompareTo("Green") == 0));
-            BlueScoring = new ShoreScoring(Colors.Single(x => x.Name.CompareTo("Blue") == 0));
-            BrownScoring = new BeachScoring(
-                Colors.Single(x => x.Name.CompareTo("Brown") == 0),
-                Colors.Single(x => x.Name.CompareTo("Green") == 0),
-                Colors.Single(x => x.Name.CompareTo("Blue") == 0));
-            RedScoring = new HamletScoring(Colors.Single(x => x.Name.CompareTo("Red") == 0));
+            GreenScoring = new SwampScoring(GetColorByName("Green"));
+            BlueScoring = new FjordsScoring(GetColorByName("Blue"));
+            BrownScoring = new DesertScoring(GetColorByName("Brown"), GetColorByName("Blue"));
+            RedScoring = new HamletScoring(GetColorByName("Red"));
 
             Debug.Log($"Green - {GreenScoring.GetName()}: {GreenScoring.GetDescription()}");
             Debug.Log($"Blue - {BlueScoring.GetName()}: {BlueScoring.GetDescription()}");

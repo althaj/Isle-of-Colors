@@ -167,6 +167,31 @@ namespace PSG.IsleOfColors.Gameplay
             return result;
         }
 
+        public List<List<PlayerSheetSpace>> GetAllRivers(PencilColor color)
+        {
+            List<List<PlayerSheetSpace>> result = new();
+            var groups = GetAllGroups(color);
+
+            foreach (var group in groups)
+            {
+                bool isRiver = true;
+                foreach (var space in group)
+                {
+                    var neighbours = GetAllNeighboursOfColor(space.X, space.Y, color);
+                    if(neighbours.Count > 2 || neighbours.Count == 0)
+                    {
+                        isRiver = false;
+                        break;
+                    }
+                }
+
+                if(isRiver)
+                    result.Add(group);
+            }
+
+            return result;
+        }
+
         private void AddHexIfColor(List<PlayerSheetSpace> list, int x, int y, PencilColor color)
         {
             if (!DoesSpaceExist(x, y))

@@ -174,7 +174,7 @@ namespace PSG.IsleOfColors.Gameplay
             int greenScore = gameManager.GreenScoring.GetScore(PlayerSheet);
             int brownScore = gameManager.BrownScoring.GetScore(PlayerSheet);
             int redScore = gameManager.RedScoring.GetScore(PlayerSheet);
-            Debug.Log($"{Name} - Blue: {blueScore}. Green: {greenScore}. Brown: {brownScore}. Red: {redScore}. Sum: {blueScore + greenScore + brownScore + redScore}.");
+            Debug.Log($"{Name} - Green: {greenScore}. Blue: {blueScore}. Brown: {brownScore}. Red: {redScore}. Sum: {blueScore + greenScore + brownScore + redScore}.");
         }
 
         public void StartTurn(int dieValue)
