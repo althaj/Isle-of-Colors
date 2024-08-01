@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay
@@ -12,7 +13,7 @@ namespace PSG.IsleOfColors.Gameplay
 
         private bool isEnabled = false;
 
-        public void AttachSpace(PlayerSheetSpace space, Player player, int x, int y)
+        public void Initialize(PlayerSheetSpace space, Player player, int x, int y)
         {
             animator = GetComponent<Animator>();
             sprite = GetComponent<SpriteRenderer>();
@@ -20,6 +21,8 @@ namespace PSG.IsleOfColors.Gameplay
             this.player = player;
             this.x = x;
             this.y = y;
+
+            GetComponentInChildren<TextMeshProUGUI>(true).text = $"{x},{y}";
 
             space.OnColorChanged.AddListener(OnColorChanged);
             space.OnEnabledChanged.AddListener(OnEnabledChanged);
