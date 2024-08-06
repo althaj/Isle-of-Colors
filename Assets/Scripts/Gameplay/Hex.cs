@@ -22,7 +22,7 @@ namespace PSG.IsleOfColors.Gameplay
             this.x = x;
             this.y = y;
 
-            GetComponentInChildren<TextMeshProUGUI>(true).text = $"{x},{y}";
+            GetComponentInChildren<TextMeshProUGUI>(true).text = $"{x},{y}\n{space.Q}";
 
             space.OnColorChanged.AddListener(OnColorChanged);
             space.OnEnabledChanged.AddListener(OnEnabledChanged);

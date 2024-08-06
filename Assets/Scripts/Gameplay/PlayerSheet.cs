@@ -1,12 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay
 {
     public class PlayerSheet
     {
+        private enum LineDirection { Horizontal, Left, Right }
+
         public PlayerSheetSpace[][] Spaces { get; private set; }
 
         public void GenerateMap(Map map)
@@ -178,15 +180,119 @@ namespace PSG.IsleOfColors.Gameplay
                 foreach (var space in group)
                 {
                     var neighbours = GetAllNeighboursOfColor(space.X, space.Y, color);
-                    if(neighbours.Count > 2 || neighbours.Count == 0)
+                    if (neighbours.Count > 2 || neighbours.Count == 0)
                     {
                         isRiver = false;
                         break;
                     }
                 }
 
-                if(isRiver)
+                if (isRiver)
                     result.Add(group);
+            }
+
+            return result;
+        }
+
+        public List<PlayerSheetSpace> GetLongestLine(PlayerSheetSpace space)
+        {
+            List<PlayerSheetSpace> lineHorizontal = GetLine(space, LineDirection.Horizontal);
+            List<PlayerSheetSpace> lineLeft = GetLine(space, LineDirection.Left);
+            List<PlayerSheetSpace> lineRight = GetLine(space, LineDirection.Right);
+
+            if (lineHorizontal.Count > lineLeft.Count && lineHorizontal.Count > lineRight.Count)
+                return lineHorizontal;
+            else if (lineLeft.Count > lineRight.Count)
+                return lineLeft;
+            else
+                return lineRight;
+        }
+
+        public PlayerSheetSpace GetSpace(int x, int y) => DoesSpaceExist(x, y) ? Spaces[y][x] : null;
+
+        public int GetDistanceBetweenGroups(List<PlayerSheetSpace> group1, List<PlayerSheetSpace> group2)
+        {
+            if (group1 == null || group1.Count == 0 || group2 == null || group2.Count == 0)
+                return 0;
+
+            int distance = int.MaxValue;
+
+            foreach (var space1 in group1)
+            {
+                foreach (var space2 in group2)
+                {
+                    var dist = GetDistance(space1, space2);
+                    if (dist < distance)
+                        distance = dist;
+                }
+            }
+
+            return distance;
+        }
+
+        // https://www.redblobgames.com/grids/hexagons/#distances-axial
+        public int GetDistance(PlayerSheetSpace space1, PlayerSheetSpace space2)
+        {
+            return (Mathf.Abs(space1.Q - space2.Q) + Mathf.Abs(space1.Q + space1.Y - space2.Q - space2.Y) + Mathf.Abs(space1.Y - space2.Y)) / 2;
+        }
+
+        private List<PlayerSheetSpace> GetLine(PlayerSheetSpace space, LineDirection direction)
+        {
+            List<PlayerSheetSpace> result = new();
+            PlayerSheetSpace currentSpace = space;
+            bool flippedDirection = false;
+
+            while (currentSpace != null && currentSpace.Color == space.Color)
+            {
+                result.Add(currentSpace);
+                switch (direction)
+                {
+                    case LineDirection.Horizontal:
+                        if (!flippedDirection)
+                        {
+                            currentSpace = GetSpace(currentSpace.X + 1, currentSpace.Y);
+                            if (currentSpace == null || currentSpace.Color != space.Color)
+                            {
+                                flippedDirection = true;
+                                currentSpace = GetSpace(space.X - 1, space.Y);
+                            }
+                        }
+                        else
+                        {
+                            currentSpace = GetSpace(currentSpace.X - 1, currentSpace.Y);
+                        }
+                        break;
+                    case LineDirection.Left:
+                        if (!flippedDirection)
+                        {
+                            currentSpace = GetSpace(currentSpace.X - (currentSpace.Y % 2 == 0 ? 1 : 0), currentSpace.Y + 1);
+                            if (currentSpace == null || currentSpace.Color != space.Color)
+                            {
+                                flippedDirection = true;
+                                currentSpace = GetSpace(space.X + (space.Y % 2 == 0 ? 0 : 1), space.Y - 1);
+                            }
+                        }
+                        else
+                        {
+                            currentSpace = GetSpace(currentSpace.X + (currentSpace.Y % 2 == 0 ? 0 : 1), currentSpace.Y - 1);
+                        }
+                        break;
+                    case LineDirection.Right:
+                        if (!flippedDirection)
+                        {
+                            currentSpace = GetSpace(currentSpace.X + (currentSpace.Y % 2 == 0 ? 0 : 1), currentSpace.Y + 1);
+                            if (currentSpace == null || currentSpace.Color != space.Color)
+                            {
+                                flippedDirection = true;
+                                currentSpace = GetSpace(space.X - (space.Y % 2 == 0 ? 1 : 0), space.Y - 1);
+                            }
+                        }
+                        else
+                        {
+                            currentSpace = GetSpace(currentSpace.X - (currentSpace.Y % 2 == 0 ? 1 : 0), currentSpace.Y - 1);
+                        }
+                        break;
+                }
             }
 
             return result;

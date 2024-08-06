@@ -41,8 +41,8 @@ namespace PSG.IsleOfColors.Gameplay
         {
             GreenScoring = new SwampScoring(GetColorByName("Green"));
             BlueScoring = new FjordsScoring(GetColorByName("Blue"));
-            BrownScoring = new DesertScoring(GetColorByName("Brown"), GetColorByName("Blue"));
-            RedScoring = new HamletScoring(GetColorByName("Red"));
+            BrownScoring = new CavesScoring(GetColorByName("Brown"));
+            RedScoring = new TownScoring(GetColorByName("Red"));
 
             Debug.Log($"Green - {GreenScoring.GetName()}: {GreenScoring.GetDescription()}");
             Debug.Log($"Blue - {BlueScoring.GetName()}: {BlueScoring.GetDescription()}");
@@ -93,9 +93,9 @@ namespace PSG.IsleOfColors.Gameplay
             player1Color = player2Color = null;
         }
 
-        public int RollDie()
+        public int RollDie(int value = 0)
         {
-            int result = RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
+            int result = value > 0 ? value : RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
             OnDieRolled?.Invoke(result);
             return result;
         }

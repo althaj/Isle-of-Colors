@@ -12,6 +12,15 @@ namespace PSG.IsleOfColors.Gameplay
 		public int X { get; private set; }
 		public int Y { get; private set; }
 
+		// https://www.redblobgames.com/grids/hexagons/#conversions-offset
+		public int Q
+		{
+			get
+			{
+				return X - (Y - (Y & 1)) / 2;
+			}
+		}
+
 		public bool IsEnabled
 		{
 			get => isEnabled; set
@@ -21,7 +30,6 @@ namespace PSG.IsleOfColors.Gameplay
 			}
 		}
 		private bool isEnabled = false;
-
 
 		public UnityEvent<PencilColor> OnColorChanged;
 		public UnityEvent<bool> OnEnabledChanged;
