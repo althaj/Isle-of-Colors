@@ -18,6 +18,8 @@ namespace PSG.IsleOfColors.Gameplay
         public List<PencilColor> Colors { get => colors; set => colors = value; }
 
         public UnityEvent<int> OnDieRolled;
+        public UnityEvent<Player, Player> OnCurrentPlayerChanged;
+        public UnityEvent OnScoringSetupFinished;
 
         private PencilColor player1Color;
         private PencilColor player2Color;
@@ -30,24 +32,99 @@ namespace PSG.IsleOfColors.Gameplay
         public IScoring BrownScoring { get; private set; }
         public IScoring RedScoring { get; private set; }
 
+        private Player currentPlayer;
+        private Player otherPlayer;
+
+        public int CurrentDieRoll { get; private set; }
+
         private void Awake()
         {
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
+            SetCurrentPlayer(player1);
         }
 
         public PencilColor GetColorByName(string name) => Colors.Single(x => x.Name.CompareTo(name) == 0);
 
         public void SetupScoring()
         {
-            GreenScoring = new SwampScoring(GetColorByName("Green"));
-            BlueScoring = new FjordsScoring(GetColorByName("Blue"));
-            BrownScoring = new CavesScoring(GetColorByName("Brown"));
-            RedScoring = new TownScoring(GetColorByName("Red"));
+            // Green scoring
+            switch (RNGManager.RNGManager.Manager["Game"].NextInt(1, 4))
+            {
+                case 1:
+                    GreenScoring = new GrassScoring(GetColorByName("Green"));
+                    break;
+                case 2:
+                    GreenScoring = new ForestScoring(GetColorByName("Green"), GetColorByName("Blue"));
+                    break;
 
-            Debug.Log($"Green - {GreenScoring.GetName()}: {GreenScoring.GetDescription()}");
-            Debug.Log($"Blue - {BlueScoring.GetName()}: {BlueScoring.GetDescription()}");
-            Debug.Log($"Brown - {BrownScoring.GetName()}: {BrownScoring.GetDescription()}");
-            Debug.Log($"Red - {RedScoring.GetName()}: {RedScoring.GetDescription()}");
+                default:
+                    GreenScoring = new SwampScoring(GetColorByName("Green"));
+                    break;
+            }
+
+            // Blue scoring
+            switch (RNGManager.RNGManager.Manager["Game"].NextInt(1, 4))
+            {
+                case 1:
+                    BlueScoring = new ShoreScoring(GetColorByName("Blue"));
+                    break;
+                case 2:
+                    BlueScoring = new RiverScoring(GetColorByName("Blue"));
+                    break;
+
+                default:
+                    BlueScoring = new FjordsScoring(GetColorByName("Blue"));
+                    break;
+            }
+
+            // Brown scoring
+            switch (RNGManager.RNGManager.Manager["Game"].NextInt(1, 4))
+            {
+                case 1:
+                    BrownScoring = new BeachScoring(GetColorByName("Brown"), GetColorByName("Green"), GetColorByName("Blue"));
+                    break;
+                case 2:
+                    BrownScoring = new DesertScoring(GetColorByName("Brown"), GetColorByName("Blue"));
+                    break;
+
+                default:
+                    BrownScoring = new CavesScoring(GetColorByName("Brown"));
+                    break;
+            }
+
+            // Red scoring
+            switch (RNGManager.RNGManager.Manager["Game"].NextInt(1, 4))
+            {
+                case 1:
+                    RedScoring = new HamletScoring(GetColorByName("Red"));
+                    break;
+                case 2:
+                    RedScoring = new VillageScoring(GetColorByName("Red"), GetColorByName("Green"), GetColorByName("Blue"), GetColorByName("Brown"));
+                    break;
+
+                default:
+                    RedScoring = new TownScoring(GetColorByName("Red"));
+                    break;
+            }
+
+            OnScoringSetupFinished?.Invoke();
+        }
+
+        public IScoring GetScoring(PencilColor color)
+        {
+            if (GreenScoring != null && GreenScoring.GetColor() == color)
+                return GreenScoring;
+
+            if (BlueScoring != null && BlueScoring.GetColor() == color)
+                return BlueScoring;
+
+            if (BrownScoring != null && BrownScoring.GetColor() == color)
+                return BrownScoring;
+
+            if (RedScoring != null && RedScoring.GetColor() == color)
+                return RedScoring;
+
+            return null;
         }
 
         public void NoMoves()
@@ -57,10 +134,10 @@ namespace PSG.IsleOfColors.Gameplay
 
         public bool IsGameFinished()
         {
-            if(lastRound)
+            if (lastRound)
                 return true;
 
-            if(Player1.ColorUsage.Any(x => x.Value >= 6) || Player2.ColorUsage.Any(x => x.Value >= 6) || noMoves)
+            if (Player1.ColorUsage.Any(x => x.Value >= 6) || Player2.ColorUsage.Any(x => x.Value >= 6) || noMoves)
                 lastRound = true;
 
             return false;
@@ -95,9 +172,38 @@ namespace PSG.IsleOfColors.Gameplay
 
         public int RollDie(int value = 0)
         {
-            int result = value > 0 ? value : RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
-            OnDieRolled?.Invoke(result);
-            return result;
+            CurrentDieRoll = value > 0 ? value : RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
+            OnDieRolled?.Invoke(CurrentDieRoll);
+            return CurrentDieRoll;
+        }
+
+        private void SetCurrentPlayer(Player player)
+        {
+            currentPlayer = player;
+            if (player == player1)
+                otherPlayer = player2;
+            else
+                otherPlayer = player1;
+
+            OnCurrentPlayerChanged?.Invoke(currentPlayer, otherPlayer);
+        }
+
+        public void ChangeCurrentPlayer()
+        {
+            if (currentPlayer == player1)
+                SetCurrentPlayer(player2);
+            else
+                SetCurrentPlayer(player1);
+        }
+
+        public void Confirm()
+        {
+            currentPlayer.Confirm();
+        }
+
+        public void Undo()
+        {
+            currentPlayer.Undo();
         }
     }
 }

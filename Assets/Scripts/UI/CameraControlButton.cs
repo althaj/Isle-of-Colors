@@ -5,33 +5,30 @@ using UnityEngine.UI;
 
 namespace PSG.IsleOfColors.UI
 {
-    public class CameraControl : MonoBehaviour
+    public class CameraControlButton : MonoBehaviour
     {
-        [SerializeField] Transform player1Transform;
-        [SerializeField] Transform player2Transform;
-
-        private Transform target;
+        [SerializeField] private Player player;
+        private GameObject button;
         private GameManager gameManager;
-
-        private void Start()
+        void Start()
         {
+            button = transform.GetChild(0).gameObject;
             gameManager = FindFirstObjectByType<GameManager>();
             gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-
             OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
         {
-            if (currentPlayer == gameManager.Player1)
-                target = player1Transform;
+            if (otherPlayer == player)
+                button.SetActive(true);
             else
-                target = player2Transform;
+                button.SetActive(false);
         }
 
-        private void Update()
+        public void ChangeCurrentPlayer()
         {
-            transform.position = Vector3.Lerp(transform.position, target.position + Vector3.forward * transform.position.z, 1.5f * Time.deltaTime);
+            gameManager.ChangeCurrentPlayer();
         }
     }
 }

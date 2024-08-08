@@ -1,4 +1,6 @@
+using System;
 using PSG.IsleOfColors.Gameplay;
+using PSG.IsleOfColors.Gameplay.Scoring;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,37 +9,47 @@ namespace PSG.IsleOfColors.UI
 {
     public class PlayerPanel : MonoBehaviour
     {
-        [SerializeField] private Player player;
-        [SerializeField] private GameObject colorButton;
+        [SerializeField] private TextMeshProUGUI playerNameText;
+        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private bool isCurrentPlayer;
 
-        private Transform colorsPanel;
+        private GameManager gameManager;
+        private ColorUsagePanel[] colorUsagePanels;
 
-        private void Awake()
+        private void Start()
         {
-            GetComponentInChildren<TextMeshProUGUI>().text = player.Name;
+            gameManager = FindFirstObjectByType<GameManager>();
 
-            // TODO upravit?
-            colorsPanel = transform.GetChild(1);
+            colorUsagePanels = GetComponentsInChildren<ColorUsagePanel>();
+            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
 
-            player.OnPlayerColorsChanged.AddListener(OnPlayerColorsChanged);
+            OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
         }
 
-        private void OnPlayerColorsChanged()
+        private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
         {
-            for (int i = 0; i < colorsPanel.childCount; i++)
+            playerNameText.text = isCurrentPlayer ? currentPlayer.Name : otherPlayer.Name;
+
+            if (isCurrentPlayer)
             {
-                Destroy(colorsPanel.GetChild(i).gameObject);
+                otherPlayer.OnPlayerScoreChanged.RemoveListener(OnPlayerScoreChanged);
+                currentPlayer.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                OnPlayerScoreChanged(currentPlayer.Score);
+            }
+            else
+            {
+                currentPlayer.OnPlayerScoreChanged.RemoveListener(OnPlayerScoreChanged);
+                otherPlayer.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                OnPlayerScoreChanged(otherPlayer.Score);
             }
 
-            foreach (var color in player.Colors)
-                CreateButton(color);
+            foreach (var panel in colorUsagePanels)
+                panel.PlayerChanged(isCurrentPlayer ? currentPlayer : otherPlayer);
         }
 
-        private void CreateButton(PencilColor color)
+        private void OnPlayerScoreChanged(PlayerScore score)
         {
-            GameObject button = Instantiate(colorButton, colorsPanel);
-            button.GetComponent<Image>().color = color.Color;
-            button.GetComponent<Button>().onClick.AddListener(() => player.StartColoring(color));
+            scoreText.text = score.TotalScore.ToString();
         }
     }
 }

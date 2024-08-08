@@ -8,30 +8,26 @@ namespace PSG.IsleOfColors.UI
 {
     public class ColorUsagePanel : MonoBehaviour
     {
-        [SerializeField] private Player player;
-        [SerializeField] private GameObject colorUsagePanelPrefab;
+        private Player player;
+        [SerializeField] private PencilColor color;
 
-        private Dictionary<PencilColor, TextMeshProUGUI> colorUsageTexts;
-
-        private void Start()
+        public void PlayerChanged(Player player)
         {
-            colorUsageTexts = new();
-            foreach (PencilColor color in player.ColorUsage.Keys)
-            {
-                GameObject colorUsagePanel = Instantiate(colorUsagePanelPrefab, transform);
-                colorUsagePanel.name = $"{color.Name} Usage Panel";
-                colorUsagePanel.GetComponent<Image>().color = color.Color;
-                colorUsageTexts.Add(color, colorUsagePanel.GetComponentInChildren<TextMeshProUGUI>());
-            }
+            if(player != null)
+                player.OnColorUsageChanged.RemoveListener(OnColorUsageChanged);
 
+            this.player = player;
             player.OnColorUsageChanged.AddListener(OnColorUsageChanged);
+            OnColorUsageChanged();
         }
 
         private void OnColorUsageChanged()
         {
-            foreach (PencilColor color in player.ColorUsage.Keys)
+            int colorUsage = player.ColorUsage[color];
+
+            for (int i = 0; i < transform.childCount; i++)
             {
-                colorUsageTexts[color].text = player.ColorUsage[color].ToString();
+                transform.GetChild(i).GetComponent<Image>().color = i < colorUsage ? color.Color : Color.white;
             }
         }
     }

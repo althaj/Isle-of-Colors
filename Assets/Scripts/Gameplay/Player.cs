@@ -1,3 +1,4 @@
+using PSG.IsleOfColors.Gameplay.Scoring;
 using PSG.IsleOfColors.Gameplay.StateMachine.States;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent OnPlayerColorsChanged;
         public UnityEvent OnPlayerStateChanged;
         public UnityEvent OnColorUsageChanged;
-        public UnityEvent OnScoreChanged;
+        public UnityEvent<PlayerScore> OnPlayerScoreChanged;
 
 
         private int dieValue;
@@ -31,6 +32,8 @@ namespace PSG.IsleOfColors.Gameplay
         private PencilColor coloringColor;
 
         private GameManager gameManager;
+
+        public PlayerScore Score { get; private set; }
 
         public EPlayerState PlayerState
         {
@@ -55,6 +58,8 @@ namespace PSG.IsleOfColors.Gameplay
             {
                 ColorUsage.Add(color, 0);
             }
+
+            Score = new PlayerScore(gameManager.Colors);
         }
 
         internal void Initialize()
@@ -170,11 +175,11 @@ namespace PSG.IsleOfColors.Gameplay
             OnPlayerStateChanged.Invoke();
 
             // UPDATE SCORES
-            int blueScore = gameManager.BlueScoring.GetScore(PlayerSheet);
-            int greenScore = gameManager.GreenScoring.GetScore(PlayerSheet);
-            int brownScore = gameManager.BrownScoring.GetScore(PlayerSheet);
-            int redScore = gameManager.RedScoring.GetScore(PlayerSheet);
-            Debug.Log($"{Name} - Green: {greenScore}. Blue: {blueScore}. Brown: {brownScore}. Red: {redScore}. Sum: {blueScore + greenScore + brownScore + redScore}.");
+            Score.SetScore(gameManager.GreenScoring.GetColor(), gameManager.GreenScoring.GetScore(PlayerSheet));
+            Score.SetScore(gameManager.BlueScoring.GetColor(), gameManager.BlueScoring.GetScore(PlayerSheet));
+            Score.SetScore(gameManager.BrownScoring.GetColor(), gameManager.BrownScoring.GetScore(PlayerSheet));
+            Score.SetScore(gameManager.RedScoring.GetColor(), gameManager.RedScoring.GetScore(PlayerSheet));
+            OnPlayerScoreChanged?.Invoke(Score);
         }
 
         public void StartTurn(int dieValue)
