@@ -1,5 +1,6 @@
 using PSG.IsleOfColors.Gameplay.Scoring;
 using RNGManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent<int> OnDieRolled;
         public UnityEvent<Player, Player> OnCurrentPlayerChanged;
         public UnityEvent OnScoringSetupFinished;
+        public UnityEvent OnLastRoundStarted;
+        public UnityEvent OnGameEnded;
 
         private PencilColor player1Color;
         private PencilColor player2Color;
@@ -39,8 +42,11 @@ namespace PSG.IsleOfColors.Gameplay
 
         private void Awake()
         {
-            player1.Name = ApplicationManager.Instance.GameOptions.Player1Name;
-            player2.Name = ApplicationManager.Instance.GameOptions.Player2Name;
+            if (!String.IsNullOrWhiteSpace(ApplicationManager.Instance.GameOptions.Player1Name))
+                player1.Name = ApplicationManager.Instance.GameOptions.Player1Name;
+
+            if (!String.IsNullOrWhiteSpace(ApplicationManager.Instance.GameOptions.Player2Name))
+                player2.Name = ApplicationManager.Instance.GameOptions.Player2Name;
 
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
             SetCurrentPlayer(player1);
@@ -138,10 +144,16 @@ namespace PSG.IsleOfColors.Gameplay
         public bool IsGameFinished()
         {
             if (lastRound)
+            {
+                OnGameEnded?.Invoke();
                 return true;
+            }
 
             if (Player1.ColorUsage.Any(x => x.Value >= 6) || Player2.ColorUsage.Any(x => x.Value >= 6) || noMoves)
+            {
+                OnLastRoundStarted?.Invoke();
                 lastRound = true;
+            }
 
             return false;
         }
