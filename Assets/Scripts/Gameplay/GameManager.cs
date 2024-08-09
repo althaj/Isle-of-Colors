@@ -39,6 +39,9 @@ namespace PSG.IsleOfColors.Gameplay
 
         private void Awake()
         {
+            player1.Name = ApplicationManager.Instance.GameOptions.Player1Name;
+            player2.Name = ApplicationManager.Instance.GameOptions.Player2Name;
+
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
             SetCurrentPlayer(player1);
         }

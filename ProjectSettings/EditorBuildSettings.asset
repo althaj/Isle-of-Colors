@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Color test.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/Init.unity
+    guid: 3fe002dab5abb1e47a6b42913b90e568
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 501ca198f95e0504c91cc138527170c7
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
+    guid: 070ce7c5c8b91514aa7f007f44aa40f6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

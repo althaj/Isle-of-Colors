@@ -11,7 +11,7 @@ namespace PSG.IsleOfColors.Gameplay
 {
     public class Player : MonoBehaviour
     {
-        public string Name { get => playerName; }
+        public string Name { get => playerName; set => playerName = value; }
         [SerializeField] private string playerName;
         [SerializeField] private Map map;
 
