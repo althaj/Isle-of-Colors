@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PSG.IsleOfColors.Gameplay.AI;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay.StateMachine.States
@@ -19,6 +20,11 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
             player1.Initialize();
             player2.Initialize();
+
+            if(ApplicationManager.Instance.GameOptions.IsSinglePlayer)
+            {
+                player2.SetBot(new SimpleAI());
+            }
 
             if (colors.Count != 4)
                 throw new ArgumentException($"SetupState: Incorrect number of colors. Expecting 4, got {colors.Count}.");
