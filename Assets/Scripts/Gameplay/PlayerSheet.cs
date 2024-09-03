@@ -9,10 +9,14 @@ namespace PSG.IsleOfColors.Gameplay
     {
         private enum LineDirection { Horizontal, Left, Right }
 
-        public PlayerSheetSpace[][] Spaces { get; private set; }
+        public PlayerSheetSpace[][] Spaces { get; set; }
+
+        private Map map;
 
         public void GenerateMap(Map map)
         {
+            this.map = map;
+
             Spaces = new PlayerSheetSpace[map.rows.Count][];
             for (int y = 0; y < Spaces.Length; y++)
             {
@@ -236,6 +240,55 @@ namespace PSG.IsleOfColors.Gameplay
             return (Mathf.Abs(space1.Q - space2.Q) + Mathf.Abs(space1.Q + space1.Y - space2.Q - space2.Y) + Mathf.Abs(space1.Y - space2.Y)) / 2;
         }
 
+        public void FillInRandomGroup(PencilColor color, int groupSize)
+        {
+            if (groupSize <= 0)
+                return;
+
+            var validGroups = GetAllGroups(null).Where(x => x.Count >= groupSize).ToList();
+
+            if (validGroups.Count == 0)
+                return;
+
+            var selectedGroup = RNGManager.RNGManager.Manager["Game"].NextElement(validGroups);
+            List<PlayerSheetSpace> selectedSpaces = new();
+
+            var spaceToAdd = RNGManager.RNGManager.Manager["Game"].NextElement(selectedGroup);
+            selectedSpaces.Add(spaceToAdd);
+            selectedGroup.Remove(spaceToAdd);
+
+            while (selectedSpaces.Count < groupSize)
+            {
+                var startingSpace = RNGManager.RNGManager.Manager["Game"].NextElement(selectedSpaces);
+                var validNeighbours = GetAllNeighboursOfColor(startingSpace.X, startingSpace.Y, null).Where(x => !selectedSpaces.Contains(x));
+                if (validNeighbours.Count() > 0)
+                {
+                    spaceToAdd = RNGManager.RNGManager.Manager["Game"].NextElement(validNeighbours);
+                    selectedSpaces.Add(spaceToAdd);
+                    selectedGroup.Remove(spaceToAdd);
+                }
+            }
+
+            for (int i = 0; i < selectedSpaces.Count; i++)
+            {
+                Spaces[selectedSpaces[i].Y][selectedSpaces[i].X].SetColor(color, i + 1);
+            }
+        }
+
+        public List<PlayerSheetSpace> GetNewSpaces()
+        {
+            List<PlayerSheetSpace> result = new();
+            foreach (var spaceY in Spaces)
+            {
+                foreach (var space in spaceY)
+                {
+                    if (space != null && space.IsNew)
+                        result.Add(space);
+                }
+            }
+            return result;
+        }
+
         private List<PlayerSheetSpace> GetLine(PlayerSheetSpace space, LineDirection direction)
         {
             List<PlayerSheetSpace> result = new();
@@ -350,6 +403,35 @@ namespace PSG.IsleOfColors.Gameplay
                 return false;
 
             return true;
+        }
+
+        public PlayerSheet GetCopy()
+        {
+            PlayerSheet sheet = new();
+            sheet.GenerateMap(map);
+
+            for (int y = 0; y < Spaces.Length; y++)
+            {
+                for (int x = 0; x < Spaces[y].Length; x++)
+                {
+                    if (Spaces[y][x] == null)
+                    {
+                        sheet.Spaces[y][x] = null;
+                    }
+                    else
+                    {
+                        sheet.Spaces[y][x] = new PlayerSheetSpace(x, y)
+                        {
+                            Color = Spaces[y][x].Color,
+                            IsEnabled = Spaces[y][x].IsEnabled,
+                            IsNew = Spaces[y][x].IsNew,
+                            MoveIndex = Spaces[y][x].MoveIndex
+                        };
+                    }
+                }
+            }
+
+            return sheet;
         }
     }
 }
