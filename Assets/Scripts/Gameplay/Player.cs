@@ -23,7 +23,7 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent OnPlayerColorsChanged;
         public UnityEvent OnPlayerStateChanged;
         public UnityEvent OnColorUsageChanged;
-        public UnityEvent<PlayerScore> OnPlayerScoreChanged;
+        public UnityEvent<Player> OnPlayerScoreChanged;
 
 
         public int DieValue { get; private set; }
@@ -187,7 +187,7 @@ namespace PSG.IsleOfColors.Gameplay
             Score.SetScore(gameManager.BlueScoring.GetColor(), gameManager.BlueScoring.GetScore(PlayerSheet));
             Score.SetScore(gameManager.BrownScoring.GetColor(), gameManager.BrownScoring.GetScore(PlayerSheet));
             Score.SetScore(gameManager.RedScoring.GetColor(), gameManager.RedScoring.GetScore(PlayerSheet));
-            OnPlayerScoreChanged?.Invoke(Score);
+            OnPlayerScoreChanged?.Invoke(this);
         }
 
         public void StartTurn(int dieValue)

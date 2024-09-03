@@ -13,6 +13,8 @@ namespace PSG.IsleOfColors.UI
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private bool isCurrentPlayer;
 
+        private Player currentPlayer;
+
         private GameManager gameManager;
         private ColorUsagePanel[] colorUsagePanels;
 
@@ -21,7 +23,10 @@ namespace PSG.IsleOfColors.UI
             gameManager = FindFirstObjectByType<GameManager>();
 
             colorUsagePanels = GetComponentsInChildren<ColorUsagePanel>();
+
             gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+            gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+            gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
 
             OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
         }
@@ -29,27 +34,25 @@ namespace PSG.IsleOfColors.UI
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
         {
             playerNameText.text = isCurrentPlayer ? currentPlayer.Name : otherPlayer.Name;
+            this.currentPlayer = currentPlayer;
 
             if (isCurrentPlayer)
             {
-                otherPlayer.OnPlayerScoreChanged.RemoveListener(OnPlayerScoreChanged);
-                currentPlayer.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
-                OnPlayerScoreChanged(currentPlayer.Score);
+                OnPlayerScoreChanged(currentPlayer);
             }
             else
             {
-                currentPlayer.OnPlayerScoreChanged.RemoveListener(OnPlayerScoreChanged);
-                otherPlayer.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
-                OnPlayerScoreChanged(otherPlayer.Score);
+                OnPlayerScoreChanged(otherPlayer);
             }
 
             foreach (var panel in colorUsagePanels)
                 panel.PlayerChanged(isCurrentPlayer ? currentPlayer : otherPlayer);
         }
 
-        private void OnPlayerScoreChanged(PlayerScore score)
+        private void OnPlayerScoreChanged(Player player)
         {
-            scoreText.text = score.TotalScore.ToString();
+            if(player == currentPlayer && isCurrentPlayer || player != currentPlayer && !isCurrentPlayer)
+                scoreText.text = player.Score.TotalScore.ToString();
         }
     }
 }

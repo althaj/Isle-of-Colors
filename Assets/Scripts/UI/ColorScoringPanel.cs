@@ -21,6 +21,8 @@ namespace PSG.IsleOfColors.UI
 
         private GameManager gameManager;
 
+        private Player currentPlayer;
+
         private void Awake()
         {
             gameManager = FindFirstObjectByType<GameManager>();
@@ -40,19 +42,23 @@ namespace PSG.IsleOfColors.UI
             if (!isSetupScoring)
             {
                 gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+                gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                
                 OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
             }
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
         {
-            otherPlayer.OnPlayerScoreChanged.RemoveListener(OnPlayerScoreChanged);
-            currentPlayer.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+            this.currentPlayer = currentPlayer;
+            OnPlayerScoreChanged(currentPlayer);
         }
 
-        private void OnPlayerScoreChanged(PlayerScore score)
+        private void OnPlayerScoreChanged(Player currentPlayer)
         {
-            scoreText.text = score.ColorScores[color].ToString();
+            if(this.currentPlayer == currentPlayer)
+                scoreText.text = currentPlayer.Score.ColorScores[color].ToString();
         }
 
         public void OnPointerEnter()
