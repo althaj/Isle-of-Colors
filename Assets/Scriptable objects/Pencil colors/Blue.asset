@@ -13,4 +13,12 @@ MonoBehaviour:
   m_Name: Blue
   m_EditorClassIdentifier: 
   Name: Blue
-  Color: {r: 0.23366857, g: 0.39545205, b: 0.8396226, a: 1}
+  Color: {r: 0.5294118, g: 0.8039216, b: 0.87058824, a: 1}
+  MainSprites:
+  - {fileID: 21300000, guid: 45e8b9e90cccf3d4ba8c38b98866762d, type: 3}
+  - {fileID: 21300000, guid: 9996a49fd31acb645a30653c775d9c2b, type: 3}
+  - {fileID: 21300000, guid: 80c47d3c897520148b9e5c26dc14734b, type: 3}
+  PropSprites:
+  - {fileID: 21300000, guid: 50d8a2da81437b942b9522a8d5151687, type: 3}
+  - {fileID: 21300000, guid: ad5959bbde09de145b1b720f88b8928c, type: 3}
+  - {fileID: 21300000, guid: 1f275afb0370fba40aae2483f2b1aefe, type: 3}

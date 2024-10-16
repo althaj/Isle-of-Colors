@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: Brown
   m_EditorClassIdentifier: 
   Name: Brown
-  Color: {r: 0.5377358, g: 0.30597192, b: 0.088777125, a: 1}
+  Color: {r: 0.9137255, g: 0.7764706, b: 0.6862745, a: 1}
+  MainSprites:
+  - {fileID: 21300000, guid: a866df41f8f9cea46ac8f0366d7b307a, type: 3}
+  - {fileID: 21300000, guid: 77f4fd721dbd64e4eb29ca5875469551, type: 3}
+  - {fileID: 21300000, guid: 07c6eadefc23be041a0873f495e2df02, type: 3}
+  PropSprites: []

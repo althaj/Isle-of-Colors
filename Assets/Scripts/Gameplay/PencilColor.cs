@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay
@@ -7,5 +8,8 @@ namespace PSG.IsleOfColors.Gameplay
 	{
 		public string Name;
 		public Color Color;
+
+		public List<Sprite> MainSprites = new();
+		public List<Sprite> PropSprites = new();
 	}
 }

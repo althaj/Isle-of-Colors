@@ -13,4 +13,12 @@ MonoBehaviour:
   m_Name: Red
   m_EditorClassIdentifier: 
   Name: Red
-  Color: {r: 0.745283, g: 0.17928976, b: 0.17928976, a: 1}
+  Color: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
+  MainSprites:
+  - {fileID: 21300000, guid: ef5a4016349766f468b086c144aac2b6, type: 3}
+  - {fileID: 21300000, guid: 3834947aaf2e94a44b7e8f9353edc90a, type: 3}
+  - {fileID: 21300000, guid: 4cb0a5433bdd172498a3c57a39c125e3, type: 3}
+  PropSprites:
+  - {fileID: 21300000, guid: d20846e97ce5ee5408ff73a5039e52f1, type: 3}
+  - {fileID: 21300000, guid: 26a8608bea9df774f84349ec8941bfa1, type: 3}
+  - {fileID: 21300000, guid: 098b445c0f48ead4fa8d9de86bca678d, type: 3}

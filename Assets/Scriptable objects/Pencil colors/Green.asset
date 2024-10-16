@@ -13,4 +13,11 @@ MonoBehaviour:
   m_Name: Green
   m_EditorClassIdentifier: 
   Name: Green
-  Color: {r: 0.2775454, g: 0.764151, b: 0.29589188, a: 1}
+  Color: {r: 0.5294118, g: 0.87058824, b: 0.6666667, a: 1}
+  MainSprites:
+  - {fileID: 21300000, guid: 7c63ac303ea047c42a9e65d1a44a3b1b, type: 3}
+  - {fileID: 21300000, guid: 9dbbcb8ce66846a448a0ff0377bacea3, type: 3}
+  - {fileID: 21300000, guid: aad4ebb183e3cc8498d864af71168d04, type: 3}
+  PropSprites:
+  - {fileID: 21300000, guid: 74dfae0722b18964da0d0d77658a77b0, type: 3}
+  - {fileID: 21300000, guid: 1d88a05f438b98f44b8032290490852c, type: 3}

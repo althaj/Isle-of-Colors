@@ -25,8 +25,11 @@ namespace PSG.IsleOfColors.Gameplay
 		{
 			get => isEnabled; set
 			{
-				isEnabled = value;
-				OnEnabledChanged?.Invoke(value);
+				if(isEnabled != value)
+				{
+					isEnabled = value;
+					OnEnabledChanged?.Invoke(value);
+				}
 			}
 		}
 		private bool isEnabled = false;
