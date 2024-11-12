@@ -5,11 +5,15 @@ namespace PSG.IsleOfColors.UI.MainMenu
     public class MainMenu : MonoBehaviour
     {
         private GameOptionsPopup gameSettingsPopup;
+        private RulesPopup rulesPopup;
 
         private void Start()
         {
             gameSettingsPopup = FindFirstObjectByType<GameOptionsPopup>();
             gameSettingsPopup.ClosePopup();
+
+            rulesPopup = FindFirstObjectByType<RulesPopup>();
+            rulesPopup.ClosePopup();
         }
 
         public void StartSinglePlayer()
@@ -29,7 +33,7 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
         public void OpenRules()
         {
-            
+            rulesPopup.OpenPopup();
         }
     }
 }
