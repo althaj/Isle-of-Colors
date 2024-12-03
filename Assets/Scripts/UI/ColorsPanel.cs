@@ -1,4 +1,6 @@
 using PSG.IsleOfColors.Gameplay;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,8 +48,9 @@ namespace PSG.IsleOfColors.UI
         private void CreateButton(PencilColor color)
         {
             GameObject button = Instantiate(colorButtonPrefab, transform);
-            button.GetComponent<Image>().color = color.Color;
+            button.GetComponentInChildren<Image>().color = color.Color;
             button.GetComponent<Button>().onClick.AddListener(() => player.StartColoring(color));
+            button.GetComponentInChildren<TextMeshProUGUI>().AddComponent<DieValueText>();
         }
     }
 }

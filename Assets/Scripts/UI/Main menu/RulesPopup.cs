@@ -13,7 +13,6 @@ namespace PSG.IsleOfColors.UI
 
         [SerializeField] private ScrollRect scrollRect;
 
-        [SerializeField] private Button closeButton;
         [SerializeField] private Button previousPageButton;
         [SerializeField] private Button nextPageButton;
 

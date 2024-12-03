@@ -37,6 +37,7 @@ namespace PSG.IsleOfColors.Gameplay
             space.OnEnabledChanged.AddListener(OnEnabledChanged);
 
             baseSpriteRenderer.sprite = RNGManager.RNGManager.Manager["Hex"].NextElement(emptySprites);
+            baseSpriteRenderer.sortingOrder = -space.Y; 
 
             UpdateVisual();
         }

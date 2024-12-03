@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: eefba6a1f6b812a48b865d39fabed0eb
+guid: a2c31bd0b817af04199e19bbf8348602
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4775014873604124373
-    second: Base Hex 3_0
+      213: -1712267390354333470
+    second: Panel - sharp no frame_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,10 +49,10 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.5, y: 0.59546924}
-  spritePixelsToUnits: 216
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 0, y: 56, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Base Hex 3_0
+      name: Panel - sharp no frame_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 216
-        height: 250
+        width: 512
+        height: 547
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5de616a7ab2444240800000000000000
-      internalID: 4775014873604124373
+      spriteID: 2e0e17561edcc38e0800000000000000
+      internalID: -1712267390354333470
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Base Hex 3_0: 4775014873604124373
+      Panel - sharp no frame_0: -1712267390354333470
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
