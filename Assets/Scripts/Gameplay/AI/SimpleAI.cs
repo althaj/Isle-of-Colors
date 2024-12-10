@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using PSG.IsleOfColors.Gameplay.Scoring;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay.AI
