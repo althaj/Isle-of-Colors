@@ -9,6 +9,9 @@ namespace PSG.IsleOfColors
     public class ApplicationManager : MonoBehaviour
     {
         [SerializeField] private bool loadMainMenu;
+        [SerializeField] private string versionString;
+
+        public string VersionString { get => versionString; }
 
         private static ApplicationManager instance;
         public static ApplicationManager Instance
