@@ -220,5 +220,14 @@ namespace PSG.IsleOfColors.Gameplay
         {
             currentPlayer.Undo();
         }
+
+        public void Reset()
+        {
+            lastRound = false;
+            noMoves = false;
+            player1.Reset();
+            player2.Reset();
+            SetupScoring();
+        }
     }
 }

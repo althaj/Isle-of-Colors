@@ -35,7 +35,7 @@ namespace PSG.IsleOfColors
             }
         }
 
-        public GameOptions GameOptions { get; private set; }
+        public GameOptions GameOptions { get; set; }
 
         public void LoadMainMenu()
         {
