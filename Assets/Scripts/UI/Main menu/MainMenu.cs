@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.UI.MainMenu
@@ -7,6 +8,8 @@ namespace PSG.IsleOfColors.UI.MainMenu
         private GameOptionsPopup gameSettingsPopup;
         private RulesPopup rulesPopup;
 
+        [SerializeField] private TextMeshProUGUI versionLabel;
+
         private void Start()
         {
             gameSettingsPopup = FindFirstObjectByType<GameOptionsPopup>();
@@ -14,6 +17,8 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
             rulesPopup = FindFirstObjectByType<RulesPopup>();
             rulesPopup.ClosePopup();
+
+            versionLabel.text = ApplicationManager.Instance.VersionString;
         }
 
         public void StartSinglePlayer()
