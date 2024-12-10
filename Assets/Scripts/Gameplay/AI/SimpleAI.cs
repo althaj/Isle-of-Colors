@@ -15,6 +15,7 @@ namespace PSG.IsleOfColors.Gameplay.AI
         {
             switch (ApplicationManager.Instance.GameOptions.Difficulty)
             {
+                case GameOptions.BotDifficulty.MainMenu : retryCount = 1; break;
                 case GameOptions.BotDifficulty.Easy: retryCount = 75; break;
                 case GameOptions.BotDifficulty.Medium: retryCount = 150; break;
                 case GameOptions.BotDifficulty.Hard: retryCount = 300; break;

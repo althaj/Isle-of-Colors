@@ -208,5 +208,17 @@ namespace PSG.IsleOfColors.Gameplay
             if (ai != null)
                 ai.DoTurn(this);
         }
+
+        public void Reset()
+        {
+            var keys = new List<PencilColor>(ColorUsage.Keys);
+
+            foreach(var key in keys)
+            {
+                ColorUsage[key] = 0;
+            }
+
+            PlayerSheet.Reset();
+        }
     }
 }
