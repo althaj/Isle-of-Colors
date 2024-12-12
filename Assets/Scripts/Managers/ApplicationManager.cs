@@ -1,37 +1,20 @@
 using System;
 using PSG.IsleOfColors.Gameplay;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace PSG.IsleOfColors
+namespace PSG.IsleOfColors.Managers
 {
-    public class ApplicationManager : MonoBehaviour
+    public class ApplicationManager : SingletonManager<ApplicationManager>
     {
         [SerializeField] private bool loadMainMenu;
         [SerializeField] private string versionString;
 
         public string VersionString { get => versionString; }
 
-        private static ApplicationManager instance;
-        public static ApplicationManager Instance
+        public new void Start()
         {
-            get
-            {
-                if (instance == null)
-                    instance = FindFirstObjectByType<ApplicationManager>();
-
-                if (instance == null)
-                    instance = new GameObject("Application Manager", new Type[] { typeof(ApplicationManager) }).GetComponent<ApplicationManager>();
-
-                return instance;
-            }
-        }
-
-        private void Start()
-        {
-            DontDestroyOnLoad(gameObject);
-
+            base.Start();
             if (loadMainMenu)
             {
                 LoadMainMenu();

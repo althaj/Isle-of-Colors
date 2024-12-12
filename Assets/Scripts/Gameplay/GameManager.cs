@@ -1,4 +1,5 @@
 using PSG.IsleOfColors.Gameplay.Scoring;
+using PSG.IsleOfColors.Managers;
 using RNGManager;
 using System;
 using System.Collections.Generic;
