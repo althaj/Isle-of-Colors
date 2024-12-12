@@ -122,7 +122,10 @@ AudioMixerSnapshotController:
   m_Name: Snapshot
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: ac355786759904443b9e44e89d07f5dd
-  m_FloatValues: {}
+  m_FloatValues:
+    484a3a86635528c43b2861f2ac4b5ae7: -14.895567
+    4f7b7d86546c9af4b9f24310167bac38: 1
+    16344737f5eba8a40958f2b182c7589c: -12.498478
   m_TransitionOverrides: {}
 --- !u!244 &576358242686747166
 AudioMixerEffectController:
@@ -158,7 +161,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: In-game sounds
+  m_Name: Ambience
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 422726ace9d619646b4753dc01ed5731
   m_Children: []

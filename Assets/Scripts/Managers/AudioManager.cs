@@ -41,12 +41,13 @@ namespace PSG.IsleOfColors.Managers
             musicAudioSource.dopplerLevel = 0;
             musicAudioSource.minDistance = 500;
             musicAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Master/Music")[0];
+            musicAudioSource.Play();
 
             uiAudioSource = gameObject.AddComponent<AudioSource>();
             uiAudioSource.playOnAwake = false;
             uiAudioSource.dopplerLevel = 0;
             uiAudioSource.minDistance = 500;
-            uiAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Master/In-game sounds")[0];
+            uiAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Master/UI sounds")[0];
         }
 
         public void PlayUISound(UIAudioType audioType)
