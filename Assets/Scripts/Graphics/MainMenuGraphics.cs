@@ -19,11 +19,13 @@ namespace PSG.IsleOfColors.Graphics
         private void Start()
         {
             players = FindObjectsByType<Player>(FindObjectsSortMode.None);
-            ai = new SimpleAI();
-
+            
             ApplicationManager.Instance.GameOptions = new GameOptions{
                 Difficulty = GameOptions.BotDifficulty.MainMenu
             };
+            
+            ai = new SimpleAI();
+
 
             gameManager = FindFirstObjectByType<GameManager>();
             stateMachine = FindFirstObjectByType<GameStateMachine>();
