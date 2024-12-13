@@ -291,7 +291,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
   m_PrefabInstance: {fileID: 1864902250}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1864902251}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -670,7 +670,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
   m_PrefabInstance: {fileID: 1834120559}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1834120560}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -1157,6 +1157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: "D\xE1vid"
   map: {fileID: 11400000, guid: a9a512ded1022484da5421743094bccb, type: 2}
+  disableSound: 1
   OnPlayerColorsChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1729,16 +1730,38 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 461555911}
   m_SourcePrefab: {fileID: 100100000, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
 --- !u!224 &461555909 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5972747357820808935, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
   m_PrefabInstance: {fileID: 461555908}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &461555910 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+  m_PrefabInstance: {fileID: 461555908}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &461555911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461555910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403a353a6c28de54f894dc7a6b71e0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &463931116
 GameObject:
   m_ObjectHideFlags: 0
@@ -2100,6 +2123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: "D\xE1vid"
   map: {fileID: 11400000, guid: a9a512ded1022484da5421743094bccb, type: 2}
+  disableSound: 1
   OnPlayerColorsChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2276,6 +2300,7 @@ GameObject:
   - component: {fileID: 606097072}
   - component: {fileID: 606097071}
   - component: {fileID: 606097070}
+  - component: {fileID: 606097074}
   m_Layer: 5
   m_Name: Player 1 name input
   m_TagString: Untagged
@@ -2390,7 +2415,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 606097074}
+        m_TargetAssemblyTypeName: PSG.IsleOfColors.UI.PlayUISound, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls: []
@@ -2462,6 +2499,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 606097068}
   m_CullTransparentMesh: 1
+--- !u!114 &606097074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606097068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e1c23b9f4376349b1fca79e20da21b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &608900981
 GameObject:
   m_ObjectHideFlags: 0
@@ -3315,6 +3365,7 @@ GameObject:
   - component: {fileID: 693502500}
   - component: {fileID: 693502499}
   - component: {fileID: 693502498}
+  - component: {fileID: 693502502}
   m_Layer: 5
   m_Name: Player 2 name input
   m_TagString: Untagged
@@ -3429,7 +3480,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 693502502}
+        m_TargetAssemblyTypeName: PSG.IsleOfColors.UI.PlayUISound, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls: []
@@ -3501,6 +3564,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 693502496}
   m_CullTransparentMesh: 1
+--- !u!114 &693502502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693502496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e1c23b9f4376349b1fca79e20da21b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &742785068
 GameObject:
   m_ObjectHideFlags: 0
@@ -6377,6 +6453,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Close
       objectReference: {fileID: 0}
+    - target: {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      propertyPath: audioType
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6935,6 +7015,7 @@ GameObject:
   - component: {fileID: 1297597878}
   - component: {fileID: 1297597877}
   - component: {fileID: 1297597876}
+  - component: {fileID: 1297597880}
   m_Layer: 5
   m_Name: Difficulty dropdown
   m_TagString: Untagged
@@ -7046,7 +7127,19 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1297597880}
+        m_TargetAssemblyTypeName: PSG.IsleOfColors.UI.PlayUISound, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1297597878
 MonoBehaviour:
@@ -7086,6 +7179,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1297597874}
   m_CullTransparentMesh: 1
+--- !u!114 &1297597880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297597874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e1c23b9f4376349b1fca79e20da21b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &1378733009
 GameObject:
   m_ObjectHideFlags: 0
@@ -7619,6 +7725,10 @@ PrefabInstance:
     - target: {fileID: 8498035305344373478, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_text
       value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      propertyPath: audioType
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8274,16 +8384,38 @@ PrefabInstance:
       propertyPath: m_text
       value: Multiplayer
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1627120870}
   m_SourcePrefab: {fileID: 100100000, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
 --- !u!224 &1627120868 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5972747357820808935, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
   m_PrefabInstance: {fileID: 1627120867}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1627120869 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+  m_PrefabInstance: {fileID: 1627120867}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1627120870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627120869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403a353a6c28de54f894dc7a6b71e0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &1630521687
 GameObject:
   m_ObjectHideFlags: 0
@@ -9084,7 +9216,8 @@ PrefabInstance:
       propertyPath: m_text
       value: Start game
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -9339,11 +9472,33 @@ PrefabInstance:
       propertyPath: m_text
       value: Previous page
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1834120561}
   m_SourcePrefab: {fileID: 100100000, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+--- !u!1 &1834120560 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+  m_PrefabInstance: {fileID: 1834120559}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1834120561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834120560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403a353a6c28de54f894dc7a6b71e0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1001 &1864902250
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9468,11 +9623,33 @@ PrefabInstance:
       propertyPath: m_text
       value: Next page
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1864902252}
   m_SourcePrefab: {fileID: 100100000, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+--- !u!1 &1864902251 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+  m_PrefabInstance: {fileID: 1864902250}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1864902252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864902251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403a353a6c28de54f894dc7a6b71e0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &1886000156
 GameObject:
   m_ObjectHideFlags: 0
@@ -9577,6 +9754,7 @@ GameObject:
   - component: {fileID: 1901060669}
   - component: {fileID: 1901060671}
   - component: {fileID: 1901060670}
+  - component: {fileID: 1901060672}
   m_Layer: 5
   m_Name: Tutorial toggle
   m_TagString: Untagged
@@ -9671,8 +9849,33 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1901060672}
+        m_TargetAssemblyTypeName: PSG.IsleOfColors.UI.PlayUISound, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
+--- !u!114 &1901060672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901060668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e1c23b9f4376349b1fca79e20da21b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &1949556602
 GameObject:
   m_ObjectHideFlags: 0
@@ -9753,12 +9956,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1949556602}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 50, y: 50, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2113778735}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1999469698
 GameObject:
@@ -10562,16 +10765,38 @@ PrefabInstance:
       propertyPath: m_text
       value: Singleplayer
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2102421132}
   m_SourcePrefab: {fileID: 100100000, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
 --- !u!224 &2102421130 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5972747357820808935, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
   m_PrefabInstance: {fileID: 2102421129}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2102421131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+  m_PrefabInstance: {fileID: 2102421129}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2102421132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102421131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403a353a6c28de54f894dc7a6b71e0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &2113778733
 GameObject:
   m_ObjectHideFlags: 0
@@ -10588,7 +10813,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2113778734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10619,6 +10844,7 @@ Transform:
   - {fileID: 472614850}
   - {fileID: 1201206697}
   - {fileID: 867237806}
+  - {fileID: 1949556604}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2115969250
@@ -10865,11 +11091,23 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 618078034}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 11500000, guid: 97d3c1b2736840c408444dcfb9fc6597, type: 3}
+    - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
@@ -10878,6 +11116,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PSG.IsleOfColors.UI.MainMenu.MainMenu, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: PSG.IsleOfColors.UI.MainMenu.MainMenu, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
@@ -10964,11 +11206,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8888127157547788169, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1579881578183202866}
   m_SourcePrefab: {fileID: 100100000, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+--- !u!1 &1579881578183202865 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
+  m_PrefabInstance: {fileID: 1579881578183202864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1579881578183202866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579881578183202865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403a353a6c28de54f894dc7a6b71e0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -10976,5 +11240,4 @@ SceneRoots:
   - {fileID: 816683106}
   - {fileID: 618078033}
   - {fileID: 2045875455}
-  - {fileID: 1949556604}
   - {fileID: 2113778735}

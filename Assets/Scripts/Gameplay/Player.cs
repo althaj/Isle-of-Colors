@@ -14,6 +14,7 @@ namespace PSG.IsleOfColors.Gameplay
         public string Name { get => playerName; set => playerName = value; }
         [SerializeField] private string playerName;
         [SerializeField] private Map map;
+        [SerializeField] private bool disableSound;
 
         public List<PencilColor> Colors { get; private set; }
         public PlayerSheet PlayerSheet { get; private set; }
@@ -24,6 +25,8 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent OnColorUsageChanged;
         public UnityEvent<Player> OnPlayerScoreChanged;
 
+
+        public bool IsSoundEnabled { get => !disableSound && ai == null; }
 
         public int DieValue { get; private set; }
         private int currentMoveIndex = 0;

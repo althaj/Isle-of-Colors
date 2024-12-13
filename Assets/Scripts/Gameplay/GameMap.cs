@@ -1,6 +1,3 @@
-using PSG.IsleOfColors.Prototype;
-using System;
-using TMPro;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay

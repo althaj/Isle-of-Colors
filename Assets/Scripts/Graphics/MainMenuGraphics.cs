@@ -2,6 +2,7 @@ using System.Collections;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Gameplay.AI;
 using PSG.IsleOfColors.Gameplay.StateMachine;
+using PSG.IsleOfColors.Managers;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Graphics
