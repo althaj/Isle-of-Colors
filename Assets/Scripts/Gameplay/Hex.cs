@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Audio;
 
 namespace PSG.IsleOfColors.Gameplay
 {
-    [RequireComponent(typeof(AudioSource))]
     public class Hex : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer baseSpriteRenderer;
@@ -15,8 +13,6 @@ namespace PSG.IsleOfColors.Gameplay
         [SerializeField] private List<SpriteRenderer> propSpriteRenderers;
 
         [SerializeField] private List<Sprite> emptySprites;
-
-        [SerializeField] private AudioSource colorHexAudioSource;
 
         private Animator animator;
         private Player player;
@@ -58,7 +54,7 @@ namespace PSG.IsleOfColors.Gameplay
         {
             UpdateVisual();
         }
-        
+
         private void OnMouseDown()
         {
             if (isEnabled)
@@ -94,9 +90,6 @@ namespace PSG.IsleOfColors.Gameplay
                     propRenderer.sprite = rngInstance.NextElement(space.Color.PropSprites);
                     propRenderer.enabled = true;
                 }
-
-                if(player.IsSoundEnabled)
-                    colorHexAudioSource.Play();
             }
         }
     }
