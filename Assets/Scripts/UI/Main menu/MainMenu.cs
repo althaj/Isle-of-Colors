@@ -8,6 +8,7 @@ namespace PSG.IsleOfColors.UI.MainMenu
     {
         private GameOptionsPopup gameSettingsPopup;
         private RulesPopup rulesPopup;
+        private SettingsPopup settingsPopup;
 
         [SerializeField] private TextMeshProUGUI versionLabel;
 
@@ -18,6 +19,9 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
             rulesPopup = FindFirstObjectByType<RulesPopup>();
             rulesPopup.ClosePopup();
+
+            settingsPopup = FindFirstObjectByType<SettingsPopup>();
+            settingsPopup.ClosePopup();
 
             versionLabel.text = ApplicationManager.Instance.VersionString;
         }
@@ -34,7 +38,7 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
         public void OpenSettings()
         {
-            
+            settingsPopup.OpenPopup();
         }
 
         public void OpenRules()

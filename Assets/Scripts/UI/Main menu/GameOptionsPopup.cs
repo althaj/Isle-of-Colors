@@ -48,6 +48,8 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
             ClearValidationError();
 
+            LoadPlayerPrefs();
+
             background.SetActive(true);
             popupPanel.SetActive(true);
         }
@@ -56,13 +58,6 @@ namespace PSG.IsleOfColors.UI.MainMenu
         {
             background.SetActive(false);
             popupPanel.SetActive(false);
-
-            LoadPlayerPrefs();
-        }
-
-        public void Cancel()
-        {
-            ClosePopup();
         }
 
         public void Confirm()
