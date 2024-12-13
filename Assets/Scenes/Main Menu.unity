@@ -2300,6 +2300,7 @@ GameObject:
   - component: {fileID: 606097072}
   - component: {fileID: 606097071}
   - component: {fileID: 606097070}
+  - component: {fileID: 606097074}
   m_Layer: 5
   m_Name: Player 1 name input
   m_TagString: Untagged
@@ -2414,7 +2415,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 606097074}
+        m_TargetAssemblyTypeName: PSG.IsleOfColors.UI.PlayUISound, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls: []
@@ -2486,6 +2499,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 606097068}
   m_CullTransparentMesh: 1
+--- !u!114 &606097074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606097068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e1c23b9f4376349b1fca79e20da21b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &608900981
 GameObject:
   m_ObjectHideFlags: 0
@@ -3339,6 +3365,7 @@ GameObject:
   - component: {fileID: 693502500}
   - component: {fileID: 693502499}
   - component: {fileID: 693502498}
+  - component: {fileID: 693502502}
   m_Layer: 5
   m_Name: Player 2 name input
   m_TagString: Untagged
@@ -3453,7 +3480,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 693502502}
+        m_TargetAssemblyTypeName: PSG.IsleOfColors.UI.PlayUISound, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
       m_Calls: []
@@ -3525,6 +3564,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 693502496}
   m_CullTransparentMesh: 1
+--- !u!114 &693502502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693502496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e1c23b9f4376349b1fca79e20da21b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &742785068
 GameObject:
   m_ObjectHideFlags: 0
@@ -6963,6 +7015,7 @@ GameObject:
   - component: {fileID: 1297597878}
   - component: {fileID: 1297597877}
   - component: {fileID: 1297597876}
+  - component: {fileID: 1297597880}
   m_Layer: 5
   m_Name: Difficulty dropdown
   m_TagString: Untagged
@@ -7074,7 +7127,19 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1297597880}
+        m_TargetAssemblyTypeName: PSG.IsleOfColors.UI.PlayUISound, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1297597878
 MonoBehaviour:
@@ -7114,6 +7179,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1297597874}
   m_CullTransparentMesh: 1
+--- !u!114 &1297597880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297597874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e1c23b9f4376349b1fca79e20da21b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &1378733009
 GameObject:
   m_ObjectHideFlags: 0
@@ -9676,6 +9754,7 @@ GameObject:
   - component: {fileID: 1901060669}
   - component: {fileID: 1901060671}
   - component: {fileID: 1901060670}
+  - component: {fileID: 1901060672}
   m_Layer: 5
   m_Name: Tutorial toggle
   m_TagString: Untagged
@@ -9770,8 +9849,33 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1901060672}
+        m_TargetAssemblyTypeName: PSG.IsleOfColors.UI.PlayUISound, Assembly-CSharp
+        m_MethodName: PlayAudio
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
+--- !u!114 &1901060672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901060668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e1c23b9f4376349b1fca79e20da21b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioType: 0
 --- !u!1 &1949556602
 GameObject:
   m_ObjectHideFlags: 0
