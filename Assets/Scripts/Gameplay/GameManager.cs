@@ -1,4 +1,5 @@
 using PSG.IsleOfColors.Gameplay.Scoring;
+using PSG.IsleOfColors.Managers;
 using RNGManager;
 using System;
 using System.Collections.Generic;
@@ -219,6 +220,15 @@ namespace PSG.IsleOfColors.Gameplay
         public void Undo()
         {
             currentPlayer.Undo();
+        }
+
+        public void Reset()
+        {
+            lastRound = false;
+            noMoves = false;
+            player1.Reset();
+            player2.Reset();
+            SetupScoring();
         }
     }
 }
