@@ -8,11 +8,11 @@ namespace PSG.IsleOfColors.UI
     public class CameraControlButton : MonoBehaviour
     {
         [SerializeField] private Player player;
-        private Button button;
+        private GameObject button;
         private GameManager gameManager;
         void Start()
         {
-            button = GetComponent<Button>();
+            button = transform.GetChild(0).gameObject;
             gameManager = FindFirstObjectByType<GameManager>();
             gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
             OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
@@ -21,9 +21,9 @@ namespace PSG.IsleOfColors.UI
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
         {
             if (otherPlayer == player)
-                button.interactable = true;
+                button.SetActive(true);
             else
-                button.interactable = false;
+                button.SetActive(false);
         }
 
         public void ChangeCurrentPlayer()

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PSG.IsleOfColors.Gameplay.Scoring;
-using PSG.IsleOfColors.Managers;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay.AI
@@ -15,7 +15,6 @@ namespace PSG.IsleOfColors.Gameplay.AI
         {
             switch (ApplicationManager.Instance.GameOptions.Difficulty)
             {
-                case GameOptions.BotDifficulty.MainMenu : retryCount = 1; break;
                 case GameOptions.BotDifficulty.Easy: retryCount = 75; break;
                 case GameOptions.BotDifficulty.Medium: retryCount = 150; break;
                 case GameOptions.BotDifficulty.Hard: retryCount = 300; break;

@@ -8,8 +8,7 @@ namespace PSG.IsleOfColors.Gameplay
         {
             Easy = 0,
             Medium = 1,
-            Hard = 2,
-            MainMenu = 3
+            Hard = 2
         }
 
         public string Player1Name { get; set; }

@@ -48,7 +48,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
                 {
                     case SetupState: currentState = NewRound(); break;
                     case RoundState:
-                        currentState = gameManager.IsGameFinished() ? new EndGameState() : NewRound();
+                            currentState = gameManager.IsGameFinished() ? new EndGameState() : NewRound();
                         break;
                     default: throw new ArgumentException($"NextState: Cannot exit from state {currentState.GetType().Name}.");
                 }
@@ -68,11 +68,6 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
         private void OnDescriptionChanged()
         {
             OnStateDescriptionChanged?.Invoke(currentState.GetDescription());
-        }
-
-        public void Reset()
-        {
-            currentState = NewRound();
         }
     }
 }

@@ -433,19 +433,5 @@ namespace PSG.IsleOfColors.Gameplay
 
             return sheet;
         }
-
-        public void Reset()
-        {
-            foreach (var spaceY in Spaces)
-            {
-                foreach (var space in spaceY)
-                {
-                    if (space != null)
-                    {
-                        space.Undo();
-                    }
-                }
-            }
-        }
     }
 }

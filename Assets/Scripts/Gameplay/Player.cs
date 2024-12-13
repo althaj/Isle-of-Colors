@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEditor.VersionControl.Asset;
 
 namespace PSG.IsleOfColors.Gameplay
 {
@@ -14,7 +15,6 @@ namespace PSG.IsleOfColors.Gameplay
         public string Name { get => playerName; set => playerName = value; }
         [SerializeField] private string playerName;
         [SerializeField] private Map map;
-        [SerializeField] private bool disableSound;
 
         public List<PencilColor> Colors { get; private set; }
         public PlayerSheet PlayerSheet { get; private set; }
@@ -25,8 +25,6 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent OnColorUsageChanged;
         public UnityEvent<Player> OnPlayerScoreChanged;
 
-
-        public bool IsSoundEnabled { get => !disableSound && ai == null; }
 
         public int DieValue { get; private set; }
         private int currentMoveIndex = 0;
@@ -209,18 +207,6 @@ namespace PSG.IsleOfColors.Gameplay
 
             if (ai != null)
                 ai.DoTurn(this);
-        }
-
-        public void Reset()
-        {
-            var keys = new List<PencilColor>(ColorUsage.Keys);
-
-            foreach(var key in keys)
-            {
-                ColorUsage[key] = 0;
-            }
-
-            PlayerSheet.Reset();
         }
     }
 }
