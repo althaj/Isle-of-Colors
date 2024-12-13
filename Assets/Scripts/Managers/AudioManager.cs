@@ -26,13 +26,13 @@ namespace PSG.IsleOfColors.Managers
         private AudioMixer mixer;
 
         private void Awake()
-        {            
+        {
             musicResource = Resources.Load<AudioResource>("Audio/Music Resource");
             uiButtonClickResource = Resources.Load<AudioResource>("Audio/UI Button Click Resource");
             confirmResource = Resources.Load<AudioResource>("Audio/Confirm Resource");
             closeResource = Resources.Load<AudioResource>("Audio/Close Resource");
             errorResource = Resources.Load<AudioResource>("Audio/Error Resource");
-            
+
             mixer = Resources.Load<AudioMixer>("Audio/Game Audio Mixer");
 
             musicAudioSource = gameObject.AddComponent<AudioSource>();
@@ -48,6 +48,8 @@ namespace PSG.IsleOfColors.Managers
             uiAudioSource.dopplerLevel = 0;
             uiAudioSource.minDistance = 500;
             uiAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Master/UI sounds")[0];
+
+            ReloadAudioSettings();
         }
 
         public void PlayUISound(UIAudioType audioType)
@@ -66,6 +68,38 @@ namespace PSG.IsleOfColors.Managers
             uiAudioSource.Stop();
             uiAudioSource.resource = resource;
             uiAudioSource.Play();
+        }
+
+        public AudioSettings LoadAudioSettings()
+        {
+            AudioSettings result = new AudioSettings();
+
+            result.MasterVolume = PlayerPrefs.GetFloat("Audio_MasterVolume", -12f);
+            result.MusicVolume = PlayerPrefs.GetFloat("Audio_MusicVolume", -24f);
+            result.UISoundVolume = PlayerPrefs.GetFloat("Audio_UISoundVolume", 0f);
+
+            return result;
+        }
+
+        public void SaveAudioSettings(AudioSettings audioSettings)
+        {
+            PlayerPrefs.SetFloat("Audio_MasterVolume", audioSettings.MasterVolume);
+            PlayerPrefs.SetFloat("Audio_MusicVolume", audioSettings.MusicVolume);
+            PlayerPrefs.SetFloat("Audio_UISoundVolume", audioSettings.UISoundVolume);
+
+            ApplyAudioSettings(audioSettings);
+        }
+
+        public void ApplyAudioSettings(AudioSettings audioSettings)
+        {
+            mixer.FindMatchingGroups("Master")[0].audioMixer.SetFloat("MasterVolume", audioSettings.MasterVolume);
+            mixer.FindMatchingGroups("Master")[0].audioMixer.SetFloat("MusicVolume", audioSettings.MusicVolume);
+            mixer.FindMatchingGroups("Master")[0].audioMixer.SetFloat("UISoundsVolume", audioSettings.UISoundVolume);
+        }
+
+        public void ReloadAudioSettings()
+        {
+            ApplyAudioSettings(LoadAudioSettings());
         }
     }
 }
