@@ -91,6 +91,8 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
             AudioManager.Instance.PlayUISound(UIAudioType.Confirm);
 
+            AnalyticsManager.Instance.GameStarted(options.IsSinglePlayer ? options.Difficulty : null);
+
             ApplicationManager.Instance.StartGame(options);
         }
 

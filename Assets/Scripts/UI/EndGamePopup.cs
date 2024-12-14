@@ -78,6 +78,8 @@ namespace PSG.IsleOfColors.UI
                 totalScore2Background.color = Color.white;
 
             popup.SetActive(true);
+
+            AnalyticsManager.Instance.GameEnded(gameManager);
         }
 
         private void FillColorRow(Player player1, Player player2, string colorName, Image image, TextMeshProUGUI title, TextMeshProUGUI player1Score, TextMeshProUGUI player2Score)
