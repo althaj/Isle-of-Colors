@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using PSG.IsleOfColors.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,6 +34,8 @@ namespace PSG.IsleOfColors.UI
             background.SetActive(true);
             popupPanel.SetActive(true);
             SwitchToPage(0);
+
+            AnalyticsManager.Instance.UserOpenedRulesPopup();
         }
 
         public void ClosePopup()

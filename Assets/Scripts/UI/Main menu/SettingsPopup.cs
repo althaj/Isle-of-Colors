@@ -35,6 +35,8 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
             background.SetActive(true);
             popupPanel.SetActive(true);
+
+            AnalyticsManager.Instance.UserOpenedSettingsPopup();
         }
 
         public void ClosePopup()
@@ -65,6 +67,8 @@ namespace PSG.IsleOfColors.UI.MainMenu
             AudioManager.Instance.SaveAudioSettings(audioSettings);
             background.SetActive(false);
             popupPanel.SetActive(false);
+
+            AnalyticsManager.Instance.UserSavedSettingsPopup(audioSettings);
         }
     }
 }
