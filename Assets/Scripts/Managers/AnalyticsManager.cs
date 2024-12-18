@@ -8,11 +8,11 @@ namespace PSG.IsleOfColors.Managers
 {
     public class AnalyticsManager : SingletonManager<AnalyticsManager>
     {
-        public new void Start()
+        public new async void Start()
         {
             base.Start();
 
-            UnityServices.InitializeAsync();
+            await UnityServices.InitializeAsync();
 
             AnalyticsService.Instance.StartDataCollection();
         }

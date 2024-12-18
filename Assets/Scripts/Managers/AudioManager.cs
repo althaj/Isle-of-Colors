@@ -16,50 +16,77 @@ namespace PSG.IsleOfColors.Managers
         private AudioSource musicAudioSource;
         private AudioSource uiAudioSource;
 
-        private AudioResource musicResource;
+        [SerializeField] private AudioResource[] musicList;
 
-        private AudioResource uiButtonClickResource;
-        private AudioResource confirmResource;
-        private AudioResource closeResource;
-        private AudioResource errorResource;
+        [SerializeField] private AudioResource uiButtonClickClip;
+        [SerializeField] private AudioResource confirmClip;
+        [SerializeField] private AudioResource closeClip;
+        [SerializeField] private AudioResource errorClip;
 
-        private AudioMixer mixer;
+        [SerializeField] private AudioMixer mixer;
 
         private void Awake()
         {
-            musicResource = Resources.Load<AudioResource>("Audio/Music Resource");
-            uiButtonClickResource = Resources.Load<AudioResource>("Audio/UI Button Click Resource");
-            confirmResource = Resources.Load<AudioResource>("Audio/Confirm Resource");
-            closeResource = Resources.Load<AudioResource>("Audio/Close Resource");
-            errorResource = Resources.Load<AudioResource>("Audio/Error Resource");
+            if (mixer == null)
+                mixer = Resources.Load<AudioMixer>("Audio/Game Audio Mixer");
 
-            mixer = Resources.Load<AudioMixer>("Audio/Game Audio Mixer");
+            if (musicList == null || musicList.Length == 0)
+                musicList = Resources.LoadAll<AudioResource>("Audio/Music");
+
+            ReloadAudioSettings();
+
+            if (uiButtonClickClip == null)
+                uiButtonClickClip = Resources.Load<AudioResource>("Audio/Click");
+
+            if (confirmClip == null)
+                confirmClip = Resources.Load<AudioResource>("Audio/Confirm");
+
+            if (closeClip == null)
+                closeClip = Resources.Load<AudioResource>("Audio/Close");
+
+            if (errorClip == null)
+                errorClip = Resources.Load<AudioResource>("Audio/Error");
 
             musicAudioSource = gameObject.AddComponent<AudioSource>();
-            musicAudioSource.loop = true;
-            musicAudioSource.resource = musicResource;
+            musicAudioSource.loop = false;
+            musicAudioSource.playOnAwake = false;
             musicAudioSource.dopplerLevel = 0;
             musicAudioSource.minDistance = 500;
             musicAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Master/Music")[0];
-            musicAudioSource.Play();
+            PlaySong();
 
             uiAudioSource = gameObject.AddComponent<AudioSource>();
             uiAudioSource.playOnAwake = false;
             uiAudioSource.dopplerLevel = 0;
             uiAudioSource.minDistance = 500;
             uiAudioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Master/UI sounds")[0];
+        }
 
-            ReloadAudioSettings();
+        private void Update()
+        {
+            if (!musicAudioSource.isPlaying)
+            {
+                PlaySong();
+            }
+        }
+
+        private void PlaySong()
+        {
+            if(musicList.Length > 0)
+            {
+                musicAudioSource.resource = RNGManager.RNGManager.Manager["Music"].NextElement(musicList);
+                musicAudioSource.Play();
+            }
         }
 
         public void PlayUISound(UIAudioType audioType)
         {
             switch (audioType)
             {
-                case UIAudioType.ButtonClick: PlayAudioResource(uiButtonClickResource); break;
-                case UIAudioType.Confirm: PlayAudioResource(confirmResource); break;
-                case UIAudioType.Close: PlayAudioResource(closeResource); break;
-                case UIAudioType.Error: PlayAudioResource(errorResource); break;
+                case UIAudioType.ButtonClick: PlayAudioResource(uiButtonClickClip); break;
+                case UIAudioType.Confirm: PlayAudioResource(confirmClip); break;
+                case UIAudioType.Close: PlayAudioResource(closeClip); break;
+                case UIAudioType.Error: PlayAudioResource(errorClip); break;
             }
         }
 

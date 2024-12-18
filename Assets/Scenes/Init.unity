@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadMainMenu: 1
-  versionString: v0.9
+  versionString: v1.0
 --- !u!4 &807531832
 Transform:
   m_ObjectHideFlags: 0
@@ -374,6 +374,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d3c1b2736840c408444dcfb9fc6597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicResource: {fileID: 8300000, guid: 5388b2d99d781694d9385d6d4344bcf9, type: 3}
+  uiButtonClickResource: {fileID: 8300000, guid: 79be938029b5b6f4ab23d693bf69f813, type: 3}
+  confirmResource: {fileID: 8300000, guid: b7453ec492ca02149ba3423636c9edd0, type: 3}
+  closeResource: {fileID: 8300000, guid: f7bff1b8941f0404c855ff6f2d18f5fe, type: 3}
+  errorResource: {fileID: 8300000, guid: 6cf771247b1149c4fa9b8d4c7792399d, type: 3}
+  mixer: {fileID: 24100000, guid: 22b446131dd6df948b899c70568805e7, type: 2}
 --- !u!4 &1720558165
 Transform:
   m_ObjectHideFlags: 0

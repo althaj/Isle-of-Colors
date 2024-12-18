@@ -15,7 +15,7 @@ namespace PSG.IsleOfColors.UI.Developer
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F2))
+            if (Input.GetKeyDown(KeyCode.F2) && Debug.isDebugBuild)
             {
                 panel.SetActive(!panel.activeSelf);
             }
