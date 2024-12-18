@@ -1,7 +1,7 @@
 using System;
 using PSG.IsleOfColors.Gameplay;
+using PSG.IsleOfColors.Managers;
 using TMPro;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -48,6 +48,8 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
             ClearValidationError();
 
+            LoadPlayerPrefs();
+
             background.SetActive(true);
             popupPanel.SetActive(true);
         }
@@ -56,19 +58,15 @@ namespace PSG.IsleOfColors.UI.MainMenu
         {
             background.SetActive(false);
             popupPanel.SetActive(false);
-
-            LoadPlayerPrefs();
-        }
-
-        public void Cancel()
-        {
-            ClosePopup();
         }
 
         public void Confirm()
         {
             if (!ValidateGameOptions())
+            {
+                AudioManager.Instance.PlayUISound(UIAudioType.Error);
                 return;
+            }
 
             SavePlayerPrefs();
 
@@ -90,6 +88,10 @@ namespace PSG.IsleOfColors.UI.MainMenu
                     case 2: options.Player2Name = "Janči BOT"; break;
                 }
             }
+
+            AudioManager.Instance.PlayUISound(UIAudioType.Confirm);
+
+            AnalyticsManager.Instance.GameStarted(options.IsSinglePlayer ? options.Difficulty : null);
 
             ApplicationManager.Instance.StartGame(options);
         }
@@ -128,7 +130,7 @@ namespace PSG.IsleOfColors.UI.MainMenu
             }
 
             ClearValidationError();
-            
+
             return true;
         }
 

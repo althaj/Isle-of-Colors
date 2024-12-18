@@ -2,6 +2,7 @@ using PSG.IsleOfColors.Gameplay.Scoring;
 using RNGManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -40,6 +41,9 @@ namespace PSG.IsleOfColors.Gameplay
 
         public int CurrentDieRoll { get; private set; }
 
+        public float GameDuration { get => gameDurationStopwatch != null ? (float)gameDurationStopwatch.Elapsed.TotalSeconds : 0; }
+        private Stopwatch gameDurationStopwatch;
+
         private void Awake()
         {
             if (!String.IsNullOrWhiteSpace(ApplicationManager.Instance.GameOptions.Player1Name))
@@ -50,6 +54,9 @@ namespace PSG.IsleOfColors.Gameplay
 
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
             SetCurrentPlayer(player1);
+
+            gameDurationStopwatch = new Stopwatch();
+            gameDurationStopwatch.Start();
         }
 
         public PencilColor GetColorByName(string name) => Colors.Single(x => x.Name.CompareTo(name) == 0);
@@ -145,6 +152,8 @@ namespace PSG.IsleOfColors.Gameplay
         {
             if (lastRound)
             {
+                gameDurationStopwatch.Stop();
+
                 OnGameEnded?.Invoke();
                 return true;
             }

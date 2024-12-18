@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace PSG.IsleOfColors.Gameplay
 {
     public struct GameOptions
@@ -9,6 +7,17 @@ namespace PSG.IsleOfColors.Gameplay
             Easy = 0,
             Medium = 1,
             Hard = 2
+        }
+
+        public static string GetBotDifficultyString(BotDifficulty? difficulty)
+        {
+            switch (difficulty)
+            {
+                case BotDifficulty.Easy: return "Easy";
+                case BotDifficulty.Medium: return "Medium";
+                case BotDifficulty.Hard: return "Hard";
+                default: return "";
+            }
         }
 
         public string Player1Name { get; set; }
