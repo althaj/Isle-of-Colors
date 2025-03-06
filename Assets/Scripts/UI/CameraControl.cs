@@ -78,7 +78,6 @@ namespace PSG.IsleOfColors.UI
 
         private void Update()
         {
-            //transform.position = Vector3.Lerp(transform.position, activePlayer.position + Vector3.forward * transform.position.z, 1.5f * Time.deltaTime);
             SetCameraZoom();
             SetCameraMovement();
         }
