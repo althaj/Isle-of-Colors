@@ -26,6 +26,13 @@ namespace PSG.IsleOfColors.Gameplay.AI
 
         public void DoTurn(Player player)
         {
+            if(player.DieValue == 0)
+            {
+                player.StartColoring(player.Colors.First());
+                player.Confirm();
+                return;
+            }
+
             List<PlayerSheet> sheets = new();
 
             List<PencilColor> colorsToCheck = player.Colors;
@@ -35,7 +42,7 @@ namespace PSG.IsleOfColors.Gameplay.AI
             if (
                 gameManager.GreenScoring is SwampScoring
                 && player.PlayerSheet.GetAllGroups(greenColor).Count == 0 
-                && colorsToCheck.Any(x => x == greenColor)
+                && colorsToCheck.Contains(greenColor)
                 && player.DieValue > 3
             )
                 colorsToCheck = new() { greenColor };
