@@ -1,3 +1,5 @@
+using System;
+using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.UI
@@ -6,7 +8,16 @@ namespace PSG.IsleOfColors.UI
     {
         [SerializeField] private GameObject background;
 
-        private void Awake()
+        private GameManager gameManager;
+
+        private void Start()
+        {
+            gameManager = FindFirstObjectByType<GameManager>();
+            gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
+            background.SetActive(false);
+        }
+
+        private void OnScoringSetupFinished()
         {
             background.SetActive(true);
         }

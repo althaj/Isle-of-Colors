@@ -1,5 +1,6 @@
 using PSG.IsleOfColors.Gameplay.Scoring;
 using PSG.IsleOfColors.Managers;
+using PSG.IsleOfColors.UI.Tutorial;
 using RNGManager;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent OnScoringSetupFinished;
         public UnityEvent OnLastRoundStarted;
         public UnityEvent OnGameEnded;
+
+        public UnityEvent<TutorialStepId> OnTutorialStepEnded;
 
         private PencilColor player1Color;
         private PencilColor player2Color;
@@ -58,6 +61,13 @@ namespace PSG.IsleOfColors.Gameplay
 
             gameDurationStopwatch = new Stopwatch();
             gameDurationStopwatch.Start();
+        }
+
+        private void Start()
+        {
+            TutorialUI tutorialUI = FindFirstObjectByType<TutorialUI>();
+            if(tutorialUI != null)
+                tutorialUI.OnTutorialStepEnded.AddListener(ReceiveOnTutorialStepEnded);
         }
 
         public PencilColor GetColorByName(string name) => Colors.Single(x => x.Name.CompareTo(name) == 0);
@@ -238,6 +248,11 @@ namespace PSG.IsleOfColors.Gameplay
             player1.Reset();
             player2.Reset();
             SetupScoring();
+        }
+
+        private void ReceiveOnTutorialStepEnded(TutorialStepId Id)
+        {
+            OnTutorialStepEnded?.Invoke(Id);
         }
     }
 }

@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14151c4e746aab5438c7f85c6699786d, type: 3}
   m_Name: 00. Welcome
   m_EditorClassIdentifier: 
+  Id: 1
   Messages:
   - {fileID: 11400000, guid: ce031b7a198865341bcb7d56564b3b03, type: 2}
+  - {fileID: 11400000, guid: 3f63e8c9024ad5e4d82c16578753c438, type: 2}
+  - {fileID: 11400000, guid: 1d791d935ea0faa48b5c27f8515bc832, type: 2}

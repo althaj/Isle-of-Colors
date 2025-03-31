@@ -1,14 +1,21 @@
-using System.Linq;
-using PSG.IsleOfColors.Gameplay;
+using System;
 using PSG.IsleOfColors.Managers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace PSG.IsleOfColors.UI.Tutorial
 {
     public enum TutorialMessagePosition
     {
         Center
+    }
+
+    public enum TutorialMessageSize
+    {
+        Normal,
+        MidTall,
+        Tall
     }
 
     public enum TutorialHighlight
@@ -29,16 +36,18 @@ namespace PSG.IsleOfColors.UI.Tutorial
         private TutorialStep currentTutorialStep;
         private int nextTutorialMessageId;
         
+        [Header("Tutorial steps")]
         [SerializeField] private TutorialStep welcomeTutorialStep;
+
+        public UnityEvent<TutorialStepId> OnTutorialStepEnded;
 
         void Start()
         {
-            // TODO: Uncomment when the tutorial is fully functional ready
-            // if(!ApplicationManager.Instance.GameOptions.ShowTutorial)
-            // {
-            //     Destroy(gameObject);
-            //     return;
-            // }
+            if(!ApplicationManager.Instance.GameOptions.ShowTutorial)
+            {
+                Destroy(gameObject);
+                return;
+            }
             
             if(messageBox != null)
             {
@@ -65,8 +74,10 @@ namespace PSG.IsleOfColors.UI.Tutorial
         private void EndTutorialStep()
         {
             ShowBackground(TutorialHighlight.Full);
-            ShowText(string.Empty, TutorialMessagePosition.Center);
+            ShowText(string.Empty, TutorialMessagePosition.Center, TutorialMessageSize.Normal);
             ShowTutorialArrow(string.Empty, TutorialArrowDirection.Up, 0);
+
+            OnTutorialStepEnded?.Invoke(currentTutorialStep.Id);
 
             currentTutorialStep = null;
         }
@@ -74,7 +85,7 @@ namespace PSG.IsleOfColors.UI.Tutorial
         /// <summary>
         /// Display the next message in the current tutorial step. If there is no next message, end the tutorial step.
         /// </summary>
-        private void ShowNextTutorialMessage()
+        public void ShowNextTutorialMessage()
         {
             if(currentTutorialStep == null)
             {
@@ -103,7 +114,7 @@ namespace PSG.IsleOfColors.UI.Tutorial
                 return;
 
             ShowBackground(message.Highlight);
-            ShowText(message.Message, message.MessagePosition);
+            ShowText(message.Message, message.MessagePosition, message.MessageSize);
             ShowTutorialArrow(message.TutorialArrowTargetName, message.TutorialArrowDirection, message.TutorialArrowOffset);
         }
 
@@ -132,7 +143,7 @@ namespace PSG.IsleOfColors.UI.Tutorial
         /// </summary>
         /// <param name="message">Message to display. Leave empty to hide the message box.</param>
         /// <param name="position">Position of the message box.</param>
-        private void ShowText(string message, TutorialMessagePosition position)
+        private void ShowText(string message, TutorialMessagePosition position, TutorialMessageSize size)
         {
             if(messageBox == null)
             {
@@ -153,6 +164,20 @@ namespace PSG.IsleOfColors.UI.Tutorial
                 case TutorialMessagePosition.Center:
                 default:
 
+                    break;
+            }
+
+            switch(size)
+            {
+                case TutorialMessageSize.Tall:
+                    messageBox.sizeDelta = new Vector2(400, 400);
+                    break;
+                case TutorialMessageSize.MidTall:
+                    messageBox.sizeDelta = new Vector2(400, 300);
+                    break;
+                case TutorialMessageSize.Normal:
+                default:
+                    messageBox.sizeDelta = new Vector2(400, 200);
                     break;
             }
         }

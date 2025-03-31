@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
-  m_Name: 01. Welcome
+  m_Name: 03. Region setup
   m_EditorClassIdentifier: 
-  Message: 'Welcome to <b>Isle of Colors</b>, a two player strategy game. You are
-    playing a digital adaptation of a coloring book board game.
-
-    <br>This tutorial
-    will teach you how the game works.'
+  Message: "At the begining of each game a random set of region types is chosen.
+    These determine how the scoring works in this game.\n<br>UI popup will show you
+    which scoring conditions are chosen.\r"
   MessagePosition: 0
+  MessageSize: 0
   Highlight: 0
   TutorialArrowTargetName: 
   TutorialArrowDirection: 2
