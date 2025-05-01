@@ -24,6 +24,7 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent OnPlayerStateChanged;
         public UnityEvent OnColorUsageChanged;
         public UnityEvent<Player> OnPlayerScoreChanged;
+        public UnityEvent OnSelectedColorChanged;
 
 
         public bool IsSoundEnabled { get => !disableSound && ai == null; }
@@ -120,6 +121,8 @@ namespace PSG.IsleOfColors.Gameplay
             PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
         }
 
+        public PencilColor GetColor() => coloringColor;
+
         public void StartColoring(PencilColor color)
         {
             if (turnFinished || isColoring)
@@ -128,7 +131,8 @@ namespace PSG.IsleOfColors.Gameplay
             isColoring = true;
             coloringColor = color;
             PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
-            OnPlayerStateChanged.Invoke();
+            OnPlayerStateChanged?.Invoke();
+            OnSelectedColorChanged?.Invoke();
         }
 
         public void Undo()
@@ -153,7 +157,8 @@ namespace PSG.IsleOfColors.Gameplay
             {
                 isColoring = false;
                 coloringColor = null;
-                OnPlayerStateChanged.Invoke();
+                OnPlayerStateChanged?.Invoke();
+                OnSelectedColorChanged?.Invoke();
             }
 
             PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
@@ -182,7 +187,7 @@ namespace PSG.IsleOfColors.Gameplay
 
             PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
 
-            OnPlayerStateChanged.Invoke();
+            OnPlayerStateChanged?.Invoke();
 
             // UPDATE SCORES
             Score.SetScore(gameManager.GreenScoring.GetColor(), gameManager.GreenScoring.GetScore(PlayerSheet));
