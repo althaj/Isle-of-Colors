@@ -85,6 +85,23 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
+        internal void UpdateNewSpacesWithColor(PencilColor color)
+        {
+            for (int y = 0; y < Spaces.Length; y++)
+            {
+                for (int x = 0; x < Spaces[y].Length; x++)
+                {
+                    if (Spaces[y][x] == null)
+                        continue;
+
+                    if (Spaces[y][x].IsNew)
+                    {
+                        Spaces[y][x].SetColor(color, Spaces[y][x].MoveIndex);
+                    }
+                }
+            }
+        }
+
         public List<List<PlayerSheetSpace>> GetAllGroups(PencilColor color)
         {
             List<List<PlayerSheetSpace>> result = new();

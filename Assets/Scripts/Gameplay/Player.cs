@@ -125,14 +125,20 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void StartColoring(PencilColor color)
         {
-            if (turnFinished || isColoring)
+            if (turnFinished)
                 return;
 
-            isColoring = true;
-            coloringColor = color;
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
-            OnPlayerStateChanged?.Invoke();
-            OnSelectedColorChanged?.Invoke();
+            if(color != coloringColor)
+            {
+                isColoring = true;
+                coloringColor = color;
+                
+                PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
+                PlayerSheet.UpdateNewSpacesWithColor(color);
+                
+                OnPlayerStateChanged?.Invoke();
+                OnSelectedColorChanged?.Invoke();
+            }
         }
 
         public void Undo()
