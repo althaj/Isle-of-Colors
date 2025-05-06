@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 
 namespace PSG.IsleOfColors.Gameplay
 {
@@ -15,6 +15,8 @@ namespace PSG.IsleOfColors.Gameplay
         [SerializeField] private List<SpriteRenderer> propSpriteRenderers;
 
         [SerializeField] private List<Sprite> emptySprites;
+
+        [SerializeField] private Color NewSpaceColor = new Color(0.5f, 0.5f, 0.5f, 1.0f);
 
         [SerializeField] private AudioSource colorHexAudioSource;
 
@@ -54,13 +56,20 @@ namespace PSG.IsleOfColors.Gameplay
             UpdateVisual();
         }
 
-        private void OnColorChanged(PencilColor color)
+        private void OnColorChanged(PencilColor color, bool IsNew)
         {
             UpdateVisual();
         }
         
         private void OnMouseDown()
         {
+            // Check if the mouse is over a UI element
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                // Block the OnMouseDown event
+                return;
+            }
+
             if (isEnabled)
             {
                 player.SetColor(space.X, space.Y);
@@ -76,8 +85,13 @@ namespace PSG.IsleOfColors.Gameplay
             {
                 enabledSpriteRenderer.enabled = isEnabled;
 
-                backgroundSpriteRenderer.enabled = false;
                 mainSpriteRenderer.enabled = false;
+
+                backgroundSpriteRenderer.enabled = space.IsNew;
+                backgroundSpriteRenderer.color = NewSpaceColor;
+
+                if(space.IsNew && player.IsSoundEnabled)
+                    colorHexAudioSource.Play();
             }
             else
             {
