@@ -1,5 +1,4 @@
 using PSG.IsleOfColors.Gameplay;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +27,7 @@ namespace PSG.IsleOfColors.Prototype
             button.interactable = enabled;
         }
 
-        private void OnColorChanged(PencilColor color)
+        private void OnColorChanged(PencilColor color, bool isNew)
         {            
             if (animator == null)
                 animator = GetComponent<Animator>();

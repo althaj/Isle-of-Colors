@@ -111,14 +111,11 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void SetColor(int x, int y)
         {
-            if (!isColoring)
-                return;
-
             if (PlayerSheet.Spaces[y][x] == null)
                 return;
 
             PlayerSheet.Spaces[y][x].SetColor(coloringColor, currentMoveIndex++);
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
+            PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
         }
 
         public PencilColor GetColor() => coloringColor;
@@ -133,7 +130,6 @@ namespace PSG.IsleOfColors.Gameplay
                 isColoring = true;
                 coloringColor = color;
                 
-                PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
                 PlayerSheet.UpdateNewSpacesWithColor(color);
                 
                 OnPlayerStateChanged?.Invoke();
@@ -143,9 +139,6 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void Undo()
         {
-            if (!isColoring)
-                return;
-
             if (currentMoveIndex > 0)
             {
                 foreach (var spaceY in PlayerSheet.Spaces)
@@ -158,15 +151,22 @@ namespace PSG.IsleOfColors.Gameplay
                 }
 
                 currentMoveIndex--;
-                
-                PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
+
+                PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
             }
         }
 
         public void Confirm()
         {
-            if (PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) != DieValue)
+            if(coloringColor == null)
+            {
                 return;
+            }
+
+            if (PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) != DieValue)
+            {
+                return;
+            }
 
             foreach (var spaceY in PlayerSheet.Spaces)
             {
@@ -179,12 +179,12 @@ namespace PSG.IsleOfColors.Gameplay
 
             gameManager.UseColor(coloringColor);
 
+            PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
+
             currentMoveIndex = 0;
             coloringColor = null;
             isColoring = false;
             turnFinished = true;
-
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
 
             OnPlayerStateChanged?.Invoke();
 
@@ -213,6 +213,8 @@ namespace PSG.IsleOfColors.Gameplay
 
             if (ai != null)
                 ai.DoTurn(this);
+
+            PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
         }
 
         public void Reset()

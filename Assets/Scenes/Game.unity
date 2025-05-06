@@ -3513,6 +3513,9 @@ MonoBehaviour:
   OnPlayerScoreChanged:
     m_PersistentCalls:
       m_Calls: []
+  OnSelectedColorChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &446185389
 Transform:
   m_ObjectHideFlags: 0
@@ -15488,6 +15491,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnPlayerScoreChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSelectedColorChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &1801362073
