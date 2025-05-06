@@ -158,16 +158,9 @@ namespace PSG.IsleOfColors.Gameplay
                 }
 
                 currentMoveIndex--;
+                
+                PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
             }
-            else
-            {
-                isColoring = false;
-                coloringColor = null;
-                OnPlayerStateChanged?.Invoke();
-                OnSelectedColorChanged?.Invoke();
-            }
-
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
         }
 
         public void Confirm()
