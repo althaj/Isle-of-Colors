@@ -58,6 +58,8 @@ namespace PSG.IsleOfColors.Gameplay
 		{
 			IsNew = false;
 			MoveIndex = -1;
+
+			OnEnabledChanged?.Invoke(IsEnabled);
 		}
 
 		public void Undo()
