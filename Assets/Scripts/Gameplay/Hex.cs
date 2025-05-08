@@ -26,10 +26,13 @@ namespace PSG.IsleOfColors.Gameplay
 
         private RNGManager.RNGInstance rngInstance;
 
-        public void Initialize(PlayerSheetSpace space, Player player)
+        private bool showEnabledMoves = true;
+
+        public void Initialize(PlayerSheetSpace space, Player player, bool showEnabledMoves)
         {
             this.player = player;
             this.space = space;
+            this.showEnabledMoves = showEnabledMoves;
 
             rngInstance = RNGManager.RNGManager.Manager["Hex"];
 
@@ -91,7 +94,7 @@ namespace PSG.IsleOfColors.Gameplay
 
             if (space.Color == null)
             {
-                enabledSpriteRenderer.enabled = isEnabled;
+                enabledSpriteRenderer.enabled = isEnabled && showEnabledMoves;
 
                 mainSpriteRenderer.enabled = false;
 

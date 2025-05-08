@@ -211,10 +211,10 @@ namespace PSG.IsleOfColors.Gameplay
                 DieValue = 0;
             }
 
+            PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
+
             if (ai != null)
                 ai.DoTurn(this);
-
-            PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
         }
 
         public void Reset()

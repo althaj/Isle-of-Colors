@@ -2,6 +2,7 @@ using UnityEngine;
 using PSG.IsleOfColors.Gameplay;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -21,16 +22,16 @@ namespace PSG.IsleOfColors.UI
                 buttonComponent.onClick.AddListener(() => player.StartColoring(color));
             }
 
-            LayoutElement layoutElement = GetComponent<LayoutElement>();
-            if(layoutElement != null && player.GetColor() == color)
+            HighlightableButton highlightableButtonComponent = GetComponent<HighlightableButton>();
+            if(highlightableButtonComponent != null)
             {
-                layoutElement.flexibleWidth = 2.0f;
+                highlightableButtonComponent.SetHighlight(player.GetColor() == color);
             }
             
             TextMeshProUGUI textMeshProComponent = GetComponentInChildren<TextMeshProUGUI>();
             if(textMeshProComponent != null)
             {
-                textMeshProComponent.gameObject.AddComponent<DieValueText>();
+                textMeshProComponent.text = String.Empty;
             }
         }
     }
