@@ -5,6 +5,7 @@ namespace PSG.IsleOfColors.Gameplay
     public class GameMap : MonoBehaviour
     {
         [SerializeField] private GameObject hexPrefab;
+        [SerializeField] private bool showEnabledMoves = true;
 
         private float deltaY = Mathf.Cos(Mathf.Deg2Rad * 30);
 
@@ -45,7 +46,7 @@ namespace PSG.IsleOfColors.Gameplay
 
                 obj.name = $"Hex {x} {y}";
 
-                obj.GetComponent<Hex>().Initialize(space, player);
+                obj.GetComponent<Hex>().Initialize(space, player, showEnabledMoves);
                 return obj;
             }
 
