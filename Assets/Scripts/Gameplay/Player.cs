@@ -24,6 +24,7 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent OnPlayerStateChanged;
         public UnityEvent OnColorUsageChanged;
         public UnityEvent<Player> OnPlayerScoreChanged;
+        public UnityEvent OnSelectedColorChanged;
 
 
         public bool IsSoundEnabled { get => !disableSound && ai == null; }
@@ -110,32 +111,34 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void SetColor(int x, int y)
         {
-            if (!isColoring)
-                return;
-
             if (PlayerSheet.Spaces[y][x] == null)
                 return;
 
             PlayerSheet.Spaces[y][x].SetColor(coloringColor, currentMoveIndex++);
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
+            PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
         }
+
+        public PencilColor GetColor() => coloringColor;
 
         public void StartColoring(PencilColor color)
         {
-            if (turnFinished || isColoring)
+            if (turnFinished)
                 return;
 
-            isColoring = true;
-            coloringColor = color;
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
-            OnPlayerStateChanged.Invoke();
+            if(color != coloringColor)
+            {
+                isColoring = true;
+                coloringColor = color;
+                
+                PlayerSheet.UpdateNewSpacesWithColor(color);
+                
+                OnPlayerStateChanged?.Invoke();
+                OnSelectedColorChanged?.Invoke();
+            }
         }
 
         public void Undo()
         {
-            if (!isColoring)
-                return;
-
             if (currentMoveIndex > 0)
             {
                 foreach (var spaceY in PlayerSheet.Spaces)
@@ -148,21 +151,22 @@ namespace PSG.IsleOfColors.Gameplay
                 }
 
                 currentMoveIndex--;
-            }
-            else
-            {
-                isColoring = false;
-                coloringColor = null;
-                OnPlayerStateChanged.Invoke();
-            }
 
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
+                PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
+            }
         }
 
         public void Confirm()
         {
-            if (PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) != DieValue)
+            if(coloringColor == null)
+            {
                 return;
+            }
+
+            if (PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) != DieValue)
+            {
+                return;
+            }
 
             foreach (var spaceY in PlayerSheet.Spaces)
             {
@@ -175,14 +179,14 @@ namespace PSG.IsleOfColors.Gameplay
 
             gameManager.UseColor(coloringColor);
 
+            PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
+
             currentMoveIndex = 0;
             coloringColor = null;
             isColoring = false;
             turnFinished = true;
 
-            PlayerSheet.UpdateAvailableMoves(isColoring, currentMoveIndex, DieValue);
-
-            OnPlayerStateChanged.Invoke();
+            OnPlayerStateChanged?.Invoke();
 
             // UPDATE SCORES
             Score.SetScore(gameManager.GreenScoring.GetColor(), gameManager.GreenScoring.GetScore(PlayerSheet));
@@ -206,6 +210,8 @@ namespace PSG.IsleOfColors.Gameplay
                 gameManager.NoMoves();
                 DieValue = 0;
             }
+
+            PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
 
             if (ai != null)
                 ai.DoTurn(this);

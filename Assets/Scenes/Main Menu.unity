@@ -1367,6 +1367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexPrefab: {fileID: 1881777523677797877, guid: 515880ce0e59fd743ac9ebcc3236beda, type: 3}
+  showEnabledMoves: 0
 --- !u!114 &285416878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1392,6 +1393,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnPlayerScoreChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSelectedColorChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &285416879
@@ -2483,6 +2487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexPrefab: {fileID: 1881777523677797877, guid: 515880ce0e59fd743ac9ebcc3236beda, type: 3}
+  showEnabledMoves: 0
 --- !u!114 &472614849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2508,6 +2513,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnPlayerScoreChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSelectedColorChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &472614850

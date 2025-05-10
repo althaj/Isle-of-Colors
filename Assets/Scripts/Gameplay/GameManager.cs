@@ -205,11 +205,10 @@ namespace PSG.IsleOfColors.Gameplay
             player1Color = player2Color = null;
         }
 
-        public int RollDie(int value = 0)
+        public void RollDie(int value)
         {
-            CurrentDieRoll = value > 0 ? value : RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
+            CurrentDieRoll = value;
             OnDieRolled?.Invoke(CurrentDieRoll);
-            return CurrentDieRoll;
         }
 
         private void SetCurrentPlayer(Player player)

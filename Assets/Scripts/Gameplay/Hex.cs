@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 
 namespace PSG.IsleOfColors.Gameplay
 {
@@ -12,13 +12,13 @@ namespace PSG.IsleOfColors.Gameplay
         [SerializeField] private SpriteRenderer enabledSpriteRenderer;
         [SerializeField] private SpriteRenderer backgroundSpriteRenderer;
         [SerializeField] private SpriteRenderer mainSpriteRenderer;
+        [SerializeField] private SpriteRenderer highlightSpriteRenderer;
         [SerializeField] private List<SpriteRenderer> propSpriteRenderers;
 
         [SerializeField] private List<Sprite> emptySprites;
 
         [SerializeField] private AudioSource colorHexAudioSource;
 
-        private Animator animator;
         private Player player;
         private PlayerSheetSpace space;
 
@@ -26,12 +26,13 @@ namespace PSG.IsleOfColors.Gameplay
 
         private RNGManager.RNGInstance rngInstance;
 
-        public void Initialize(PlayerSheetSpace space, Player player)
-        {
-            animator = GetComponent<Animator>();
+        private bool showEnabledMoves = true;
 
+        public void Initialize(PlayerSheetSpace space, Player player, bool showEnabledMoves)
+        {
             this.player = player;
             this.space = space;
+            this.showEnabledMoves = showEnabledMoves;
 
             rngInstance = RNGManager.RNGManager.Manager["Hex"];
 
@@ -40,27 +41,44 @@ namespace PSG.IsleOfColors.Gameplay
             space.OnColorChanged.AddListener(OnColorChanged);
             space.OnEnabledChanged.AddListener(OnEnabledChanged);
 
-            baseSpriteRenderer.sprite = RNGManager.RNGManager.Manager["Hex"].NextElement(emptySprites);
-            baseSpriteRenderer.sortingOrder = -space.Y; 
+            baseSpriteRenderer.sprite = rngInstance.NextElement(emptySprites);
+            baseSpriteRenderer.sortingOrder = -space.Y;
 
             UpdateVisual();
+
+            InitializeAnimator();
+        }
+
+        private void InitializeAnimator()
+        {
+            Animator animator = GetComponent<Animator>();
+            if (animator != null && rngInstance != null)
+            {
+                animator.SetFloat("SpeedMultiplier", rngInstance.NextFloat(0.75f, 1.25f));
+                animator.SetFloat("Offset", rngInstance.NextFloat(0f, 1f));
+            }
         }
 
         private void OnEnabledChanged(bool enabled)
         {
-            animator.SetBool("Enabled", enabled);
             isEnabled = enabled;
-
             UpdateVisual();
         }
 
-        private void OnColorChanged(PencilColor color)
+        private void OnColorChanged(PencilColor color, bool IsNew)
         {
             UpdateVisual();
         }
         
         private void OnMouseDown()
         {
+            // Check if the mouse is over a UI element
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                // Block the OnMouseDown event
+                return;
+            }
+
             if (isEnabled)
             {
                 player.SetColor(space.X, space.Y);
@@ -72,12 +90,18 @@ namespace PSG.IsleOfColors.Gameplay
             foreach (var propRenderer in propSpriteRenderers)
                 propRenderer.enabled = false;
 
+            highlightSpriteRenderer.enabled = space.IsNew;
+
             if (space.Color == null)
             {
-                enabledSpriteRenderer.enabled = isEnabled;
+                enabledSpriteRenderer.enabled = isEnabled && showEnabledMoves;
+
+                mainSpriteRenderer.enabled = false;
 
                 backgroundSpriteRenderer.enabled = false;
-                mainSpriteRenderer.enabled = false;
+
+                if(space.IsNew && player.IsSoundEnabled)
+                    colorHexAudioSource.Play();
             }
             else
             {
