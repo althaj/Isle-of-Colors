@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
+  m_Name: 08. Undo
+  m_EditorClassIdentifier: 
+  Message: 'You can undo your last colored space by clicking this button.
+
+    <br>You
+    can change your selected color at any time by clicking on the other color.'
+  MessagePosition: 0
+  MessageSize: 0
+  Highlight: 5
+  TutorialArrowTargetName: Undo button
+  TutorialArrowDirection: 4
+  TutorialArrowOffset: 0.1

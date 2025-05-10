@@ -17,7 +17,7 @@ MonoBehaviour:
     one type\r\nof region.\n<br>At the end of the game each region type is scored
     differently. The player with the\r\nmost points wins!\r"
   MessagePosition: 0
-  MessageSize: 1
+  MessageSize: 2
   Highlight: 0
   TutorialArrowTargetName: 
   TutorialArrowDirection: 2

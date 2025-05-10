@@ -6,7 +6,9 @@ namespace PSG.IsleOfColors.UI.Tutorial
     {
         Up,
         UpLeft,
-        UpRight
+        UpRight,
+        Left,
+        Right
     }
 
     [RequireComponent(typeof(RectTransform))]
@@ -75,6 +77,16 @@ namespace PSG.IsleOfColors.UI.Tutorial
                     rectTransform.rotation = Quaternion.Euler(0, 0, -45.0f);
                     rectTransform.anchorMin = new Vector2(0, 0);
                     rectTransform.anchorMax = new Vector2(0, 0);
+                    break;
+                case TutorialArrowDirection.Left:
+                    rectTransform.rotation = Quaternion.Euler(0, 0, 90.0f);
+                    rectTransform.anchorMin = new Vector2(1, 0.5f);
+                    rectTransform.anchorMax = new Vector2(1, 0.5f);
+                    break;
+                case TutorialArrowDirection.Right:
+                    rectTransform.rotation = Quaternion.Euler(0, 0, -90.0f);
+                    rectTransform.anchorMin = new Vector2(0, 0.5f);
+                    rectTransform.anchorMax = new Vector2(0, 0.5f);
                     break;
                 case TutorialArrowDirection.Up:
                 default:

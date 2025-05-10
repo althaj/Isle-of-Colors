@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PSG.IsleOfColors.Managers;
 using TMPro;
 using UnityEngine;
@@ -8,12 +9,14 @@ namespace PSG.IsleOfColors.UI.Tutorial
 {
     public enum TutorialMessagePosition
     {
-        Center
+        Center,
+        Bottom
     }
 
     public enum TutorialMessageSize
     {
         Normal,
+        Small,
         MidTall,
         Tall
     }
@@ -21,7 +24,12 @@ namespace PSG.IsleOfColors.UI.Tutorial
     public enum TutorialHighlight
     {
         None,
-        Full
+        Full,
+        TopPanel,
+        OtherPlayerPanel,
+        ColorsPanel,
+        ConfirmUndoButtons,
+        RightArrow
     }
 
     public class TutorialUI : MonoBehaviour
@@ -29,15 +37,26 @@ namespace PSG.IsleOfColors.UI.Tutorial
         private TMP_Text messageText;
         
         [SerializeField] private RectTransform canvas;
-        [SerializeField] private RectTransform background;
         [SerializeField] private RectTransform messageBox;
         [SerializeField] private TutorialArrow tutorialArrow;
 
+        [Header("Backgrounds")]
+        [SerializeField] private RectTransform clickBlocker;
+        [SerializeField] private RectTransform fullBackground;
+        [SerializeField] private RectTransform topBackground;
+        [SerializeField] private RectTransform otherPlayerBackground;
+        [SerializeField] private RectTransform colorsPanelBackground;
+        [SerializeField] private RectTransform confirmUndoBackground;
+        [SerializeField] private RectTransform rightArrowBackground;
+        private RectTransform[] backgroundPanels;
+        
         private TutorialStep currentTutorialStep;
         private int nextTutorialMessageId;
+
         
         [Header("Tutorial steps")]
         [SerializeField] private TutorialStep welcomeTutorialStep;
+        [SerializeField] private TutorialStep uiTutorialStep;
 
         public UnityEvent<TutorialStepId> OnTutorialStepEnded;
 
@@ -53,6 +72,23 @@ namespace PSG.IsleOfColors.UI.Tutorial
             {
                 messageText = messageBox.GetComponentInChildren<TMP_Text>();
             }
+
+            SetupScoringPanel setupScoringPanel = FindFirstObjectByType<SetupScoringPanel>();
+            if(setupScoringPanel != null)
+            {
+                setupScoringPanel.OnSetupScoringPanelClosed?.AddListener(OnSetupScoringPanelClosed);
+            }
+
+            backgroundPanels = new RectTransform[]{
+                fullBackground,
+                topBackground,
+                otherPlayerBackground,
+                colorsPanelBackground,
+                confirmUndoBackground,
+                rightArrowBackground
+            };
+
+            HideBackgrounds();
 
             ShowTutorialStep(welcomeTutorialStep);
         }
@@ -124,18 +160,81 @@ namespace PSG.IsleOfColors.UI.Tutorial
         /// <param name="highlight">Part of the UI or game area to highlght.</param>
         private void ShowBackground(TutorialHighlight highlight)
         {
-            switch(highlight)
+            HideBackgrounds();
+
+            if(clickBlocker == null || clickBlocker.gameObject == null)
+            {
+                Debug.LogError("Click blocker has not been assigned.");
+            }
+            else
+            {
+                clickBlocker.gameObject.SetActive(true);
+            }
+
+            switch (highlight)
             {
                 case TutorialHighlight.Full:
-                    background.gameObject.SetActive(false);
+                    if(clickBlocker != null && clickBlocker.gameObject != null)
+                    {
+                        clickBlocker.gameObject.SetActive(false);
+                    }
+                    break;
+                case TutorialHighlight.TopPanel:
+                    EnableBackground(topBackground, "Top panel");
+                    break;
+                case TutorialHighlight.OtherPlayerPanel:
+                    EnableBackground(otherPlayerBackground, "Other player panel");
+                    break;
+                case TutorialHighlight.ColorsPanel:
+                    EnableBackground(colorsPanelBackground, "Colors panel");
+                    break;
+                case TutorialHighlight.ConfirmUndoButtons:
+                    EnableBackground(confirmUndoBackground, "Confirm / Undo");
+                    break;
+                case TutorialHighlight.RightArrow:
+                    EnableBackground(rightArrowBackground, "RIght arrow");
                     break;
                 case TutorialHighlight.None:
                 default:
-                    background.gameObject.SetActive(true);
-                    background.anchorMin = new Vector2(0, 0);
-                    background.anchorMax = new Vector2(1, 1);
+                    EnableBackground(fullBackground, "Full");
                     break;
             }
+        }
+
+        /// <summary>
+        /// Hides all tutorial backgrounds.
+        /// </summary>
+        private void HideBackgrounds()
+        {
+            if (backgroundPanels != null)
+            {
+                for (int i = 0; i < backgroundPanels.Length; i++)
+                {
+                    if (backgroundPanels[i] == null || backgroundPanels[i].gameObject == null)
+                    {
+                        continue;
+                    }
+
+                    backgroundPanels[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enables a background.
+        /// </summary>
+        /// <param name="background">RectTransform to enable (its gameObject will be set to active).</param>
+        /// <param name="title">Title of the background, used in debug error in case it cannot be enabled.</param>
+        private void EnableBackground(RectTransform background, string title)
+        {
+            if (background == null || background.gameObject == null)
+            {
+                Debug.LogErrorFormat("Missing {0} tutorial background.", title);
+                return;
+            }
+
+            background.gameObject.SetActive(true);
+            return;
         }
 
         /// <summary>
@@ -161,14 +260,26 @@ namespace PSG.IsleOfColors.UI.Tutorial
 
             switch(position)
             {
+                case TutorialMessagePosition.Bottom:
+                    messageBox.anchorMin = new Vector2(0.5f, 0);
+                    messageBox.anchorMax = new Vector2(0.5f, 0);
+                    messageBox.pivot = new Vector2(0.5f, 0);
+                    messageBox.anchoredPosition = new Vector2(0, 50.0f);
+                break;
                 case TutorialMessagePosition.Center:
                 default:
-
+                    messageBox.anchorMin = new Vector2(0.5f, 0.5f);
+                    messageBox.anchorMax = new Vector2(0.5f, 0.5f);
+                    messageBox.pivot = new Vector2(0.5f, 0.5f);
+                    messageBox.anchoredPosition = Vector2.zero;
                     break;
             }
 
             switch(size)
             {
+                case TutorialMessageSize.Small:
+                    messageBox.sizeDelta = new Vector2(400, 150);
+                    break;
                 case TutorialMessageSize.Tall:
                     messageBox.sizeDelta = new Vector2(400, 400);
                     break;
@@ -211,6 +322,11 @@ namespace PSG.IsleOfColors.UI.Tutorial
             RectTransform targetRectTransform = targetTransform.GetComponent<RectTransform>();
 
             tutorialArrow.Show(targetRectTransform, direction, offset);
+        }
+
+        private void OnSetupScoringPanelClosed()
+        {
+            ShowTutorialStep(uiTutorialStep);
         }
     }
 }

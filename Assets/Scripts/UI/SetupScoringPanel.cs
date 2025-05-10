@@ -1,12 +1,15 @@
 using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace PSG.IsleOfColors.UI
 {
     public class SetupScoringPanel : MonoBehaviour
     {
         [SerializeField] private GameObject background;
+
+        public UnityEvent OnSetupScoringPanelClosed;
 
         private GameManager gameManager;
 
@@ -25,6 +28,7 @@ namespace PSG.IsleOfColors.UI
         public void Close()
         {
             background.SetActive(false);
+            OnSetupScoringPanelClosed?.Invoke();
         }
     }
 }
