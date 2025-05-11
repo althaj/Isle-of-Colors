@@ -1,9 +1,11 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
+using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using PSG.IsleOfColors.Gameplay.StateMachine.States;
 
 namespace PSG.IsleOfColors.UI.Tutorial
 {
@@ -53,15 +55,25 @@ namespace PSG.IsleOfColors.UI.Tutorial
         private TutorialStep currentTutorialStep;
         private int nextTutorialMessageId;
 
+        private GameManager gameManager;
+
         
         [Header("Tutorial steps")]
-        [SerializeField] private TutorialStep welcomeTutorialStep;
-        [SerializeField] private TutorialStep uiTutorialStep;
+        [SerializeField] private List<TutorialStep> tutorialSteps;
 
         public UnityEvent<TutorialStepId> OnTutorialStepEnded;
 
         void Start()
         {
+            gameManager = FindFirstObjectByType<GameManager>();
+
+            if(gameManager == null || gameManager.Player1 == null || gameManager.Player2 == null)
+            {
+                Debug.LogError("Game Manager, Player 1 or Player 2 are invalid.");
+                Destroy(gameObject);
+                return;
+            }
+
             if(!ApplicationManager.Instance.GameOptions.ShowTutorial)
             {
                 Destroy(gameObject);
@@ -90,15 +102,31 @@ namespace PSG.IsleOfColors.UI.Tutorial
 
             HideBackgrounds();
 
-            ShowTutorialStep(welcomeTutorialStep);
+            ShowTutorialStep(TutorialStepId.Welcome);
+
+            gameManager.Player1.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+            gameManager.Player2.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
         }
 
         /// <summary>
         /// Shows a tutorial step, starting with the first message.
         /// </summary>
-        /// <param name="tutorialStep">Tutorial step to show.</param>
-        private void ShowTutorialStep(TutorialStep tutorialStep)
+        /// <param name="tutorialStepId">Id of tutorial to show.</param>
+        private void ShowTutorialStep(TutorialStepId tutorialStepId)
         {
+            if(tutorialSteps == null)
+            {
+                Debug.LogError("Tutorial steps have not been initialized.");
+                return;
+            }
+
+            TutorialStep tutorialStep = tutorialSteps.FirstOrDefault(x => x.Id == tutorialStepId);
+            if(tutorialStep == null)
+            {
+                Debug.LogErrorFormat("Could not find tutorial with ID {0}.", tutorialStepId);
+                return;
+            }
+
             currentTutorialStep = tutorialStep;
             nextTutorialMessageId = 0;
             ShowNextTutorialMessage();
@@ -326,7 +354,29 @@ namespace PSG.IsleOfColors.UI.Tutorial
 
         private void OnSetupScoringPanelClosed()
         {
-            ShowTutorialStep(uiTutorialStep);
+            ShowTutorialStep(TutorialStepId.UI);
+        }
+
+        private void OnPlayerStateChanged()
+        {
+            if(gameManager == null)
+            {
+                Debug.LogError("Game manager is invalid.");
+                return;
+            }
+
+            if(gameManager.Player1 == null || gameManager.Player2 == null)
+            {
+                Debug.LogError("Player 1 or Player 2 is invalid.");
+                return;
+            }
+
+            if(gameManager.Player1.PlayerState == EPlayerState.Finished && gameManager.Player2.PlayerState == EPlayerState.Finished)
+            {
+                ShowTutorialStep(TutorialStepId.EndGame);
+                gameManager.Player1.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
+                gameManager.Player2.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
+            }
         }
     }
 }

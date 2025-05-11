@@ -18,7 +18,7 @@ MonoBehaviour:
     forget that you have to select a color and you have to fill exactly the same
     number of spaces as the value rolled on the die. You can see this number next
     to your two colors.'
-  MessagePosition: 0
+  MessagePosition: 1
   MessageSize: 2
   Highlight: 5
   TutorialArrowTargetName: Confirm button

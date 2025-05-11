@@ -4,7 +4,8 @@ public enum TutorialStepId
 {
     Undefined,
     Welcome,
-    UI
+    UI,
+    EndGame
 }
 
 namespace PSG.IsleOfColors.UI.Tutorial
