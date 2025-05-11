@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 08. Undo
   m_EditorClassIdentifier: 
-  Message: 'You can undo your last colored space by clicking this button.
+  Message: 'You can undo your last painted space by clicking the undo button.
 
     <br>You
-    can change your selected color at any time by clicking on the other color.'
+    can also switch your selected color at any time by clicking the other one.'
   MessagePosition: 1
   MessageSize: 0
   Highlight: 5

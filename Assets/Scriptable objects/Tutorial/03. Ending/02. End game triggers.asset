@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 02. End game triggers
   m_EditorClassIdentifier: 
-  Message: 'The of the game is triggered when at least one of the players does not
-    have enough space on their island, or when at least one of the players uses the
-    same color six times.
+  Message: 'The game ends when either:
 
-    <br>When this happens, the players take one last turn
-    and compare their scores. The player with the better score wins.'
+    <indent=5%>a player no longer has enough
+    space left to paint, or</indent>
+
+    <indent=5%>a player has used the same color
+    six times.</indent>
+
+    <br>When this happens, each player takes one final turn,
+    and then scores are compared.
+
+    The player with the higher score wins!'
   MessagePosition: 0
   MessageSize: 2
   Highlight: 0

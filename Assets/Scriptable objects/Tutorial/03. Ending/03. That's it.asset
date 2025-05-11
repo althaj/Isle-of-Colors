@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 03. That's it
   m_EditorClassIdentifier: 
-  Message: 'That is everything you need to know to play <b>Isle of Colors</b>.
-
-    <br>Have
-    fun!'
+  Message: "That\u2019s everything you need to know to play <b>Isle of Colors</b>.\n<br>Have
+    fun!"
   MessagePosition: 0
   MessageSize: 1
   Highlight: 0

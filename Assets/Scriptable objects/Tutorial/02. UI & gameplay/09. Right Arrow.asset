@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 09. Right Arrow
   m_EditorClassIdentifier: 
-  Message: You can use the arrows on the side to change view between the players.
-    The UI always updates to show the information about the currently viewed player.
+  Message: Use the arrow buttons on the side of the screen to switch views between
+    the players. The UI will always update to show information for the currently
+    selected player.
   MessagePosition: 0
   MessageSize: 0
   Highlight: 6

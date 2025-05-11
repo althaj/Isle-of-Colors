@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 04. Status panel
   m_EditorClassIdentifier: 
-  Message: Below is the status text. it shows the current state of the game.
+  Message: At the very bottom of the screen is the status text, which shows the current
+    phase of the game.
   MessagePosition: 1
   MessageSize: 1
   Highlight: 3

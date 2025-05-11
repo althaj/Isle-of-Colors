@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 01. Swap colors
   m_EditorClassIdentifier: 
-  Message: After both players confirm their turn, they swap the colors they just
-    used. Continue like this until the end of the game is triggered.
+  Message: 'After both players confirm their turn, they swap the colors they just
+    used.
+
+    Continue like this until the end of the game is triggered.'
   MessagePosition: 0
   MessageSize: 1
   Highlight: 0

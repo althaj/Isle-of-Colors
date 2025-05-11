@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 06. Select color and paint
   m_EditorClassIdentifier: 
-  Message: 'You can see your colors and the dice roll on the bottom of the screen.
+  Message: 'You can see your two available colors and the dice roll at the bottom
+    of the screen.
 
-    <br>Select
-    one of the colors by clicking on it with your mouse, then paint spaces on your
-    island by clicking on them with your mouse as well. The spaces you paint can
-    be anywhere on the island, but they have to be connected together.'
+    <br>Click one of the colors to select it, then click spaces
+    on your island to paint them. The spaces can be located anywhere, but they must
+    be connected to one another.'
   MessagePosition: 0
   MessageSize: 2
   Highlight: 4

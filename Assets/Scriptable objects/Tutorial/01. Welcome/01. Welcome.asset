@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 01. Welcome
   m_EditorClassIdentifier: 
-  Message: 'Welcome to <b>Isle of Colors</b>, a two player strategy game. You are
-    playing a digital adaptation of a coloring book board game.
+  Message: 'Welcome to <b>Isle of Colors</b>, a two-player strategy game! This is
+    a digital adaptation of a coloring book-style board game.
 
     <br>This tutorial
-    will teach you how the game works.'
+    will guide you through how the game works.'
   MessagePosition: 0
+  MessageSize: 0
   Highlight: 0
   TutorialArrowTargetName: 
   TutorialArrowDirection: 2

@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 03. Other player panel
   m_EditorClassIdentifier: 
-  Message: 'On the bottom left you can see information about the other player.
-
-    <br>Here
-    you can see the current player''s name, their color usage and their score.'
+  Message: 'On the bottom left, you''ll find information about the other player:
+    their name, color usage, and score.'
   MessagePosition: 1
-  MessageSize: 0
+  MessageSize: 1
   Highlight: 3
   TutorialArrowTargetName: Other player panel/Score panel
   TutorialArrowDirection: 3

@@ -12,14 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 01. Intro
   m_EditorClassIdentifier: 
-  Message: 'Let''s have a look at the in-game user interface.
-
-    <br>Top central
-    part of the screen contains information about the currently viewed player. There''s
-    the name of the current player, their color usage (more on this later).
-
-    <br>Below
-    this there''s the score of the current player.'
+  Message: "Let\u2019s take a look at the in-game user interface.\n<br>The top-center
+    part of the screen displays information about the currently viewed player: their
+    name, their color usage (we'll explain this soon), and their score just below."
   MessagePosition: 0
   MessageSize: 2
   Highlight: 2

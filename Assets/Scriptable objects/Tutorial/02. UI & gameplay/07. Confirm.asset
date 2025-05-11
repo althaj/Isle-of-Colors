@@ -12,12 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
   m_Name: 07. Confirm
   m_EditorClassIdentifier: 
-  Message: 'Once you are finished, click this button to confirm your turn.
-
-    <br>Don''t
-    forget that you have to select a color and you have to fill exactly the same
-    number of spaces as the value rolled on the die. You can see this number next
-    to your two colors.'
+  Message: "Once you're done, click the confirm button to end your turn.\n<br>Make
+    sure you\u2019ve selected a color and painted exactly the number of spaces shown
+    on the die. This number is visible next to your two colors."
   MessagePosition: 1
   MessageSize: 2
   Highlight: 5
