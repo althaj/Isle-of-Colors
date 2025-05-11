@@ -17,7 +17,7 @@ MonoBehaviour:
 
     Continue like this until the end of the game is triggered.'
   MessagePosition: 0
-  MessageSize: 1
+  MessageSize: 0
   Highlight: 0
   TutorialArrowTargetName: 
   TutorialArrowDirection: 0
