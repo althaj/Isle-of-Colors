@@ -19,9 +19,21 @@ namespace PSG.IsleOfColors.Managers
             {
                 LoadMainMenu();
             }
+
         }
 
-        public GameOptions GameOptions { get; set; }
+        private GameOptions go;
+
+        // TODO: Update when the tutorial is fully functional and ready
+        public GameOptions GameOptions { 
+            get {
+                go.ShowTutorial = true;
+                return go;
+            }
+            set {
+                go = value;
+            }
+         }
 
         public void LoadMainMenu()
         {

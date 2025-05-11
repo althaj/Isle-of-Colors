@@ -11,7 +11,32 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
     {
         private bool isDone = false;
 
+        private GameManager gameManager;
+
         public SetupState(GameManager gameManager)
+        {
+            this.gameManager = gameManager;
+
+            if(ApplicationManager.Instance.GameOptions.ShowTutorial)
+            {
+                gameManager.OnTutorialStepEnded.AddListener(OnTutorialStepEnded);
+            }
+            else 
+            {
+                SetupGame();
+            }
+        }
+
+        private void OnTutorialStepEnded(TutorialStepId Id)
+        {
+            if(Id == TutorialStepId.Welcome)
+            {
+                gameManager.OnTutorialStepEnded.RemoveListener(OnTutorialStepEnded);
+                SetupGame();
+            }
+        }
+
+        private void SetupGame()
         {
             gameManager.SetupScoring();
 
@@ -46,7 +71,6 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
         public void Exit()
         {
-            Debug.Log("Finished setting up the game.");
         }
 
         public string GetDescription() => "Setting up the game.";
