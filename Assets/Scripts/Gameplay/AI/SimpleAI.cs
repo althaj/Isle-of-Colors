@@ -26,12 +26,18 @@ namespace PSG.IsleOfColors.Gameplay.AI
 
         public void DoTurn(Player player)
         {
-            if(player.DieValue == 0)
+            if (player == null)
             {
-                player.StartColoring(player.Colors.First());
-                player.Confirm();
+                Debug.LogError("SimpleAI.DoTurn: Player is null.");
                 return;
             }
+            
+            if (player.DieValue == 0)
+                {
+                    player.StartColoring(player.Colors.First());
+                    player.Confirm();
+                    return;
+                }
 
             List<PlayerSheet> sheets = new();
 
