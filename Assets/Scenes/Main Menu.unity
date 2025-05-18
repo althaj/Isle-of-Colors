@@ -926,9 +926,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: After the last round the score for each region is added up. The player
-    with the higher score wins the game. In case of a tie both players share the
-    victory.
+  m_text: Players total the points for each color based on its scoring condition.
+    The player with the higher total score wins. If scores are tied, both players
+    share the victory.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1396,6 +1396,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnSelectedColorChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerMove:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &285416879
@@ -2518,6 +2521,9 @@ MonoBehaviour:
   OnSelectedColorChanged:
     m_PersistentCalls:
       m_Calls: []
+  OnPlayerMove:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &472614850
 Transform:
   m_ObjectHideFlags: 0
@@ -2675,7 +2681,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: On the bottom right are two buttons to confirm or undo your turn.
+  m_text: On the bottom right are buttons to confirm or undo your turn.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3356,10 +3362,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: On the left and right side of the screen there are arrows. These arrows
-    let you switch between the islands of the players. The name of the player who's
-    island you are viewing is displayed on top of the screen. The top panels displaying
-    scores and color usage are always updated for the island you are currently viewing.
+  m_text: "On the left and right sides of the screen are arrow buttons that let you
+    switch between the players\u2019 islands. The name of the player whose island
+    you're currently viewing appears at the top. All top panels update automatically
+    based on the selected island."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3798,7 +3804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.7490196}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3858,7 +3864,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: -255}
+  m_AnchoredPosition: {x: 150, y: -295}
   m_SizeDelta: {x: 280, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &635184861
@@ -4037,10 +4043,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: In <b>Isle of Colors</b> players are adventurers exploring colorful islands.
-    Over multiple rounds players simultaneously fill in their personal island with
-    four colors, each representing one type of region. At the end of the game each
-    region type is scored differently. The player with the most points wins!
+  m_text: In <b>Isle of Colors</b>, players are adventurers exploring vibrant, colorful
+    islands. Over multiple rounds, players simultaneously fill in their personal
+    islands with four colors, each representing a different region type. At the end
+    of the game, each region is scored according to its own unique condition. The
+    player with the highest score wins!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5668,9 +5675,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The bottom center of the screen shows the 2 color buttons that are available
-    to the player you are currently viewing. In the buttons is the number that has
-    been rolled in the current round (more on this later).
+  m_text: The bottom center displays two color buttons, representing the colors available
+    to the player you're currently viewing. Next to them is the number rolled for
+    the current round (explained later).
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5943,10 +5950,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: When playing the 2 player hot seat version, one player completes their
-    turn, then switch the view to the other island and the other player completes
-    their turn. Always check the name of the player on the top of the screen to avoid
-    playing for the other player.
+  m_text: When playing the 2-player hot seat version, one player completes their
+    turn, then switches the view to the other island so the second player can take
+    their turn. Always double-check the player name at the top of the screen to avoid
+    making a move for the wrong player.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7067,13 +7074,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'On the top of the screen there are multiple panels.
+  m_text: 'On the top of the screen, several panels provide key information:
 
 
-    4 color panels
-    display the name of the scoring chosen for the color and the amount of points
-    you are currently earning from this color. You can hover over a color panel with
-    your mouse to display information about how this color is scored.'
+    4
+    color panels display the name of the scoring condition assigned to each color,
+    along with the number of points you''re currently earning for that color. You
+    can hover over a panel to see a description of how that color is scored.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7209,10 +7216,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Once the end of the game is triggered (either by any player using a certain
-    color six times or by not having space to fill in a group on their island), players
-    finish the current round and complete one final round. Players then proceed to
-    scoring.
+  m_text: "Once the end of the game is triggered (either because a player used the
+    same color six times or couldn\u2019t place a group), players finish the current
+    round and then complete one final round. After that, final scoring begins."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8516,6 +8522,9 @@ MonoBehaviour:
   OnGameEnded:
     m_PersistentCalls:
       m_Calls: []
+  OnTutorialStepEnded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1201206697
 Transform:
   m_ObjectHideFlags: 0
@@ -9238,7 +9247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.7490196}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -9523,7 +9532,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 400}
+  m_SizeDelta: {x: 300, y: 440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1566428389
 MonoBehaviour:
@@ -9578,7 +9587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.7490196}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -10451,9 +10460,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: On the bottom left of the screen is a panel displaying quick information
-    about your opponent's island. Under this panel there is a status message displaying
-    the current state of the game.
+  m_text: "On the bottom left of the screen, you'll find a panel showing a quick
+    summary of your opponent\u2019s island. Beneath it is a status message showing
+    the current state of the game."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10911,8 +10920,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: In the top center of the screen is the color usage panel. It displays information
-    about how many times you have used each color. It also displays your total score.
+  m_text: In the top center of the screen is the color usage panel, which shows how
+    many times you've used each color and your total score.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12842,26 +12851,23 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "The game is played over multiple rounds. Each round plays as follows:\n1.<indent=7%>A
-    die is rolled. Value rolled on the die is displayed in the color buttons on the
-    bottom center of the screen.</indent>\n2.<indent=7%>Both players at the same
-    time complete the following:</indent>\n<indent=7%>2.1</indent><indent=14%>Choose
-    one of the colors they have by clicking on one of the color buttons on the bottom
-    center of the screen.</indent>\n<indent=7%>2.2</indent><indent=14%>Fill in a
-    continuous group with the chosen color on their island.</indent>\n<indent=14%>\u2022</indent><indent=18%>The
-    group has to be exactly the same number of spaces as the value rolled on the
-    die.</indent>\n<indent=14%>\u2022</indent><indent=18%>The group can be anywhere
-    on the island.</indent>\n<indent=14%>\u2022</indent><indent=18%>If a player does
-    not have enough space on the island to fill a group, they don\u2019t fill anything
-    and <b>the end of the game is triggered.</b></indent>\n<indent=7%>2.3</indent><indent=14%>Confirm
-    your turn by clicking the confirm button. You can click on the undo button at
-    any time during your turn before you confirm to undo the last action you made.
-    </indent>\n<indent=7%>2.4</indent><indent=14%>After you confirm your turn, the
-    color that you used is marked on your color usage track on the top middle of
-    the screen. If this is the 6th time you have used this color, <b>the end of the
-    game is triggered.</b></indent>\n3.<indent=7%>After both players confirmed their
-    turn, they swap the colors that they used this round.</indent>\n4.<indent=7%>New
-    round begins.</indent>"
+  m_text: "The game is played over multiple rounds. Each round proceeds as follows:\n1.<indent=7%>A
+    die is rolled. The value rolled is displayed next to the color buttons at the
+    bottom center of the screen.</indent>\n2.<indent=7%>Both players simultaneously
+    complete the following steps:</indent>\n<indent=7%>2.1</indent><indent=14%>Choose
+    one of the two available colors by clicking one of the color buttons.</indent>\n<indent=7%>2.2</indent><indent=14%>Fill
+    a continuous group of spaces with the chosen color on your island.</indent>\n<indent=14%>\u2022</indent><indent=18%>The
+    group must be exactly the same number of spaces as the rolled value.</indent>\n<indent=14%>\u2022</indent><indent=18%>The
+    group can be placed anywhere on the island.</indent>\n<indent=14%>\u2022</indent><indent=18%>If
+    you don\u2019t have enough space on your island to place the group, you skip
+    this step and <b>the end of the game is triggered.</b></indent>\n<indent=7%>2.3</indent><indent=14%>Confirm
+    your move by clicking the confirm button. You can undo your last action any time
+    before confirming by clicking the undo button.</indent>\n<indent=7%>2.4</indent><indent=14%>After
+    confirming, the color you used is recorded on your color usage tracker at the
+    top center of the screen. If this is the 6th time you've used that color, <b>the
+    end of the game is triggered.</b></indent>\n3.<indent=7%>After both players confirm
+    their turns, they swap the colors they used this round.</indent>\n4.<indent=7%>A
+    new round begins.</indent>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -13286,9 +13292,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Both players are exploring their own separate island. The islands consist
-    of hexagonal spaces that the players will fill with colors during the course
-    of the game.
+  m_text: Each player explores their own separate island. These islands are made
+    up of hexagonal spaces that will be filled with colors throughout the game.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -13609,7 +13614,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: -305}
+  m_AnchoredPosition: {x: 150, y: -345}
   m_SizeDelta: {x: 280, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2115969252
@@ -13715,9 +13720,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: At the beginning of the game for each color a random scoring condition
-    is chosen. A popup window will show you which scoring conditions have been chosen
-    every time you start a new game.
+  m_text: At the start of the game, a random scoring condition is selected for each
+    color. A popup window will show which conditions were chosen every time you begin
+    a new game.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
