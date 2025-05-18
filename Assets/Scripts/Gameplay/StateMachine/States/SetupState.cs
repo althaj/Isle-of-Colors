@@ -55,7 +55,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
             if (colors.Count != 4)
                 throw new ArgumentException($"SetupState: Incorrect number of colors. Expecting 4, got {colors.Count}.");
 
-            // TODO naimplementovať shuffle do RNGManager
+            // TODO implement shuffle to RNGManager
             colors = colors.OrderBy(x => RNGManager.RNGManager.Manager["Game"].NextInt(100)).ToList();
             player1.AddColor(colors[0]);
             player1.AddColor(colors[1]);
