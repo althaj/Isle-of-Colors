@@ -31,7 +31,7 @@ namespace PSG.IsleOfColors.Gameplay
         public int DieValue { get; private set; }
         private int currentMoveIndex = 0;
         private bool isColoring = false;
-        private bool turnFinished = true;
+        private bool turnFinished = false;
         private PencilColor coloringColor;
 
         private GameManager gameManager;
@@ -54,9 +54,15 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
-        public bool CanConfirm => coloringColor != null && PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) == DieValue;
+        public bool CanConfirm {
+            get {
+                bool hasCompletedTurn = PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) == DieValue;
+                bool hasSelectedColor = coloringColor != null;
+                return hasCompletedTurn && hasSelectedColor && !turnFinished;
+            }
+        }
 
-        public bool CanUndo => currentMoveIndex > 0;
+        public bool CanUndo => currentMoveIndex > 0 && !turnFinished;
 
         void Awake()
         {
@@ -173,14 +179,7 @@ namespace PSG.IsleOfColors.Gameplay
                 return;
             }
 
-            foreach (var spaceY in PlayerSheet.Spaces)
-            {
-                foreach (var space in spaceY)
-                {
-                    if (space != null && space.IsNew)
-                        space.Confirm();
-                }
-            }
+            PlayerSheet.Confirm();
 
             gameManager.UseColor(coloringColor);
 

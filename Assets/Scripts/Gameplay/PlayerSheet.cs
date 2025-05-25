@@ -32,6 +32,18 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
+        public void Confirm()
+        {
+            foreach (var spaceY in Spaces)
+            {
+                foreach (var space in spaceY)
+                {
+                    if (space != null && space.IsNew)
+                        space.Confirm();
+                }
+            }
+        }
+
         internal void UpdateAvailableMoves(int currentMoveIndex, int maxMoves)
         {
             if (currentMoveIndex == 0 && maxMoves != 0)
@@ -437,11 +449,9 @@ namespace PSG.IsleOfColors.Gameplay
                     {
                         sheet.Spaces[y][x] = new PlayerSheetSpace(x, y)
                         {
-                            Color = Spaces[y][x].Color,
-                            IsEnabled = Spaces[y][x].IsEnabled,
-                            IsNew = Spaces[y][x].IsNew,
-                            MoveIndex = Spaces[y][x].MoveIndex
+                            IsEnabled = Spaces[y][x].IsEnabled
                         };
+                        sheet.Spaces[y][x].SetColor(Spaces[y][x].Color, Spaces[y][x].MoveIndex);
                     }
                 }
             }
