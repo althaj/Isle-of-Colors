@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
+  m_Name: 02. Scoring panels
+  m_EditorClassIdentifier: 
+  Message: "To the left and right of this, you'll see the four scoring conditions.
+    Each panel shows the color associated with the condition, its title, and the
+    current player\u2019s score for that color.\n<br>You can hover your mouse over
+    any scoring condition panel to see its full description."
+  MessagePosition: 0
+  MessageSize: 2
+  Highlight: 2
+  TutorialArrowTargetName: Top area/Green scoring panel
+  TutorialArrowDirection: 0
+  TutorialArrowOffset: 0.1

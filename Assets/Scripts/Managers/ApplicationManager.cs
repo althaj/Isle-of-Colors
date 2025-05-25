@@ -19,6 +19,7 @@ namespace PSG.IsleOfColors.Managers
             {
                 LoadMainMenu();
             }
+
         }
 
         public GameOptions GameOptions { get; set; }

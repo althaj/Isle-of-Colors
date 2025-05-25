@@ -9,9 +9,6 @@
    id="svg5"
    sodipodi:docname="UI.svg"
    inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   inkscape:export-filename="..\..\Assets\Sprites\UI\Button - highlight static.png"
-   inkscape:export-xdpi="130.04797"
-   inkscape:export-ydpi="130.04797"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -28,9 +25,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.4912879"
-     inkscape:cx="637.70384"
-     inkscape:cy="688.6665"
+     inkscape:zoom="2.1089995"
+     inkscape:cx="564.0115"
+     inkscape:cy="844.47624"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="1912"
@@ -146,6 +143,36 @@
        y1="111.99978"
        x2="1.5"
        y2="117.5" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1294"
+       id="radialGradient1111"
+       cx="135.4352"
+       cy="238.6485"
+       fx="135.4352"
+       fy="238.6485"
+       r="27.955784"
+       gradientTransform="matrix(0.43522898,-1.74093,0.90731047,0.2268258,-130.5316,406.43776)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3725"
+       id="linearGradient1846"
+       x1="159.64568"
+       y1="224.35762"
+       x2="159.64568"
+       y2="234.38167"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3725"
+       id="linearGradient1850"
+       gradientUnits="userSpaceOnUse"
+       x1="159.64568"
+       y1="224.35762"
+       x2="159.64568"
+       y2="234.38167"
+       gradientTransform="translate(-12.16736,-23.92967)" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -281,65 +308,35 @@
        inkscape:export-filename="..\..\Assets\Sprites\UI\Button - disabled.png"
        inkscape:export-xdpi="130.04797"
        inkscape:export-ydpi="130.04797" />
-    <rect
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffd42a;stroke-width:4;stroke-linecap:round;stroke-dasharray:4,12;stroke-opacity:1;paint-order:normal;stroke-dashoffset:0"
-       id="rect11541"
-       width="50"
-       height="25"
-       x="120"
-       y="173.90323"
-       rx="6.0867853"
-       ry="5.1804814"
-       inkscape:export-filename="..\..\Assets\Sprites\UI\Button - highlight 1.png"
-       inkscape:export-xdpi="130.04797"
-       inkscape:export-ydpi="130.04797" />
-    <rect
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffd42a;stroke-width:4;stroke-linecap:round;stroke-dasharray:4,12;stroke-dashoffset:12;stroke-opacity:1;paint-order:normal"
-       id="rect13001"
-       width="50"
-       height="25"
-       x="120"
-       y="208.5"
-       rx="6.0867853"
-       ry="5.1804814"
-       inkscape:export-filename="..\..\Assets\Sprites\UI\Button - highlight 2.png"
-       inkscape:export-xdpi="130.04797"
-       inkscape:export-ydpi="130.04797" />
-    <rect
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffd42a;stroke-width:4;stroke-linecap:round;stroke-dasharray:4,12;stroke-dashoffset:8;stroke-opacity:1;paint-order:normal"
-       id="rect13003"
-       width="50"
-       height="25"
-       x="120"
-       y="239.54839"
-       rx="6.0867853"
-       ry="5.1804814"
-       inkscape:export-filename="..\..\Assets\Sprites\UI\Button - highlight 3.png"
-       inkscape:export-xdpi="130.04797"
-       inkscape:export-ydpi="130.04797" />
-    <rect
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffd42a;stroke-width:4;stroke-linecap:round;stroke-dasharray:4,12;stroke-dashoffset:4;stroke-opacity:1;paint-order:normal"
-       id="rect13005"
-       width="50"
-       height="25"
-       x="120"
-       y="275.03226"
-       rx="6.0867853"
-       ry="5.1804814"
-       inkscape:export-filename="..\..\Assets\Sprites\UI\Button - highlight 4.png"
-       inkscape:export-xdpi="130.04797"
-       inkscape:export-ydpi="130.04797" />
-    <rect
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffd42a;stroke-width:4;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
-       id="rect13733"
-       width="50"
-       height="25"
-       x="190.6129"
-       y="173.90323"
-       rx="6.0867853"
-       ry="5.1804814"
-       inkscape:export-filename="..\..\Assets\Sprites\UI\Button - highlight 1.png"
-       inkscape:export-xdpi="130.04797"
-       inkscape:export-ydpi="130.04797" />
+    <path
+       id="path1848"
+       style="opacity:1;fill:url(#linearGradient1850);fill-opacity:1;stroke:none;stroke-width:2.0995;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:0.983287;paint-order:normal"
+       d="m 132.77464,200.452 v 10 l 48.66906,-3.3e-4 v -10 z"
+       inkscape:label="Shadow"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="..\..\Assets\Sprites\UI\Panel - sharp.png"
+       inkscape:export-xdpi="126.26007"
+       inkscape:export-ydpi="126.26007" />
+    <path
+       id="path1117"
+       style="opacity:1;fill:#f9f9f9;fill-opacity:1;stroke:#6c6753;stroke-width:3;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="m 136.47881,198.8645 h 10.57986 v 24.86337 h 20.10066 V 198.8645 l 10.5802,-3.3e-4 -20.63036,-20.63037 z"
+       inkscape:label="Frame"
+       sodipodi:nodetypes="cccccccc" />
+    <path
+       id="path1836"
+       style="opacity:1;fill:url(#linearGradient1846);fill-opacity:1;stroke:none;stroke-width:2.0995;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:0.983287;paint-order:normal"
+       d="m 144.942,224.38167 v 10 l 24.48922,-0.0444 v -10 z"
+       inkscape:label="Shadow"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="..\..\Assets\Sprites\UI\Panel - sharp.png"
+       inkscape:export-xdpi="126.26007"
+       inkscape:export-ydpi="126.26007" />
+    <path
+       id="path383"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:url(#radialGradient1111);stroke-width:3;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="M 132.77464,200.452 H 144.942 v 24.3342 H 157.10917 169.276 V 200.452 l 12.1677,-3.3e-4 -24.33453,-24.33453 z"
+       inkscape:label="Frame"
+       sodipodi:nodetypes="ccccccccc" />
   </g>
 </svg>
