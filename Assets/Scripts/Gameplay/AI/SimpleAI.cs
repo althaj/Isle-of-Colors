@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PSG.IsleOfColors.Gameplay.Scoring;
-using UnityEditor.Rendering;
+using PSG.IsleOfColors.Managers;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay.AI
@@ -15,6 +15,7 @@ namespace PSG.IsleOfColors.Gameplay.AI
         {
             switch (ApplicationManager.Instance.GameOptions.Difficulty)
             {
+                case GameOptions.BotDifficulty.MainMenu : retryCount = 1; break;
                 case GameOptions.BotDifficulty.Easy: retryCount = 75; break;
                 case GameOptions.BotDifficulty.Medium: retryCount = 150; break;
                 case GameOptions.BotDifficulty.Hard: retryCount = 300; break;
@@ -23,8 +24,26 @@ namespace PSG.IsleOfColors.Gameplay.AI
             gameManager = Object.FindFirstObjectByType<GameManager>();
         }
 
-        public void DoTurn(Player player)
+        public bool DoTurn(Player player)
         {
+            if (player == null || player.Colors == null || player.Colors.Count == 0)
+            {
+                Debug.LogError("SimpleAI.DoTurn: Player is null or player colors are null or empty.");
+                return false;
+            }
+            
+            if(player.PlayerState == StateMachine.States.EPlayerState.Finished)
+            {
+                return false;
+            }
+
+            if (player.DieValue == 0)
+                {
+                    player.StartColoring(player.Colors.First());
+                    player.Confirm();
+                    return true;
+                }
+
             List<PlayerSheet> sheets = new();
 
             List<PencilColor> colorsToCheck = player.Colors;
@@ -34,7 +53,7 @@ namespace PSG.IsleOfColors.Gameplay.AI
             if (
                 gameManager.GreenScoring is SwampScoring
                 && player.PlayerSheet.GetAllGroups(greenColor).Count == 0 
-                && colorsToCheck.Any(x => x == greenColor)
+                && colorsToCheck.Contains(greenColor)
                 && player.DieValue > 3
             )
                 colorsToCheck = new() { greenColor };
@@ -44,6 +63,10 @@ namespace PSG.IsleOfColors.Gameplay.AI
                 for (int i = 0; i < retryCount; i++)
                 {
                     var newSheet = player.PlayerSheet.GetCopy();
+                    foreach(PlayerSheetSpace space in newSheet.GetNewSpaces())
+                    {
+                        space.Undo();
+                    }
 
                     newSheet.FillInRandomGroup(color, player.DieValue);
 
@@ -52,19 +75,44 @@ namespace PSG.IsleOfColors.Gameplay.AI
             }
 
             if (sheets.Count == 0)
-                return;
+                return false;
 
             var sheet = sheets.OrderByDescending(x => GetScoreFromSheet(x).TotalScore).First();
 
             var newSpaces = sheet.GetNewSpaces();
             if (newSpaces.Count == 0)
-                return;
+                return false;
 
-            player.StartColoring(newSpaces.First().Color);
+            PencilColor selectedColor = newSpaces.Where(x => x.Color != null).Select(x => x.Color).FirstOrDefault();
+            if(selectedColor == null)
+            {
+                Debug.LogError("SimpleAI.DoTurn: No color found in new spaces. Cannot do a turn.");
+                return false;
+            }
+
+            player.StartColoring(selectedColor);
             foreach (var space in newSpaces)
                 player.SetColor(space.X, space.Y);
 
+            if(!player.CanConfirm)
+            {
+                bool tepmp = player.CanConfirm;
+
+                Debug.LogError("SimpleAI.DoTurn: Player cannot confirm the turn. Cannot do a turn.");
+
+                foreach(PlayerSheetSpace space in player.PlayerSheet.GetNewSpaces())
+                {
+                    space.Undo();
+                }
+
+                player.StartColoring(null);
+
+                return false;
+            }
+
             player.Confirm();
+
+            return true;
         }
 
         private PlayerScore GetScoreFromSheet(PlayerSheet sheet)

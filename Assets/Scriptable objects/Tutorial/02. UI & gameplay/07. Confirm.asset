@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
+  m_Name: 07. Confirm
+  m_EditorClassIdentifier: 
+  Message: "Once you're done, click the confirm button to end your turn.\n<br>Make
+    sure you\u2019ve selected a color and painted exactly the number of spaces shown
+    on the die. This number is visible next to your two colors."
+  MessagePosition: 1
+  MessageSize: 2
+  Highlight: 5
+  TutorialArrowTargetName: Confirm button
+  TutorialArrowDirection: 4
+  TutorialArrowOffset: 0.1

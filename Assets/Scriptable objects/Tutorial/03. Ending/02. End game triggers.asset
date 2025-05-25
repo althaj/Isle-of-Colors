@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
+  m_Name: 02. End game triggers
+  m_EditorClassIdentifier: 
+  Message: 'The game ends when either:
+
+    <indent=5%>a player no longer has enough
+    space left to paint, or</indent>
+
+    <indent=5%>a player has used the same color
+    six times.</indent>
+
+    <br>When this happens, each player takes one final turn,
+    and then scores are compared.
+
+    The player with the higher score wins!'
+  MessagePosition: 0
+  MessageSize: 2
+  Highlight: 0
+  TutorialArrowTargetName: 
+  TutorialArrowDirection: 0
+  TutorialArrowOffset: 0.5

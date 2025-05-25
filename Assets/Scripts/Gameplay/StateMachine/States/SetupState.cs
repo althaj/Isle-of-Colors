@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PSG.IsleOfColors.Gameplay.AI;
+using PSG.IsleOfColors.Managers;
 using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay.StateMachine.States
@@ -10,7 +11,32 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
     {
         private bool isDone = false;
 
+        private GameManager gameManager;
+
         public SetupState(GameManager gameManager)
+        {
+            this.gameManager = gameManager;
+
+            if(ApplicationManager.Instance.GameOptions.ShowTutorial)
+            {
+                gameManager.OnTutorialStepEnded.AddListener(OnTutorialStepEnded);
+            }
+            else 
+            {
+                SetupGame();
+            }
+        }
+
+        private void OnTutorialStepEnded(TutorialStepId Id)
+        {
+            if(Id == TutorialStepId.Welcome)
+            {
+                gameManager.OnTutorialStepEnded.RemoveListener(OnTutorialStepEnded);
+                SetupGame();
+            }
+        }
+
+        private void SetupGame()
         {
             gameManager.SetupScoring();
 
@@ -29,7 +55,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
             if (colors.Count != 4)
                 throw new ArgumentException($"SetupState: Incorrect number of colors. Expecting 4, got {colors.Count}.");
 
-            // TODO naimplementovať shuffle do RNGManager
+            // TODO implement shuffle to RNGManager
             colors = colors.OrderBy(x => RNGManager.RNGManager.Manager["Game"].NextInt(100)).ToList();
             player1.AddColor(colors[0]);
             player1.AddColor(colors[1]);
@@ -45,7 +71,6 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
         public void Exit()
         {
-            Debug.Log("Finished setting up the game.");
         }
 
         public string GetDescription() => "Setting up the game.";

@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: 'Pandora Stratos Games '
+  companyName: Pandora Stratos Games
   productName: Isle of Colors
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}

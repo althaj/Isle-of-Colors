@@ -19,14 +19,19 @@ namespace PSG.IsleOfColors.UI
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private GameObject descriptionPanel;
 
+        private bool isShown;
+
         private GameManager gameManager;
 
         private Player currentPlayer;
 
-        private void Awake()
+        private void Start()
         {
+            Display(false);
+
             gameManager = FindFirstObjectByType<GameManager>();
             gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
+            OnScoringSetupFinished();
         }
 
         private void OnScoringSetupFinished()
@@ -34,6 +39,8 @@ namespace PSG.IsleOfColors.UI
             IScoring scoring = gameManager.GetScoring(color);
             if (scoring == null)
                 return;
+
+            Display(true);
 
             image.color = color.Color;
             scoringTitleText.text = scoring.GetName();
@@ -47,6 +54,20 @@ namespace PSG.IsleOfColors.UI
                 
                 OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
             }
+        }
+
+        private void Display(bool show)
+        {
+            image.enabled = show;
+            scoringTitleText.enabled = show;
+            descriptionText.enabled = show;
+
+            if(!isSetupScoring)
+            {
+                scoreText.enabled = show;
+            }
+
+            isShown = show;
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
@@ -63,7 +84,8 @@ namespace PSG.IsleOfColors.UI
 
         public void OnPointerEnter()
         {
-            descriptionPanel.SetActive(true);
+            if(isShown)
+                descriptionPanel.SetActive(true);
         }
 
         public void OnPointerExit()

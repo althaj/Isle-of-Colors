@@ -32,56 +32,78 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
-        internal void UpdateAvailableMoves(bool isColoring, int currentMoveIndex, int maxMoves)
+        public void Confirm()
         {
-            if (isColoring)
+            foreach (var spaceY in Spaces)
             {
-                if (currentMoveIndex == 0 && maxMoves != 0)
+                foreach (var space in spaceY)
                 {
-                    foreach (var spaceY in Spaces)
-                    {
-                        foreach (var space in spaceY)
-                        {
-                            if (space != null)
-                                space.IsEnabled = space.Color == null;
-                        }
-                    }
+                    if (space != null && space.IsNew)
+                        space.Confirm();
                 }
-                else
+            }
+        }
+
+        internal void UpdateAvailableMoves(int currentMoveIndex, int maxMoves)
+        {
+            if (currentMoveIndex == 0 && maxMoves != 0)
+            {
+                foreach (var spaceY in Spaces)
                 {
-                    if (currentMoveIndex >= maxMoves)
+                    foreach (var space in spaceY)
                     {
-                        ClearAllSpaces();
-                    }
-                    else
-                    {
-                        List<PlayerSheetSpace> spacesToEnable = new();
-                        for (int y = 0; y < Spaces.Length; y++)
-                        {
-                            for (int x = 0; x < Spaces[y].Length; x++)
-                            {
-                                if (Spaces[y][x] == null)
-                                    continue;
-
-                                Spaces[y][x].IsEnabled = false;
-
-                                if (Spaces[y][x].IsNew)
-                                {
-                                    spacesToEnable.AddRange(GetAllAvailableNeighbours(x, y));
-                                }
-                            }
-                        }
-
-                        foreach (var space in spacesToEnable.Distinct())
-                        {
-                            space.IsEnabled = true;
-                        }
+                        if (space != null)
+                            space.IsEnabled = space.Color == null;
                     }
                 }
             }
             else
             {
-                ClearAllSpaces();
+                if (currentMoveIndex >= maxMoves)
+                {
+                    ClearAllSpaces();
+                }
+                else
+                {
+                    List<PlayerSheetSpace> spacesToEnable = new();
+                    for (int y = 0; y < Spaces.Length; y++)
+                    {
+                        for (int x = 0; x < Spaces[y].Length; x++)
+                        {
+                            if (Spaces[y][x] == null)
+                                continue;
+
+                            Spaces[y][x].IsEnabled = false;
+
+                            if (Spaces[y][x].IsNew)
+                            {
+                                spacesToEnable.AddRange(GetAllAvailableNeighbours(x, y));
+                            }
+                        }
+                    }
+
+                    foreach (var space in spacesToEnable.Distinct())
+                    {
+                        space.IsEnabled = true;
+                    }
+                }
+            }
+        }
+
+        internal void UpdateNewSpacesWithColor(PencilColor color)
+        {
+            for (int y = 0; y < Spaces.Length; y++)
+            {
+                for (int x = 0; x < Spaces[y].Length; x++)
+                {
+                    if (Spaces[y][x] == null)
+                        continue;
+
+                    if (Spaces[y][x].IsNew)
+                    {
+                        Spaces[y][x].SetColor(color, Spaces[y][x].MoveIndex);
+                    }
+                }
             }
         }
 
@@ -351,13 +373,18 @@ namespace PSG.IsleOfColors.Gameplay
             return result;
         }
 
-        private void AddHexIfColor(List<PlayerSheetSpace> list, int x, int y, PencilColor color)
+        private void AddHexIfColor(List<PlayerSheetSpace> list, int x, int y, PencilColor color, bool? isNew = null)
         {
             if (!DoesSpaceExist(x, y))
                 return;
 
             if (Spaces[y][x].Color == color)
-                list.Add(Spaces[y][x]);
+            {
+                if(Spaces[y][x].IsNew == isNew || isNew == null)
+                {
+                    list.Add(Spaces[y][x]);
+                }
+            }
         }
 
         private void AddHexIfExists(List<PlayerSheetSpace> list, int x, int y)
@@ -387,12 +414,12 @@ namespace PSG.IsleOfColors.Gameplay
             bool isEven = y % 2 == 0;
 
             List<PlayerSheetSpace> result = new();
-            AddHexIfColor(result, isEven ? x - 1 : x, y - 1, null);
-            AddHexIfColor(result, isEven ? x : x + 1, y - 1, null);
-            AddHexIfColor(result, x - 1, y, null);
-            AddHexIfColor(result, x + 1, y, null);
-            AddHexIfColor(result, isEven ? x - 1 : x, y + 1, null);
-            AddHexIfColor(result, isEven ? x : x + 1, y + 1, null);
+            AddHexIfColor(result, isEven ? x - 1 : x, y - 1, null, false);
+            AddHexIfColor(result, isEven ? x : x + 1, y - 1, null, false);
+            AddHexIfColor(result, x - 1, y, null, false);
+            AddHexIfColor(result, x + 1, y, null, false);
+            AddHexIfColor(result, isEven ? x - 1 : x, y + 1, null, false);
+            AddHexIfColor(result, isEven ? x : x + 1, y + 1, null, false);
 
             return result;
         }
@@ -422,16 +449,28 @@ namespace PSG.IsleOfColors.Gameplay
                     {
                         sheet.Spaces[y][x] = new PlayerSheetSpace(x, y)
                         {
-                            Color = Spaces[y][x].Color,
-                            IsEnabled = Spaces[y][x].IsEnabled,
-                            IsNew = Spaces[y][x].IsNew,
-                            MoveIndex = Spaces[y][x].MoveIndex
+                            IsEnabled = Spaces[y][x].IsEnabled
                         };
+                        sheet.Spaces[y][x].SetColor(Spaces[y][x].Color, Spaces[y][x].MoveIndex);
                     }
                 }
             }
 
             return sheet;
+        }
+
+        public void Reset()
+        {
+            foreach (var spaceY in Spaces)
+            {
+                foreach (var space in spaceY)
+                {
+                    if (space != null)
+                    {
+                        space.Undo();
+                    }
+                }
+            }
         }
     }
 }

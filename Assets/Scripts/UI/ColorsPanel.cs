@@ -1,6 +1,5 @@
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -22,10 +21,14 @@ namespace PSG.IsleOfColors.UI
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
         {
             if (player != null)
+            {
                 player.OnColorUsageChanged.RemoveListener(OnPlayerColorsChanged);
+                player.OnSelectedColorChanged.RemoveListener(OnSelectedColorChanged);
+            }
 
             player = currentPlayer;
             player.OnPlayerColorsChanged.AddListener(OnPlayerColorsChanged);
+            player.OnSelectedColorChanged.AddListener(OnSelectedColorChanged);
             OnPlayerColorsChanged();
         }
 
@@ -46,8 +49,17 @@ namespace PSG.IsleOfColors.UI
         private void CreateButton(PencilColor color)
         {
             GameObject button = Instantiate(colorButtonPrefab, transform);
-            button.GetComponent<Image>().color = color.Color;
-            button.GetComponent<Button>().onClick.AddListener(() => player.StartColoring(color));
+
+            ColorButton colorButton = button.AddComponent<ColorButton>() as ColorButton;
+            if(colorButton != null && player != null)
+            {
+                colorButton.Initialize(color, player);
+            }
+        }
+
+        void OnSelectedColorChanged()
+        {
+            OnPlayerColorsChanged();
         }
     }
 }

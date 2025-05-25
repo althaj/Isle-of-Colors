@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9faf422c52dd046b13a1291b0fe108, type: 3}
+  m_Name: 03. Region setup
+  m_EditorClassIdentifier: 
+  Message: "At the beginning of each game, a random set of region types is selected.\nThese
+    determine how scoring will work for that game.\n<br>A popup will show you the
+    chosen scoring conditions. You can close it for now\u2014don\u2019t worry, you\u2019ll
+    be able to check them again later.\r"
+  MessagePosition: 0
+  MessageSize: 2
+  Highlight: 0
+  TutorialArrowTargetName: 
+  TutorialArrowDirection: 2
+  TutorialArrowOffset: 0

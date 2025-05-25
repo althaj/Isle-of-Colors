@@ -24,10 +24,11 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
             player1.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
             player2.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
 
-            int dieValue = gameManager.RollDie();
-
+            int dieValue = RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
             player1.StartTurn(dieValue);
             player2.StartTurn(dieValue);
+            
+            gameManager.RollDie(dieValue);
 
             OnPlayerStateChanged();
         }
