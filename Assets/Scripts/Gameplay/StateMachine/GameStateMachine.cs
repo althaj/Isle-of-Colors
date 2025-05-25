@@ -72,7 +72,8 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
 
         public void Reset()
         {
-            currentState = NewRound();
+            currentState = null;
+            NextState();
         }
     }
 }

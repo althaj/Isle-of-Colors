@@ -27,36 +27,46 @@ namespace PSG.IsleOfColors.Graphics
             };
             
             ai = new SimpleAI();
-
             gameManager = FindFirstObjectByType<GameManager>();
             stateMachine = FindFirstObjectByType<GameStateMachine>();
+            
+            if (gameManager == null || stateMachine == null)
+            {
+                Debug.LogError("GameManager or GameStateMachine not found. Cannot start the game animation.");
+                return;
+            }
 
-            StartCoroutine(DoTurn());
+            StartCoroutine(PlayAnimation());
         }
 
-        private IEnumerator DoTurn()
+        private IEnumerator PlayAnimation()
         {
+            if (gameManager == null || stateMachine == null)
+            {
+                Debug.LogError("GameManager or GameStateMachine not found. Cannot start the game animation.");
+                yield break;
+            }
+
+            stateMachine.Reset();
+            gameManager.Reset();
+
             while (true)
             {
-                yield return new WaitForSeconds(Random.Range(turnDelay * 0.1f, turnDelay));
-
-                if (gameManager.IsGameFinished())
+                if(gameManager.IsGameFinished())
                 {
                     yield return new WaitForSeconds(turnDelay);
                     gameManager.Reset();
                     stateMachine.Reset();
                 }
-                else
-                {
-                    foreach (Player player in players)
-                    {
-                        ai.DoTurn(player);
-                    }
-                }
 
+                yield return new WaitForSeconds(Random.Range(turnDelay * 0.1f, turnDelay));
+
+                foreach (Player player in players)
+                {
+                    ai.DoTurn(player);
+                }
             }
         }
-
     }
 
 }
