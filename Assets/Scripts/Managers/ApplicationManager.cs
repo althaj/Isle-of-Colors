@@ -1,4 +1,3 @@
-using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 using UnityEngine.SceneManagement;
