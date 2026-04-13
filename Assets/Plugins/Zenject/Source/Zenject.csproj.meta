@@ -1,5 +1,6 @@
 fileFormatVersion: 2
 guid: 8645273165cb7f54290d6eaa1e10ab37
+<<<<<<< Updated upstream
 timeCreated: 1461878212
 licenseType: Store
 DefaultImporter:
@@ -13,3 +14,10 @@ AssetOrigin:
   packageVersion: 9.2.0
   assetPath: Assets/Plugins/Zenject/Source/Zenject.csproj
   uploadId: 370902
+=======
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+>>>>>>> Stashed changes

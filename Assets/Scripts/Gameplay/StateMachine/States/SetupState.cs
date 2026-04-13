@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using PSG.IsleOfColors.Gameplay.AI;
 using PSG.IsleOfColors.Managers;
-using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 {
@@ -11,17 +10,20 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
     {
         private bool isDone = false;
 
-        private GameManager gameManager;
+        private GameManager _gameManager;
 
-        public SetupState(GameManager gameManager)
+        private ApplicationManager _applicationManager;
+
+        public SetupState(GameManager gameManager, ApplicationManager applicationManager)
         {
-            this.gameManager = gameManager;
+            _gameManager = gameManager;
+            _applicationManager = applicationManager;
 
-            if(ApplicationManager.Instance.GameOptions.ShowTutorial)
+            if (_applicationManager.GameOptions.ShowTutorial)
             {
                 gameManager.OnTutorialStepEnded.AddListener(OnTutorialStepEnded);
             }
-            else 
+            else
             {
                 SetupGame();
             }
@@ -29,27 +31,27 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
         private void OnTutorialStepEnded(TutorialStepId Id)
         {
-            if(Id == TutorialStepId.Welcome)
+            if (Id == TutorialStepId.Welcome)
             {
-                gameManager.OnTutorialStepEnded.RemoveListener(OnTutorialStepEnded);
+                _gameManager.OnTutorialStepEnded.RemoveListener(OnTutorialStepEnded);
                 SetupGame();
             }
         }
 
         private void SetupGame()
         {
-            gameManager.SetupScoring();
+            _gameManager.SetupScoring();
 
-            Player player1 = gameManager.Player1;
-            Player player2 = gameManager.Player2;
-            List<PencilColor> colors = gameManager.Colors;
+            Player player1 = _gameManager.Player1;
+            Player player2 = _gameManager.Player2;
+            List<PencilColor> colors = _gameManager.Colors;
 
             player1.Initialize();
             player2.Initialize();
 
-            if(ApplicationManager.Instance.GameOptions.IsSinglePlayer)
+            if (_applicationManager.GameOptions.IsSinglePlayer)
             {
-                player2.SetBot(new SimpleAI());
+                player2.SetBot(new SimpleAI(_applicationManager));
             }
 
             if (colors.Count != 4)
@@ -66,7 +68,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
         public void Execute()
         {
-            
+
         }
 
         public void Exit()

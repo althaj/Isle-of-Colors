@@ -1,6 +1,7 @@
 using PSG.IsleOfColors.Managers;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -9,9 +10,16 @@ namespace PSG.IsleOfColors.UI
     {
         [SerializeField] private UIAudioType audioType;
 
+        [Inject] private AudioManager _audioManager;
+
         void Start()
         {
-            GetComponent<Button>().onClick.AddListener(() => AudioManager.Instance.PlayUISound(audioType));
+            GetComponent<Button>().onClick.AddListener(() => PlaySound(_audioManager));
+        }
+
+        private void PlaySound(AudioManager audioManager)
+        {
+            audioManager.PlayUISound(audioType);
         }
     }
 }

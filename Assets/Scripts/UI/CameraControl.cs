@@ -1,5 +1,6 @@
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -35,7 +36,6 @@ namespace PSG.IsleOfColors.UI
         #region private variables
 
         private Transform activePlayer;
-        private GameManager gameManager;
         private Camera mainCamera;
 
         private float startingZoom = 0;
@@ -54,12 +54,13 @@ namespace PSG.IsleOfColors.UI
 
         #endregion
 
+        [Inject] private GameManager _gameManager;
+
         private void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
 
-            OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
+            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
 
             screenSize = new Vector2(Screen.width, Screen.height);
             mainCamera = Camera.main;
@@ -70,7 +71,7 @@ namespace PSG.IsleOfColors.UI
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
         {
-            if (currentPlayer == gameManager.Player1)
+            if (currentPlayer == _gameManager.Player1)
                 activePlayer = player1Transform;
             else
                 activePlayer = player2Transform;

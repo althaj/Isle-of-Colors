@@ -2,6 +2,7 @@ using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -9,13 +10,12 @@ namespace PSG.IsleOfColors.UI
     {
         [SerializeField] private Player player;
         private Button button;
-        private GameManager gameManager;
+        [Inject] private GameManager _gameManager;
         void Start()
         {
             button = GetComponent<Button>();
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-            OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
@@ -28,7 +28,7 @@ namespace PSG.IsleOfColors.UI
 
         public void ChangeCurrentPlayer()
         {
-            gameManager.ChangeCurrentPlayer();
+            _gameManager.ChangeCurrentPlayer();
         }
     }
 }

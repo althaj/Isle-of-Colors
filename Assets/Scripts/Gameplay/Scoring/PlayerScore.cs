@@ -6,7 +6,7 @@ namespace PSG.IsleOfColors.Gameplay.Scoring
     public struct PlayerScore
     {
         public Dictionary<PencilColor, int> ColorScores { get; set; }
-        public int TotalScore { get => ColorScores.Sum(k => k.Value); }
+        public int TotalScore { get => ColorScores == null ? 0 : ColorScores.Sum(k => k.Value); }
 
         public PlayerScore(List<PencilColor> colors)
         {

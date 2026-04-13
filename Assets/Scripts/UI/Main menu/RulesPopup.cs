@@ -1,8 +1,8 @@
-using System;
 using System.Collections;
 using PSG.IsleOfColors.Managers;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -20,6 +20,8 @@ namespace PSG.IsleOfColors.UI
         private GameObject[] pages;
         int currentPageId;
 
+        [Inject] private AnalyticsManager _analyticsManager;
+
         void Start()
         {
             pages = new GameObject[pagesContainer.childCount];
@@ -35,7 +37,7 @@ namespace PSG.IsleOfColors.UI
             popupPanel.SetActive(true);
             SwitchToPage(0);
 
-            AnalyticsManager.Instance.UserOpenedRulesPopup();
+            _analyticsManager.UserOpenedRulesPopup();
         }
 
         public void ClosePopup()

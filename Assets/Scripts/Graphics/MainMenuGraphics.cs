@@ -4,6 +4,7 @@ using PSG.IsleOfColors.Gameplay.AI;
 using PSG.IsleOfColors.Gameplay.StateMachine;
 using PSG.IsleOfColors.Managers;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.Graphics
 {
@@ -13,26 +14,26 @@ namespace PSG.IsleOfColors.Graphics
 
         private Player[] players;
         private IBot ai;
-        private GameManager gameManager;
-        private GameStateMachine stateMachine;
+
+        [Inject] private ApplicationManager _applicationManager;
+        [Inject] private GameManager _gameManager;
+        [Inject] private GameStateMachine _stateMachine;
 
         private void Start()
         {
-            players = FindObjectsByType<Player>(FindObjectsSortMode.None);
-            
-            ApplicationManager.Instance.GameOptions = new GameOptions
+            players = new[] { _gameManager.Player1, _gameManager.Player2 };
+
+            _applicationManager.GameOptions = new GameOptions
             {
                 Difficulty = GameOptions.BotDifficulty.MainMenu,
                 ShowTutorial = false
             };
-            
-            ai = new SimpleAI();
-            gameManager = FindFirstObjectByType<GameManager>();
-            stateMachine = FindFirstObjectByType<GameStateMachine>();
-            
-            if (gameManager == null || stateMachine == null)
+
+            ai = new SimpleAI(_applicationManager);
+
+            if (_gameManager == null || _stateMachine == null)
             {
-                Debug.LogError("GameManager or GameStateMachine not found. Cannot start the game animation.");
+                Debug.LogError("[MainMenuGraphics:Start] GameManager or GameStateMachine not found. Cannot start the game animation.");
                 return;
             }
 
@@ -41,22 +42,22 @@ namespace PSG.IsleOfColors.Graphics
 
         private IEnumerator PlayAnimation()
         {
-            if (gameManager == null || stateMachine == null)
+            if (_gameManager == null || _stateMachine == null)
             {
-                Debug.LogError("GameManager or GameStateMachine not found. Cannot start the game animation.");
+                Debug.LogError("[MainMenuGraphics:PlayAnimation] GameManager or GameStateMachine not found. Cannot start the game animation.");
                 yield break;
             }
 
-            stateMachine.Reset();
-            gameManager.Reset();
+            _stateMachine.Reset();
+            _gameManager.Reset();
 
             while (true)
             {
-                if(gameManager.IsGameFinished())
+                if (_gameManager.IsGameFinished())
                 {
                     yield return new WaitForSeconds(turnDelay);
-                    gameManager.Reset();
-                    stateMachine.Reset();
+                    _gameManager.Reset();
+                    _stateMachine.Reset();
                 }
 
                 yield return new WaitForSeconds(Random.Range(turnDelay * 0.1f, turnDelay));

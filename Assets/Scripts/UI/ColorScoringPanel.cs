@@ -4,6 +4,7 @@ using PSG.IsleOfColors.Gameplay.Scoring;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -21,22 +22,22 @@ namespace PSG.IsleOfColors.UI
 
         private bool isShown;
 
-        private GameManager gameManager;
-
         private Player currentPlayer;
+
+        [Inject] private GameManager _gameManager;
 
         private void Start()
         {
             Display(false);
 
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
+            _gameManager = FindFirstObjectByType<GameManager>();
+            _gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
             OnScoringSetupFinished();
         }
 
         private void OnScoringSetupFinished()
         {
-            IScoring scoring = gameManager.GetScoring(color);
+            IScoring scoring = _gameManager.GetScoring(color);
             if (scoring == null)
                 return;
 
@@ -48,11 +49,11 @@ namespace PSG.IsleOfColors.UI
 
             if (!isSetupScoring)
             {
-                gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-                gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
-                gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+                _gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                _gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
                 
-                OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
+                OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
             }
         }
 

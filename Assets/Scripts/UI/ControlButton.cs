@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using PSG.IsleOfColors.Gameplay;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -10,19 +11,19 @@ namespace PSG.IsleOfColors.UI
         [SerializeField] private bool isConfirm;
 
         private Button button;
-        private GameManager gameManager;
         private Player currentPlayer;
+        
+        [Inject] private GameManager _gameManager;
 
         void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-            if(gameManager == null)
+            if(_gameManager == null)
             {
                 Debug.LogError("ControlButton.Start: Missing game manager.");
                 return;
             }
 
-            if(gameManager.Player1 == null || gameManager.Player2 == null)
+            if(_gameManager.Player1 == null || _gameManager.Player2 == null)
             {
                 Debug.LogError("ControlButton.Start: Player is missing from GameManager.");
                 return;   
@@ -35,24 +36,24 @@ namespace PSG.IsleOfColors.UI
                 return;
             }
 
-            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-            gameManager.Player1.OnPlayerMove.AddListener(OnPlayerMove);
-            gameManager.Player2.OnPlayerMove.AddListener(OnPlayerMove);
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+            _gameManager.Player1.OnPlayerMove.AddListener(OnPlayerMove);
+            _gameManager.Player2.OnPlayerMove.AddListener(OnPlayerMove);
 
-            OnCurrentPlayerChanged(gameManager.Player1, null);
+            OnCurrentPlayerChanged(_gameManager.Player1, null);
         }
 
         void OnDestroy()
         {
-            if(gameManager == null)
+            if(_gameManager == null)
             {
                 Debug.LogError("ControlButton.OnDestroy: Missing game manager.");
                 return;
             }
 
-            gameManager.OnCurrentPlayerChanged.RemoveListener(OnCurrentPlayerChanged);
-            gameManager.Player1.OnPlayerMove.RemoveListener(OnPlayerMove);
-            gameManager.Player2.OnPlayerMove.RemoveListener(OnPlayerMove);
+            _gameManager.OnCurrentPlayerChanged.RemoveListener(OnCurrentPlayerChanged);
+            _gameManager.Player1.OnPlayerMove.RemoveListener(OnPlayerMove);
+            _gameManager.Player2.OnPlayerMove.RemoveListener(OnPlayerMove);
         }
 
         void OnCurrentPlayerChanged(Player currentPlayer, Player previousPlayer)

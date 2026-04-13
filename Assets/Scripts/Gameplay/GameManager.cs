@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace PSG.IsleOfColors.Gameplay
 {
@@ -48,25 +49,24 @@ namespace PSG.IsleOfColors.Gameplay
         public float GameDuration { get => gameDurationStopwatch != null ? (float)gameDurationStopwatch.Elapsed.TotalSeconds : 0; }
         private Stopwatch gameDurationStopwatch;
 
-        private void Awake()
-        {
-            if (!String.IsNullOrWhiteSpace(ApplicationManager.Instance.GameOptions.Player1Name))
-                player1.Name = ApplicationManager.Instance.GameOptions.Player1Name;
+        [Inject] private ApplicationManager _applicationManager;
 
-            if (!String.IsNullOrWhiteSpace(ApplicationManager.Instance.GameOptions.Player2Name))
-                player2.Name = ApplicationManager.Instance.GameOptions.Player2Name;
+        private void Start()
+        {
+            if (!String.IsNullOrWhiteSpace(_applicationManager.GameOptions.Player1Name))
+                player1.Name = _applicationManager.GameOptions.Player1Name;
+
+            if (!String.IsNullOrWhiteSpace(_applicationManager.GameOptions.Player2Name))
+                player2.Name = _applicationManager.GameOptions.Player2Name;
 
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
             SetCurrentPlayer(player1);
 
             gameDurationStopwatch = new Stopwatch();
             gameDurationStopwatch.Start();
-        }
 
-        private void Start()
-        {
             TutorialUI tutorialUI = FindFirstObjectByType<TutorialUI>();
-            if(tutorialUI != null)
+            if (tutorialUI != null)
                 tutorialUI.OnTutorialStepEnded.AddListener(ReceiveOnTutorialStepEnded);
         }
 

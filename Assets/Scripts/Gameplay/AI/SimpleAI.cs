@@ -3,25 +3,24 @@ using System.Linq;
 using PSG.IsleOfColors.Gameplay.Scoring;
 using PSG.IsleOfColors.Managers;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.Gameplay.AI
 {
     public class SimpleAI : IBot
     {
         private int retryCount;
-        private GameManager gameManager;
+        [Inject] private GameManager _gameManager;
 
-        public SimpleAI()
+        public SimpleAI(ApplicationManager _applicationManager)
         {
-            switch (ApplicationManager.Instance.GameOptions.Difficulty)
+            switch (_applicationManager.GameOptions.Difficulty)
             {
-                case GameOptions.BotDifficulty.MainMenu : retryCount = 1; break;
+                case GameOptions.BotDifficulty.MainMenu: retryCount = 1; break;
                 case GameOptions.BotDifficulty.Easy: retryCount = 75; break;
                 case GameOptions.BotDifficulty.Medium: retryCount = 150; break;
                 case GameOptions.BotDifficulty.Hard: retryCount = 300; break;
             }
-
-            gameManager = Object.FindFirstObjectByType<GameManager>();
         }
 
         public bool DoTurn(Player player)
@@ -31,30 +30,30 @@ namespace PSG.IsleOfColors.Gameplay.AI
                 Debug.LogError("SimpleAI.DoTurn: Player is null or player colors are null or empty.");
                 return false;
             }
-            
-            if(player.PlayerState == StateMachine.States.EPlayerState.Finished)
+
+            if (player.PlayerState == StateMachine.States.EPlayerState.Finished)
             {
                 return false;
             }
 
             if (player.DieValue == 0)
-                {
-                    player.StartColoring(player.Colors.First());
-                    player.Confirm();
-                    return true;
-                }
+            {
+                player.StartColoring(player.Colors.First());
+                player.Confirm();
+                return true;
+            }
 
             List<PlayerSheet> sheets = new();
 
             List<PencilColor> colorsToCheck = player.Colors;
 
             // Swamp scoring fix (it socres for 2nd largest group, so we need to force the bot to create the first group).
-            var greenColor = gameManager.GetColorByName("Green");
+            var greenColor = _gameManager.GetColorByName("Green");
             if (
-                gameManager.GreenScoring is SwampScoring
-                && player.PlayerSheet.GetAllGroups(greenColor).Count == 0 
-                && colorsToCheck.Contains(greenColor)
-                && player.DieValue > 3
+                _gameManager.GreenScoring is SwampScoring
+                    && player.PlayerSheet.GetAllGroups(greenColor).Count == 0
+                    && colorsToCheck.Contains(greenColor)
+                    && player.DieValue > 3
             )
                 colorsToCheck = new() { greenColor };
 
@@ -63,7 +62,7 @@ namespace PSG.IsleOfColors.Gameplay.AI
                 for (int i = 0; i < retryCount; i++)
                 {
                     var newSheet = player.PlayerSheet.GetCopy();
-                    foreach(PlayerSheetSpace space in newSheet.GetNewSpaces())
+                    foreach (PlayerSheetSpace space in newSheet.GetNewSpaces())
                     {
                         space.Undo();
                     }
@@ -84,7 +83,7 @@ namespace PSG.IsleOfColors.Gameplay.AI
                 return false;
 
             PencilColor selectedColor = newSpaces.Where(x => x.Color != null).Select(x => x.Color).FirstOrDefault();
-            if(selectedColor == null)
+            if (selectedColor == null)
             {
                 Debug.LogError("SimpleAI.DoTurn: No color found in new spaces. Cannot do a turn.");
                 return false;
@@ -94,13 +93,13 @@ namespace PSG.IsleOfColors.Gameplay.AI
             foreach (var space in newSpaces)
                 player.SetColor(space.X, space.Y);
 
-            if(!player.CanConfirm)
+            if (!player.CanConfirm)
             {
                 bool tepmp = player.CanConfirm;
 
                 Debug.LogError("SimpleAI.DoTurn: Player cannot confirm the turn. Cannot do a turn.");
 
-                foreach(PlayerSheetSpace space in player.PlayerSheet.GetNewSpaces())
+                foreach (PlayerSheetSpace space in player.PlayerSheet.GetNewSpaces())
                 {
                     space.Undo();
                 }
@@ -117,12 +116,12 @@ namespace PSG.IsleOfColors.Gameplay.AI
 
         private PlayerScore GetScoreFromSheet(PlayerSheet sheet)
         {
-            PlayerScore score = new(gameManager.Colors);
+            PlayerScore score = new(_gameManager.Colors);
 
-            score.SetScore(gameManager.GreenScoring.GetColor(), gameManager.GreenScoring.GetScore(sheet));
-            score.SetScore(gameManager.BlueScoring.GetColor(), gameManager.BlueScoring.GetScore(sheet));
-            score.SetScore(gameManager.BrownScoring.GetColor(), gameManager.BrownScoring.GetScore(sheet));
-            score.SetScore(gameManager.RedScoring.GetColor(), gameManager.RedScoring.GetScore(sheet));
+            score.SetScore(_gameManager.GreenScoring.GetColor(), _gameManager.GreenScoring.GetScore(sheet));
+            score.SetScore(_gameManager.BlueScoring.GetColor(), _gameManager.BlueScoring.GetScore(sheet));
+            score.SetScore(_gameManager.BrownScoring.GetColor(), _gameManager.BrownScoring.GetScore(sheet));
+            score.SetScore(_gameManager.RedScoring.GetColor(), _gameManager.RedScoring.GetScore(sheet));
 
             return score;
         }

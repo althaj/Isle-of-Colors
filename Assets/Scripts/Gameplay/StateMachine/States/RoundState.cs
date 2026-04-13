@@ -6,7 +6,6 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
     {
         public UnityEvent OnDescriptionChanged;
 
-        private GameManager gameManager;
         private Player player1;
         private Player player2;
 
@@ -17,7 +16,6 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
         {
             OnDescriptionChanged = new();
 
-            this.gameManager = gameManager;
             player1 = gameManager.Player1;
             player2 = gameManager.Player2;
 

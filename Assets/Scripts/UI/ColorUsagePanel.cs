@@ -13,7 +13,7 @@ namespace PSG.IsleOfColors.UI
 
         public void PlayerChanged(Player player)
         {
-            if(player != null)
+            if (player != null)
                 player.OnColorUsageChanged.RemoveListener(OnColorUsageChanged);
 
             this.player = player;
@@ -23,6 +23,18 @@ namespace PSG.IsleOfColors.UI
 
         private void OnColorUsageChanged()
         {
+            if (player == null)
+            {
+                Debug.LogError("[ColorUsagePanel:OnColorUsageChanged] Player is invalid.");
+                return;
+            }
+
+            if (!player.ColorUsage.ContainsKey(color))
+            {
+                Debug.LogWarning("[ColorUsagePanel:OnColorUsageChanged] Player's color usage does not contain the color.");
+                return;
+            }
+
             int colorUsage = player.ColorUsage[color];
 
             for (int i = 0; i < transform.childCount; i++)

@@ -1,5 +1,6 @@
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -8,14 +9,13 @@ namespace PSG.IsleOfColors.UI
         [SerializeField] private GameObject colorButtonPrefab;
 
         private Player player;
-        private GameManager gameManager;
+        [Inject] private GameManager _gameManager;
 
         void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
 
-            OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
+            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)

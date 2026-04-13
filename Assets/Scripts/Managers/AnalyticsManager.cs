@@ -1,17 +1,15 @@
-using System;
 using PSG.IsleOfColors.Analytics;
 using PSG.IsleOfColors.Gameplay;
 using Unity.Services.Analytics;
 using Unity.Services.Core;
+using UnityEngine;
 
 namespace PSG.IsleOfColors.Managers
 {
-    public class AnalyticsManager : SingletonManager<AnalyticsManager>
+    public class AnalyticsManager : MonoBehaviour
     {
-        public new async void Start()
+        public async void Start()
         {
-            base.Start();
-
             await UnityServices.InitializeAsync();
 
             AnalyticsService.Instance.StartDataCollection();
@@ -32,9 +30,9 @@ namespace PSG.IsleOfColors.Managers
             AnalyticsService.Instance.RecordEvent(new SettingsMenuSavedEvent(audioSettings));
         }
 
-        public void GameEnded(GameManager gameManager)
+        public void GameEnded()
         {
-            AnalyticsService.Instance.RecordEvent(new GameEndedEvent(gameManager));
+            AnalyticsService.Instance.RecordEvent(new GameEndedEvent());
         }
 
         public void GameStarted(GameOptions.BotDifficulty? difficulty)

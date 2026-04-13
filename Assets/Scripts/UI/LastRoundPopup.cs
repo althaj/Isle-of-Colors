@@ -1,19 +1,19 @@
 using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
     public class LastRoundPopup : MonoBehaviour
     {
-        private GameManager gameManager;
+        [Inject] private GameManager _gameManager;
 
         [SerializeField] private GameObject popup;
 
         private void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnLastRoundStarted.AddListener(OnLastRoundStarted);
+            _gameManager.OnLastRoundStarted.AddListener(OnLastRoundStarted);
             ClosePopup();
         }
 

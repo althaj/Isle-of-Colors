@@ -1,6 +1,7 @@
 using PSG.IsleOfColors.Managers;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI.MainMenu
 {
@@ -11,6 +12,8 @@ namespace PSG.IsleOfColors.UI.MainMenu
         private SettingsPopup settingsPopup;
 
         [SerializeField] private TextMeshProUGUI versionLabel;
+
+        [Inject] private ApplicationManager _applicationManager;
 
         private void Start()
         {
@@ -23,7 +26,7 @@ namespace PSG.IsleOfColors.UI.MainMenu
             settingsPopup = FindFirstObjectByType<SettingsPopup>();
             settingsPopup.ClosePopup();
 
-            versionLabel.text = ApplicationManager.Instance.VersionString;
+            versionLabel.text = _applicationManager.VersionString;
         }
 
         public void StartSinglePlayer()

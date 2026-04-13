@@ -1,25 +1,25 @@
 using PSG.IsleOfColors.Gameplay;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
     public class DieValueText : MonoBehaviour
     {
         private TextMeshProUGUI text;
-        private GameManager gameManager;
+        [Inject] private GameManager _gameManager;
 
         void OnEnable()
         {
             text = GetComponent<TextMeshProUGUI>();
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnDieRolled.AddListener(OnDieRolled);
-            OnDieRolled(gameManager.CurrentDieRoll);
+            _gameManager.OnDieRolled.AddListener(OnDieRolled);
+            OnDieRolled(_gameManager.CurrentDieRoll);
         }
 
         private void OnDisable()
         {
-            gameManager.OnDieRolled.RemoveListener(OnDieRolled);
+            _gameManager.OnDieRolled.RemoveListener(OnDieRolled);
         }
 
         private void OnDieRolled(int dieValue)

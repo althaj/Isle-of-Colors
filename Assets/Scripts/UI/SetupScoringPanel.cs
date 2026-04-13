@@ -2,6 +2,7 @@ using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -11,12 +12,10 @@ namespace PSG.IsleOfColors.UI
 
         public UnityEvent OnSetupScoringPanelClosed;
 
-        private GameManager gameManager;
-
+        [Inject] private GameManager _gameManager;
         private void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
+            _gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
             background.SetActive(false);
         }
 

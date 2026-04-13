@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace PSG.IsleOfColors.Gameplay
 {
@@ -17,7 +18,7 @@ namespace PSG.IsleOfColors.Gameplay
 
         public List<PencilColor> Colors { get; private set; }
         public PlayerSheet PlayerSheet { get; private set; }
-        public Dictionary<PencilColor, int> ColorUsage { get; private set; }
+        public Dictionary<PencilColor, int> ColorUsage { get; private set; } = new();
 
         public UnityEvent OnPlayerColorsChanged;
         public UnityEvent OnPlayerStateChanged;
@@ -33,8 +34,6 @@ namespace PSG.IsleOfColors.Gameplay
         private bool isColoring = false;
         private bool turnFinished = false;
         private PencilColor coloringColor;
-
-        private GameManager gameManager;
 
         public PlayerScore Score { get; private set; }
 
@@ -62,19 +61,18 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
+        [Inject] private GameManager _gameManager;
+
         public bool CanUndo => currentMoveIndex > 0 && !turnFinished;
 
-        void Awake()
+        void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-
-            ColorUsage = new();
-            foreach (PencilColor color in gameManager.Colors)
+            foreach (PencilColor color in _gameManager.Colors)
             {
                 ColorUsage.Add(color, 0);
             }
 
-            Score = new PlayerScore(gameManager.Colors);
+            Score = new PlayerScore(_gameManager.Colors);
         }
 
         internal void Initialize()
@@ -181,7 +179,7 @@ namespace PSG.IsleOfColors.Gameplay
 
             PlayerSheet.Confirm();
 
-            gameManager.UseColor(coloringColor);
+            _gameManager.UseColor(coloringColor);
 
             PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
 
@@ -193,10 +191,10 @@ namespace PSG.IsleOfColors.Gameplay
             OnPlayerStateChanged?.Invoke();
 
             // UPDATE SCORES
-            Score.SetScore(gameManager.GreenScoring.GetColor(), gameManager.GreenScoring.GetScore(PlayerSheet));
-            Score.SetScore(gameManager.BlueScoring.GetColor(), gameManager.BlueScoring.GetScore(PlayerSheet));
-            Score.SetScore(gameManager.BrownScoring.GetColor(), gameManager.BrownScoring.GetScore(PlayerSheet));
-            Score.SetScore(gameManager.RedScoring.GetColor(), gameManager.RedScoring.GetScore(PlayerSheet));
+            Score.SetScore(_gameManager.GreenScoring.GetColor(), _gameManager.GreenScoring.GetScore(PlayerSheet));
+            Score.SetScore(_gameManager.BlueScoring.GetColor(), _gameManager.BlueScoring.GetScore(PlayerSheet));
+            Score.SetScore(_gameManager.BrownScoring.GetColor(), _gameManager.BrownScoring.GetScore(PlayerSheet));
+            Score.SetScore(_gameManager.RedScoring.GetColor(), _gameManager.RedScoring.GetScore(PlayerSheet));
             OnPlayerScoreChanged?.Invoke(this);
             OnPlayerMove?.Invoke(this);
         }
@@ -212,7 +210,7 @@ namespace PSG.IsleOfColors.Gameplay
             if (!PlayerSheet.GetAllGroups(null).Any(x => x.Count >= dieValue))
             {
                 Debug.Log("No more moves.", gameObject);
-                gameManager.NoMoves();
+                _gameManager.NoMoves();
                 DieValue = 0;
             }
 

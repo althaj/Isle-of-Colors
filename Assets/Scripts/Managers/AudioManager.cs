@@ -11,7 +11,7 @@ namespace PSG.IsleOfColors.Managers
         Error
     }
 
-    public class AudioManager : SingletonManager<AudioManager>
+    public class AudioManager : MonoBehaviour
     {
         private AudioSource musicAudioSource;
         private AudioSource uiAudioSource;
@@ -25,7 +25,7 @@ namespace PSG.IsleOfColors.Managers
 
         [SerializeField] private AudioMixer mixer;
 
-        private void Awake()
+        private void Start()
         {
             if (mixer == null)
                 mixer = Resources.Load<AudioMixer>("Audio/Game Audio Mixer");
