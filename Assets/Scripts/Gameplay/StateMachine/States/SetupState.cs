@@ -40,18 +40,13 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
         private void SetupGame()
         {
-            _gameManager.SetupScoring();
-
             Player player1 = _gameManager.Player1;
             Player player2 = _gameManager.Player2;
             List<PencilColor> colors = _gameManager.Colors;
 
-            player1.Initialize();
-            player2.Initialize();
-
             if (_applicationManager.GameOptions.IsSinglePlayer)
             {
-                player2.SetBot(new SimpleAI(_applicationManager));
+                player2.SetBot(new SimpleAI(_applicationManager, _gameManager));
             }
 
             if (colors.Count != 4)

@@ -8,7 +8,8 @@ namespace PSG.IsleOfColors.Managers
         ButtonClick,
         Confirm,
         Close,
-        Error
+        Error,
+        HexSound
     }
 
     public class AudioManager : MonoBehaviour
@@ -22,6 +23,7 @@ namespace PSG.IsleOfColors.Managers
         [SerializeField] private AudioResource confirmClip;
         [SerializeField] private AudioResource closeClip;
         [SerializeField] private AudioResource errorClip;
+        [SerializeField] private AudioResource hexClip;
 
         [SerializeField] private AudioMixer mixer;
 
@@ -46,6 +48,9 @@ namespace PSG.IsleOfColors.Managers
 
             if (errorClip == null)
                 errorClip = Resources.Load<AudioResource>("Audio/Error");
+
+            if (hexClip == null)
+                hexClip = Resources.Load<AudioResource>("Audio/HexSound");
 
             musicAudioSource = gameObject.AddComponent<AudioSource>();
             musicAudioSource.loop = false;
@@ -87,6 +92,7 @@ namespace PSG.IsleOfColors.Managers
                 case UIAudioType.Confirm: PlayAudioResource(confirmClip); break;
                 case UIAudioType.Close: PlayAudioResource(closeClip); break;
                 case UIAudioType.Error: PlayAudioResource(errorClip); break;
+                case UIAudioType.HexSound: PlayAudioResource(hexClip); break;
             }
         }
 

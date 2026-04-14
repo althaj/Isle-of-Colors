@@ -3,6 +3,7 @@ using PSG.IsleOfColors.Gameplay;
 using Unity.Services.Analytics;
 using Unity.Services.Core;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.Managers
 {
@@ -30,9 +31,9 @@ namespace PSG.IsleOfColors.Managers
             AnalyticsService.Instance.RecordEvent(new SettingsMenuSavedEvent(audioSettings));
         }
 
-        public void GameEnded()
+        public void GameEnded(GameManager gameManager, ApplicationManager applicationManager)
         {
-            AnalyticsService.Instance.RecordEvent(new GameEndedEvent());
+            AnalyticsService.Instance.RecordEvent(new GameEndedEvent(gameManager, applicationManager));
         }
 
         public void GameStarted(GameOptions.BotDifficulty? difficulty)

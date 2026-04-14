@@ -17,7 +17,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
         [Inject] private GameManager _gameManager;
         [Inject] private ApplicationManager _applicationManager;
 
-        private void Start()
+        public void StartStateMachine()
         {
             NextState();
         }

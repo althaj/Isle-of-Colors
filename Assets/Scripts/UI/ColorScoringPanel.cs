@@ -29,13 +29,11 @@ namespace PSG.IsleOfColors.UI
         private void Start()
         {
             Display(false);
-
-            _gameManager = FindFirstObjectByType<GameManager>();
-            _gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
-            OnScoringSetupFinished();
+            
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
         }
 
-        private void OnScoringSetupFinished()
+        private void OnGameInitialized()
         {
             IScoring scoring = _gameManager.GetScoring(color);
             if (scoring == null)
@@ -55,6 +53,8 @@ namespace PSG.IsleOfColors.UI
                 
                 OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
             }
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         private void Display(bool show)
@@ -79,6 +79,17 @@ namespace PSG.IsleOfColors.UI
 
         private void OnPlayerScoreChanged(Player currentPlayer)
         {
+            if(currentPlayer == null)
+            {
+                Debug.LogError("[ColorScoringPanel:OnPlayerScoreChanged] Player is invalid.");
+                return;
+            }
+
+            if(currentPlayer.Score == null || !currentPlayer.Score.ColorScores.ContainsKey(color))
+            {
+                return;
+            }
+
             if(this.currentPlayer == currentPlayer)
                 scoreText.text = currentPlayer.Score.ColorScores[color].ToString();
         }

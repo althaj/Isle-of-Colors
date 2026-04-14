@@ -12,14 +12,19 @@ namespace PSG.IsleOfColors.UI
 
         [Inject] private AudioManager _audioManager;
 
-        void Start()
+        void OnEnable()
         {
-            GetComponent<Button>().onClick.AddListener(() => PlaySound(_audioManager));
+            GetComponent<Button>().onClick.AddListener(PlaySound);
         }
 
-        private void PlaySound(AudioManager audioManager)
+        void OnDisable()
         {
-            audioManager.PlayUISound(audioType);
+            GetComponent<Button>().onClick.RemoveListener(PlaySound);
+        }
+
+        private void PlaySound()
+        {
+            _audioManager.PlayUISound(audioType);
         }
     }
 }

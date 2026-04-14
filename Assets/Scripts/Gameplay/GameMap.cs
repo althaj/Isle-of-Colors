@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.Gameplay
 {
@@ -9,6 +10,7 @@ namespace PSG.IsleOfColors.Gameplay
 
         private float deltaY = Mathf.Cos(Mathf.Deg2Rad * 30);
 
+        [Inject] private DiContainer _container;
 
         internal void CreateMap()
         {
@@ -36,7 +38,7 @@ namespace PSG.IsleOfColors.Gameplay
 
             if (space != null)
             {
-                GameObject obj = Instantiate(hexPrefab, parent);
+                GameObject obj = _container.InstantiatePrefab(hexPrefab, parent);
 
                 Vector3 position = new Vector3(startX + x, startY + y * deltaY, 0);
                 if (y % 2 == 1)

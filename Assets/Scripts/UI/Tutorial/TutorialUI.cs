@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using PSG.IsleOfColors.Gameplay.StateMachine.States;
 using Zenject;
+using System;
 
 namespace PSG.IsleOfColors.UI.Tutorial
 {
@@ -66,18 +67,13 @@ namespace PSG.IsleOfColors.UI.Tutorial
 
         void Start()
         {
-            if (_gameManager == null || _gameManager.Player1 == null || _gameManager.Player2 == null)
-            {
-                Debug.LogError("[TutorialUI:Start] Game Manager, Player 1 or Player 2 are invalid.");
-                Destroy(gameObject);
-                return;
-            }
-
             if (!_applicationManager.GameOptions.ShowTutorial)
             {
                 Destroy(gameObject);
                 return;
             }
+
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
 
             if (messageBox != null)
             {
@@ -100,11 +96,16 @@ namespace PSG.IsleOfColors.UI.Tutorial
             };
 
             HideBackgrounds();
-
+            
             ShowTutorialStep(TutorialStepId.Welcome);
+        }
 
+        private void OnGameInitialized()
+        {
             _gameManager.Player1.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
             _gameManager.Player2.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         /// <summary>
@@ -358,18 +359,6 @@ namespace PSG.IsleOfColors.UI.Tutorial
 
         private void OnPlayerStateChanged()
         {
-            if (_gameManager == null)
-            {
-                Debug.LogError("Game manager is invalid.");
-                return;
-            }
-
-            if (_gameManager.Player1 == null || _gameManager.Player2 == null)
-            {
-                Debug.LogError("Player 1 or Player 2 is invalid.");
-                return;
-            }
-
             if (_gameManager.Player1.PlayerState == EPlayerState.Finished && _gameManager.Player2.PlayerState == EPlayerState.Finished)
             {
                 ShowTutorialStep(TutorialStepId.EndGame);

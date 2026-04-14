@@ -1,3 +1,4 @@
+using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 using Zenject;
@@ -58,15 +59,26 @@ namespace PSG.IsleOfColors.UI
 
         private void Start()
         {
-            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-
-            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
 
             screenSize = new Vector2(Screen.width, Screen.height);
             mainCamera = Camera.main;
             currentZoom = startingZoom;
 
             UpdateCameraZoom();
+        }
+
+        private void OnGameInitialized()
+        {
+            player1Transform = _gameManager.Player1.transform;
+            player2Transform = _gameManager.Player2.transform;
+            activePlayer = player1Transform;
+
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+
+            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
@@ -124,7 +136,7 @@ namespace PSG.IsleOfColors.UI
             targetPosition = transform.position + new Vector3(cameraMovement.x, cameraMovement.y, 0);
             targetPosition.x = Mathf.Clamp(targetPosition.x, activePlayer.position.x - boundsX, activePlayer.position.x + boundsX);
             targetPosition.y = Mathf.Clamp(targetPosition.y, activePlayer.position.y - boundsY, activePlayer.position.y + boundsY);
-            
+
             // Apply movement, rotation and FOV
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * cameraPanSpeed);
             mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetOrthoSize, Time.deltaTime * cameraPanSpeed);
@@ -137,7 +149,7 @@ namespace PSG.IsleOfColors.UI
 
             currentZoom = Mathf.Clamp(currentZoom + Input.GetAxis("Mouse ScrollWheel") * orthoSizeChangeSpeed * Time.deltaTime, 0, 1);
 
-            if(lastZoom != currentZoom)
+            if (lastZoom != currentZoom)
             {
                 UpdateCameraZoom();
             }

@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using PSG.IsleOfColors.Gameplay;
 using Zenject;
+using System;
+using Unity.VisualScripting;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -12,48 +14,51 @@ namespace PSG.IsleOfColors.UI
 
         private Button button;
         private Player currentPlayer;
-        
+
         [Inject] private GameManager _gameManager;
 
-        void Start()
+        private void OnGameInitialized()
         {
-            if(_gameManager == null)
-            {
-                Debug.LogError("ControlButton.Start: Missing game manager.");
-                return;
-            }
-
-            if(_gameManager.Player1 == null || _gameManager.Player2 == null)
-            {
-                Debug.LogError("ControlButton.Start: Player is missing from GameManager.");
-                return;   
-            }
-
-            button = GetComponent<Button>();
-            if(button == null)
-            {
-                Debug.LogError("ControlButton.Start: Button is null.");
-                return;
-            }
-
             _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
             _gameManager.Player1.OnPlayerMove.AddListener(OnPlayerMove);
             _gameManager.Player2.OnPlayerMove.AddListener(OnPlayerMove);
 
-            OnCurrentPlayerChanged(_gameManager.Player1, null);
+            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
-            if(_gameManager == null)
-            {
-                Debug.LogError("ControlButton.OnDestroy: Missing game manager.");
-                return;
-            }
-
             _gameManager.OnCurrentPlayerChanged.RemoveListener(OnCurrentPlayerChanged);
             _gameManager.Player1.OnPlayerMove.RemoveListener(OnPlayerMove);
             _gameManager.Player2.OnPlayerMove.RemoveListener(OnPlayerMove);
+
+            button.onClick.RemoveListener(OnButtonClicked);
+        }
+
+        void OnEnable()
+        {
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
+
+            if (button == null)
+            {
+                button = GetComponent<Button>();
+            }
+
+            button.onClick.AddListener(OnButtonClicked);
+        }
+
+        private void OnButtonClicked()
+        {
+            if (isConfirm)
+            {
+                _gameManager.Confirm();
+            }
+            else
+            {
+                _gameManager.Undo();
+            }
         }
 
         void OnCurrentPlayerChanged(Player currentPlayer, Player previousPlayer)
@@ -64,7 +69,7 @@ namespace PSG.IsleOfColors.UI
 
         void OnPlayerMove(Player player)
         {
-            if(currentPlayer == player)
+            if (currentPlayer == player)
             {
                 UpdateButtonState(player);
             }
@@ -72,18 +77,18 @@ namespace PSG.IsleOfColors.UI
 
         void UpdateButtonState(Player player)
         {
-            if(player == null)
+            if (player == null)
             {
-                Debug.LogError("ControlButton.UpdateButtonState: Player is null.");
+                Debug.LogError("[ControlButton:UpdateButtonState] Player is null.");
                 return;
             }
 
-            if(button == null)
+            if (button == null)
             {
-                Debug.LogError("ControlButton.UpdateButtonState: Button is null.");
+                Debug.LogError("[ControlButton:UpdateButtonState] Button is null.");
                 return;
             }
-            
+
             button.interactable = isConfirm ? player.CanConfirm : player.CanUndo;
         }
     }

@@ -9,13 +9,22 @@ namespace PSG.IsleOfColors.UI
         [SerializeField] private GameObject colorButtonPrefab;
 
         private Player player;
+
         [Inject] private GameManager _gameManager;
+        [Inject] private DiContainer _container;
 
         void Start()
+        {
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
+        }
+
+        private void OnGameInitialized()
         {
             _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
 
             OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
@@ -48,7 +57,7 @@ namespace PSG.IsleOfColors.UI
 
         private void CreateButton(PencilColor color)
         {
-            GameObject button = Instantiate(colorButtonPrefab, transform);
+            GameObject button = _container.InstantiatePrefab(colorButtonPrefab, transform);
 
             ColorButton colorButton = button.AddComponent<ColorButton>() as ColorButton;
             if(colorButton != null && player != null)

@@ -21,12 +21,19 @@ namespace PSG.IsleOfColors.UI
 
         void Start()
         {
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
+
+            ClosePopup();
+        }
+
+        private void OnGameInitialized()
+        {
             currentPlayer = _gameManager.Player1;
 
             _gameManager.OnDieRolled.AddListener(OnDieRolled);
             _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
 
-            ClosePopup();
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         public void ClosePopup()

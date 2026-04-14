@@ -16,8 +16,8 @@ namespace PSG.IsleOfColors.Gameplay
         [SerializeField] private Map map;
         [SerializeField] private bool disableSound;
 
-        public List<PencilColor> Colors { get; private set; }
-        public PlayerSheet PlayerSheet { get; private set; }
+        public List<PencilColor> Colors { get; private set; } = new();
+        public PlayerSheet PlayerSheet { get; private set; } = new();
         public Dictionary<PencilColor, int> ColorUsage { get; private set; } = new();
 
         public UnityEvent OnPlayerColorsChanged;
@@ -53,32 +53,34 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
-        public bool CanConfirm {
-            get {
+        public bool CanConfirm
+        {
+            get
+            {
+                if (PlayerSheet == null || PlayerSheet.Spaces == null)
+                {
+                    return false;
+                }
+
                 bool hasCompletedTurn = PlayerSheet.Spaces.Sum(x => x.Count(y => y != null && y.IsNew)) == DieValue;
                 bool hasSelectedColor = coloringColor != null;
                 return hasCompletedTurn && hasSelectedColor && !turnFinished;
             }
         }
 
-        [Inject] private GameManager _gameManager;
-
         public bool CanUndo => currentMoveIndex > 0 && !turnFinished;
 
-        void Start()
+        [Inject] private GameManager _gameManager;
+
+        internal void Initialize()
         {
             foreach (PencilColor color in _gameManager.Colors)
             {
                 ColorUsage.Add(color, 0);
             }
 
-            Score = new PlayerScore(_gameManager.Colors);
-        }
+            Score = new(_gameManager);
 
-        internal void Initialize()
-        {
-            Colors = new List<PencilColor>();
-            PlayerSheet = new PlayerSheet();
             PlayerSheet.GenerateMap(map);
             GetComponent<GameMap>().CreateMap();
         }
@@ -92,9 +94,8 @@ namespace PSG.IsleOfColors.Gameplay
         {
             if (!Colors.Contains(color))
             {
-                string message = $"UseColor: Player {Name} does not own the color {color}.";
-                Debug.LogError(message, this);
-                throw new System.ArgumentException(message);
+                Debug.LogError($"[Player:UseColor] Player {Name} does not own the color {color}.", this);
+                return;
             }
 
             Colors.Remove(color);
@@ -107,9 +108,8 @@ namespace PSG.IsleOfColors.Gameplay
         {
             if (Colors.Contains(color))
             {
-                string message = $"AddColor: Player {Name} already owns the color {color}.";
-                Debug.LogError(message, this);
-                throw new System.ArgumentException(message);
+                Debug.LogError($"[Player:AddColor] AddColor: Player {Name} already owns the color {color}.", this);
+                return;
             }
 
             Colors.Add(color);
@@ -134,13 +134,13 @@ namespace PSG.IsleOfColors.Gameplay
             if (turnFinished)
                 return;
 
-            if(color != coloringColor)
+            if (color != coloringColor)
             {
                 isColoring = true;
                 coloringColor = color;
-                
+
                 PlayerSheet.UpdateNewSpacesWithColor(color);
-                
+
                 OnPlayerStateChanged?.Invoke();
                 OnSelectedColorChanged?.Invoke();
                 OnPlayerMove?.Invoke(this);
@@ -149,11 +149,11 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void Undo()
         {
-            if(!CanUndo)
+            if (!CanUndo)
             {
                 return;
             }
-            
+
             foreach (var spaceY in PlayerSheet.Spaces)
             {
                 foreach (var space in spaceY)
@@ -172,7 +172,7 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void Confirm()
         {
-            if(!CanConfirm)
+            if (!CanConfirm)
             {
                 return;
             }
@@ -225,11 +225,12 @@ namespace PSG.IsleOfColors.Gameplay
         public void Reset()
         {
             var keys = new List<PencilColor>(ColorUsage.Keys);
-
-            foreach(var key in keys)
+            foreach (var key in keys)
             {
                 ColorUsage[key] = 0;
             }
+
+            Colors = new();
 
             PlayerSheet.Reset();
         }

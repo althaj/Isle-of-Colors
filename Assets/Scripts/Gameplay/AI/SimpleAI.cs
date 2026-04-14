@@ -10,17 +10,20 @@ namespace PSG.IsleOfColors.Gameplay.AI
     public class SimpleAI : IBot
     {
         private int retryCount;
-        [Inject] private GameManager _gameManager;
+        
+        private GameManager _gameManager;
 
-        public SimpleAI(ApplicationManager _applicationManager)
+        public SimpleAI(ApplicationManager applicationManager, GameManager gameManager)
         {
-            switch (_applicationManager.GameOptions.Difficulty)
+            switch (applicationManager.GameOptions.Difficulty)
             {
                 case GameOptions.BotDifficulty.MainMenu: retryCount = 1; break;
                 case GameOptions.BotDifficulty.Easy: retryCount = 75; break;
                 case GameOptions.BotDifficulty.Medium: retryCount = 150; break;
                 case GameOptions.BotDifficulty.Hard: retryCount = 300; break;
             }
+
+            _gameManager = gameManager;
         }
 
         public bool DoTurn(Player player)
@@ -116,7 +119,7 @@ namespace PSG.IsleOfColors.Gameplay.AI
 
         private PlayerScore GetScoreFromSheet(PlayerSheet sheet)
         {
-            PlayerScore score = new(_gameManager.Colors);
+            PlayerScore score = new(_gameManager);
 
             score.SetScore(_gameManager.GreenScoring.GetColor(), _gameManager.GreenScoring.GetScore(sheet));
             score.SetScore(_gameManager.BlueScoring.GetColor(), _gameManager.BlueScoring.GetScore(sheet));

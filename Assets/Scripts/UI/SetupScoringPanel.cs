@@ -1,4 +1,3 @@
-using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,13 +14,14 @@ namespace PSG.IsleOfColors.UI
         [Inject] private GameManager _gameManager;
         private void Start()
         {
-            _gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
             background.SetActive(false);
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
         }
 
-        private void OnScoringSetupFinished()
+        private void OnGameInitialized()
         {
             background.SetActive(true);
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         public void Close()

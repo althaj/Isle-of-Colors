@@ -27,35 +27,32 @@ namespace PSG.IsleOfColors.Analytics
         public int RedScore2 { set { SetParameter("RedScore2", value); } }
         public int TotalScore2 { set { SetParameter("TotalScore2", value); } }
 
-        [Inject] private ApplicationManager _applicationManager;
-        [Inject] private GameManager _gameManager;
-
-        public GameEndedEvent() : base("GameEnded")
+        public GameEndedEvent(GameManager gameManager, ApplicationManager applicationManager) : base("GameEnded")
         {
             GameOptions.BotDifficulty? difficulty =
-                _applicationManager.GameOptions.IsSinglePlayer
-                ? _applicationManager.GameOptions.Difficulty
+                applicationManager.GameOptions.IsSinglePlayer
+                ? applicationManager.GameOptions.Difficulty
                 : null;
 
             BotDifficulty = GameOptions.GetBotDifficultyString(difficulty);
-            GameDuration = _gameManager.GameDuration;
+            GameDuration = gameManager.GameDuration;
 
-            GreenScoring = _gameManager.GreenScoring.GetName();
-            BlueScoring = _gameManager.BlueScoring.GetName();
-            BrownScoring = _gameManager.BrownScoring.GetName();
-            RedScoring = _gameManager.RedScoring.GetName();
+            GreenScoring = gameManager.GreenScoring.GetName();
+            BlueScoring = gameManager.BlueScoring.GetName();
+            BrownScoring = gameManager.BrownScoring.GetName();
+            RedScoring = gameManager.RedScoring.GetName();
 
-            GreenScore1 = _gameManager.Player1.Score.ColorScores[_gameManager.GetColorByName("Green")];
-            BlueScore1 = _gameManager.Player1.Score.ColorScores[_gameManager.GetColorByName("Blue")];
-            BrownScore1 = _gameManager.Player1.Score.ColorScores[_gameManager.GetColorByName("Brown")];
-            RedScore1 = _gameManager.Player1.Score.ColorScores[_gameManager.GetColorByName("Red")];
-            TotalScore1 = _gameManager.Player1.Score.TotalScore;
+            GreenScore1 = gameManager.Player1.Score.ColorScores[gameManager.GetColorByName("Green")];
+            BlueScore1 = gameManager.Player1.Score.ColorScores[gameManager.GetColorByName("Blue")];
+            BrownScore1 = gameManager.Player1.Score.ColorScores[gameManager.GetColorByName("Brown")];
+            RedScore1 = gameManager.Player1.Score.ColorScores[gameManager.GetColorByName("Red")];
+            TotalScore1 = gameManager.Player1.Score.TotalScore;
 
-            GreenScore2 = _gameManager.Player2.Score.ColorScores[_gameManager.GetColorByName("Green")];
-            BlueScore2 = _gameManager.Player2.Score.ColorScores[_gameManager.GetColorByName("Blue")];
-            BrownScore2 = _gameManager.Player2.Score.ColorScores[_gameManager.GetColorByName("Brown")];
-            RedScore2 = _gameManager.Player2.Score.ColorScores[_gameManager.GetColorByName("Red")];
-            TotalScore2 = _gameManager.Player2.Score.TotalScore;
+            GreenScore2 = gameManager.Player2.Score.ColorScores[gameManager.GetColorByName("Green")];
+            BlueScore2 = gameManager.Player2.Score.ColorScores[gameManager.GetColorByName("Blue")];
+            BrownScore2 = gameManager.Player2.Score.ColorScores[gameManager.GetColorByName("Brown")];
+            RedScore2 = gameManager.Player2.Score.ColorScores[gameManager.GetColorByName("Red")];
+            TotalScore2 = gameManager.Player2.Score.TotalScore;
         }
     }
 }

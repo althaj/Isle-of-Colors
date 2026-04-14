@@ -21,6 +21,11 @@ namespace PSG.IsleOfColors.Graphics
 
         private void Start()
         {
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
+        }
+
+        private void OnGameInitialized()
+        {
             players = new[] { _gameManager.Player1, _gameManager.Player2 };
 
             _applicationManager.GameOptions = new GameOptions
@@ -29,28 +34,15 @@ namespace PSG.IsleOfColors.Graphics
                 ShowTutorial = false
             };
 
-            ai = new SimpleAI(_applicationManager);
-
-            if (_gameManager == null || _stateMachine == null)
-            {
-                Debug.LogError("[MainMenuGraphics:Start] GameManager or GameStateMachine not found. Cannot start the game animation.");
-                return;
-            }
+            ai = new SimpleAI(_applicationManager, _gameManager);
 
             StartCoroutine(PlayAnimation());
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         private IEnumerator PlayAnimation()
         {
-            if (_gameManager == null || _stateMachine == null)
-            {
-                Debug.LogError("[MainMenuGraphics:PlayAnimation] GameManager or GameStateMachine not found. Cannot start the game animation.");
-                yield break;
-            }
-
-            _stateMachine.Reset();
-            _gameManager.Reset();
-
             while (true)
             {
                 if (_gameManager.IsGameFinished())

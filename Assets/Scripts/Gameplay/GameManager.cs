@@ -1,8 +1,7 @@
 using PSG.IsleOfColors.Gameplay.Scoring;
-using PSG.IsleOfColors.Managers;
+using PSG.IsleOfColors.Gameplay.StateMachine;
 using PSG.IsleOfColors.UI.Tutorial;
 using RNGManager;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,19 +13,21 @@ namespace PSG.IsleOfColors.Gameplay
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private Player player1;
-        [SerializeField] private Player player2;
         [SerializeField] private List<PencilColor> colors;
 
-        public Player Player1 { get => player1; }
-        public Player Player2 { get => player2; }
+        public bool IsGameInitialized { get; private set; } = false;
+
+        private Player[] players;
+
+        public Player Player1 { get => players != null && players.Length > 0 ? players[0] : null; }
+        public Player Player2 { get => players != null && players.Length > 1 ? players[1] : null; }
         public List<PencilColor> Colors { get => colors; set => colors = value; }
 
         public UnityEvent<int> OnDieRolled;
         public UnityEvent<Player, Player> OnCurrentPlayerChanged;
-        public UnityEvent OnScoringSetupFinished;
         public UnityEvent OnLastRoundStarted;
         public UnityEvent OnGameEnded;
+        public UnityEvent OnGameInitialized;
 
         public UnityEvent<TutorialStepId> OnTutorialStepEnded;
 
@@ -49,25 +50,46 @@ namespace PSG.IsleOfColors.Gameplay
         public float GameDuration { get => gameDurationStopwatch != null ? (float)gameDurationStopwatch.Elapsed.TotalSeconds : 0; }
         private Stopwatch gameDurationStopwatch;
 
-        [Inject] private ApplicationManager _applicationManager;
+        [Inject] private GameFactory _gameFactory;
+        [Inject] private GameStateMachine _stateMachine;
 
         private void Start()
         {
-            if (!String.IsNullOrWhiteSpace(_applicationManager.GameOptions.Player1Name))
-                player1.Name = _applicationManager.GameOptions.Player1Name;
-
-            if (!String.IsNullOrWhiteSpace(_applicationManager.GameOptions.Player2Name))
-                player2.Name = _applicationManager.GameOptions.Player2Name;
+            players = _gameFactory.InitializePlayers(2).ToArray();
 
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
-            SetCurrentPlayer(player1);
+            SetCurrentPlayer(Player1);
+
+            SetupScoring();
+
+            _stateMachine.StartStateMachine();
 
             gameDurationStopwatch = new Stopwatch();
             gameDurationStopwatch.Start();
 
             TutorialUI tutorialUI = FindFirstObjectByType<TutorialUI>();
             if (tutorialUI != null)
+            {
                 tutorialUI.OnTutorialStepEnded.AddListener(ReceiveOnTutorialStepEnded);
+            }
+
+            IsGameInitialized = true;
+            OnGameInitialized?.Invoke();
+        }
+
+        public void InvokeAfterInitialization(UnityAction action)
+        {
+            if (action == null)
+                return;
+
+            if (IsGameInitialized)
+            {
+                action.Invoke();
+            }
+            else
+            {
+                OnGameInitialized.AddListener(action);
+            }
         }
 
         public PencilColor GetColorByName(string name) => Colors.Single(x => x.Name.CompareTo(name) == 0);
@@ -133,8 +155,6 @@ namespace PSG.IsleOfColors.Gameplay
                     RedScoring = new TownScoring(GetColorByName("Red"));
                     break;
             }
-
-            OnScoringSetupFinished?.Invoke();
         }
 
         public IScoring GetScoring(PencilColor color)
@@ -214,20 +234,20 @@ namespace PSG.IsleOfColors.Gameplay
         private void SetCurrentPlayer(Player player)
         {
             currentPlayer = player;
-            if (player == player1)
-                otherPlayer = player2;
+            if (player == Player1)
+                otherPlayer = Player2;
             else
-                otherPlayer = player1;
+                otherPlayer = Player1;
 
             OnCurrentPlayerChanged?.Invoke(currentPlayer, otherPlayer);
         }
 
         public void ChangeCurrentPlayer()
         {
-            if (currentPlayer == player1)
-                SetCurrentPlayer(player2);
+            if (currentPlayer == Player1)
+                SetCurrentPlayer(Player2);
             else
-                SetCurrentPlayer(player1);
+                SetCurrentPlayer(Player1);
         }
 
         public void Confirm()
@@ -244,8 +264,8 @@ namespace PSG.IsleOfColors.Gameplay
         {
             lastRound = false;
             noMoves = false;
-            player1.Reset();
-            player2.Reset();
+            Player1.Reset();
+            Player2.Reset();
             SetupScoring();
         }
 

@@ -81,7 +81,7 @@ namespace PSG.IsleOfColors.UI
 
             popup.SetActive(true);
 
-            _analyticsManager.GameEnded();
+            _analyticsManager.GameEnded(_gameManager, _applicationManager);
         }
 
         private void FillColorRow(Player player1, Player player2, string colorName, Image image, TextMeshProUGUI title, TextMeshProUGUI player1Score, TextMeshProUGUI player2Score)

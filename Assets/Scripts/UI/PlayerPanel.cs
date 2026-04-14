@@ -24,11 +24,18 @@ namespace PSG.IsleOfColors.UI
         {
             colorUsagePanels = GetComponentsInChildren<ColorUsagePanel>();
 
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
+        }
+
+        private void OnGameInitialized()
+        {
             _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
             _gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
             _gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
 
             OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
@@ -51,8 +58,23 @@ namespace PSG.IsleOfColors.UI
 
         private void OnPlayerScoreChanged(Player player)
         {
-            if(player == currentPlayer && isCurrentPlayer || player != currentPlayer && !isCurrentPlayer)
+            if (player == null)
+            {
+                Debug.LogError($"[PlayerPanel::OnPlayerScoreChanged] Player is invalid");
+                return;
+            }
+
+            if (player.Score == null)
+            {
+                return;
+            }
+
+            if (
+                player == currentPlayer && isCurrentPlayer ||
+                player != currentPlayer && !isCurrentPlayer)
+            {
                 scoreText.text = player.Score.TotalScore.ToString();
+            }
         }
     }
 }
