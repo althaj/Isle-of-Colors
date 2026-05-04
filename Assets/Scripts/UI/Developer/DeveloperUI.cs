@@ -1,12 +1,15 @@
 using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI.Developer
 {
     public class DeveloperUI : MonoBehaviour
     {
         [SerializeField] private GameObject panel;
+
+        [Inject] private GameManager _gameManager;
 
         void Start()
         {
@@ -29,18 +32,17 @@ namespace PSG.IsleOfColors.UI.Developer
                 bool newState = !spaces.First().transform.GetChild(0).GetChild(0).gameObject.activeSelf;
                 foreach (var space in spaces)
                 {
-                    space.transform.GetChild(0).GetChild(0).gameObject.SetActive(newState);
+                    var coordinateObject = space.transform.GetChild(0).GetChild(0);
+                    coordinateObject.gameObject.SetActive(newState);
                 }
             }
         }
 
         public void RollDie(int value)
         {
-            FindFirstObjectByType<GameManager>().RollDie(value);
-            foreach (var player in FindObjectsByType<Player>(FindObjectsSortMode.None))
-            {
-                player.StartTurn(value);
-            }
+            _gameManager.RollDie(value);
+            _gameManager.Player1.StartTurn(value);
+            _gameManager.Player2.StartTurn(value);
         }
     }
 }

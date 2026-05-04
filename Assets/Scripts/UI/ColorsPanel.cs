@@ -1,5 +1,6 @@
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -8,14 +9,22 @@ namespace PSG.IsleOfColors.UI
         [SerializeField] private GameObject colorButtonPrefab;
 
         private Player player;
-        private GameManager gameManager;
+
+        [Inject] private GameManager _gameManager;
+        [Inject] private DiContainer _container;
 
         void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
+        }
 
-            OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
+        private void OnGameInitialized()
+        {
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+
+            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
@@ -48,7 +57,7 @@ namespace PSG.IsleOfColors.UI
 
         private void CreateButton(PencilColor color)
         {
-            GameObject button = Instantiate(colorButtonPrefab, transform);
+            GameObject button = _container.InstantiatePrefab(colorButtonPrefab, transform);
 
             ColorButton colorButton = button.AddComponent<ColorButton>() as ColorButton;
             if(colorButton != null && player != null)

@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using PSG.IsleOfColors.Gameplay.StateMachine.States;
+using Zenject;
+using System;
 
 namespace PSG.IsleOfColors.UI.Tutorial
 {
@@ -37,7 +39,7 @@ namespace PSG.IsleOfColors.UI.Tutorial
     public class TutorialUI : MonoBehaviour
     {
         private TMP_Text messageText;
-        
+
         [SerializeField] private RectTransform canvas;
         [SerializeField] private RectTransform messageBox;
         [SerializeField] private TutorialArrow tutorialArrow;
@@ -51,42 +53,35 @@ namespace PSG.IsleOfColors.UI.Tutorial
         [SerializeField] private RectTransform confirmUndoBackground;
         [SerializeField] private RectTransform rightArrowBackground;
         private RectTransform[] backgroundPanels;
-        
+
         private TutorialStep currentTutorialStep;
         private int nextTutorialMessageId;
 
-        private GameManager gameManager;
-
-        
         [Header("Tutorial steps")]
         [SerializeField] private List<TutorialStep> tutorialSteps;
 
         public UnityEvent<TutorialStepId> OnTutorialStepEnded;
 
+        [Inject] private ApplicationManager _applicationManager;
+        [Inject] private GameManager _gameManager;
+
         void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-
-            if(gameManager == null || gameManager.Player1 == null || gameManager.Player2 == null)
-            {
-                Debug.LogError("Game Manager, Player 1 or Player 2 are invalid.");
-                Destroy(gameObject);
-                return;
-            }
-
-            if(!ApplicationManager.Instance.GameOptions.ShowTutorial)
+            if (!_applicationManager.GameOptions.ShowTutorial)
             {
                 Destroy(gameObject);
                 return;
             }
-            
-            if(messageBox != null)
+
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
+
+            if (messageBox != null)
             {
                 messageText = messageBox.GetComponentInChildren<TMP_Text>();
             }
 
             SetupScoringPanel setupScoringPanel = FindFirstObjectByType<SetupScoringPanel>();
-            if(setupScoringPanel != null)
+            if (setupScoringPanel != null)
             {
                 setupScoringPanel.OnSetupScoringPanelClosed?.AddListener(OnSetupScoringPanelClosed);
             }
@@ -101,11 +96,16 @@ namespace PSG.IsleOfColors.UI.Tutorial
             };
 
             HideBackgrounds();
-
+            
             ShowTutorialStep(TutorialStepId.Welcome);
+        }
 
-            gameManager.Player1.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
-            gameManager.Player2.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+        private void OnGameInitialized()
+        {
+            _gameManager.Player1.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+            _gameManager.Player2.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         /// <summary>
@@ -114,14 +114,14 @@ namespace PSG.IsleOfColors.UI.Tutorial
         /// <param name="tutorialStepId">Id of tutorial to show.</param>
         private void ShowTutorialStep(TutorialStepId tutorialStepId)
         {
-            if(tutorialSteps == null)
+            if (tutorialSteps == null)
             {
                 Debug.LogError("Tutorial steps have not been initialized.");
                 return;
             }
 
             TutorialStep tutorialStep = tutorialSteps.FirstOrDefault(x => x.Id == tutorialStepId);
-            if(tutorialStep == null)
+            if (tutorialStep == null)
             {
                 Debug.LogErrorFormat("Could not find tutorial with ID {0}.", tutorialStepId);
                 return;
@@ -151,13 +151,13 @@ namespace PSG.IsleOfColors.UI.Tutorial
         /// </summary>
         public void ShowNextTutorialMessage()
         {
-            if(currentTutorialStep == null)
+            if (currentTutorialStep == null)
             {
                 EndTutorialStep();
                 return;
             }
 
-            if(nextTutorialMessageId < 0 || currentTutorialStep.Messages.Length < nextTutorialMessageId + 1)
+            if (nextTutorialMessageId < 0 || currentTutorialStep.Messages.Length < nextTutorialMessageId + 1)
             {
                 EndTutorialStep();
                 return;
@@ -174,7 +174,7 @@ namespace PSG.IsleOfColors.UI.Tutorial
         /// <param name="message"></param>
         private void ShowTutorialMessage(TutorialMessage message)
         {
-            if(message == null)
+            if (message == null)
                 return;
 
             ShowBackground(message.Highlight);
@@ -190,7 +190,7 @@ namespace PSG.IsleOfColors.UI.Tutorial
         {
             HideBackgrounds();
 
-            if(clickBlocker == null || clickBlocker.gameObject == null)
+            if (clickBlocker == null || clickBlocker.gameObject == null)
             {
                 Debug.LogError("Click blocker has not been assigned.");
             }
@@ -202,7 +202,7 @@ namespace PSG.IsleOfColors.UI.Tutorial
             switch (highlight)
             {
                 case TutorialHighlight.Full:
-                    if(clickBlocker != null && clickBlocker.gameObject != null)
+                    if (clickBlocker != null && clickBlocker.gameObject != null)
                     {
                         clickBlocker.gameObject.SetActive(false);
                     }
@@ -272,12 +272,12 @@ namespace PSG.IsleOfColors.UI.Tutorial
         /// <param name="position">Position of the message box.</param>
         private void ShowText(string message, TutorialMessagePosition position, TutorialMessageSize size)
         {
-            if(messageBox == null)
+            if (messageBox == null)
             {
                 return;
             }
 
-            if(messageText == null || string.IsNullOrEmpty(message))
+            if (messageText == null || string.IsNullOrEmpty(message))
             {
                 messageBox.gameObject.SetActive(false);
                 return;
@@ -286,14 +286,14 @@ namespace PSG.IsleOfColors.UI.Tutorial
             messageBox.gameObject.SetActive(true);
             messageText.text = message;
 
-            switch(position)
+            switch (position)
             {
                 case TutorialMessagePosition.Bottom:
                     messageBox.anchorMin = new Vector2(0.5f, 0);
                     messageBox.anchorMax = new Vector2(0.5f, 0);
                     messageBox.pivot = new Vector2(0.5f, 0);
                     messageBox.anchoredPosition = new Vector2(0, 50.0f);
-                break;
+                    break;
                 case TutorialMessagePosition.Center:
                 default:
                     messageBox.anchorMin = new Vector2(0.5f, 0.5f);
@@ -303,7 +303,7 @@ namespace PSG.IsleOfColors.UI.Tutorial
                     break;
             }
 
-            switch(size)
+            switch (size)
             {
                 case TutorialMessageSize.Small:
                     messageBox.sizeDelta = new Vector2(400, 150);
@@ -329,19 +329,19 @@ namespace PSG.IsleOfColors.UI.Tutorial
         /// <param name="offset">Offset of the arrow from the highlighted rect transform, in pivot, so 1 is height of the arrow.</param>
         private void ShowTutorialArrow(string targetTransformName, TutorialArrowDirection direction, float offset)
         {
-            if(tutorialArrow == null)
+            if (tutorialArrow == null)
             {
                 return;
             }
 
-            if(string.IsNullOrEmpty(targetTransformName))
+            if (string.IsNullOrEmpty(targetTransformName))
             {
                 tutorialArrow.Hide();
                 return;
             }
 
             Transform targetTransform = canvas.Find(targetTransformName);
-            if(targetTransform == null)
+            if (targetTransform == null)
             {
                 tutorialArrow.Hide();
                 return;
@@ -359,23 +359,11 @@ namespace PSG.IsleOfColors.UI.Tutorial
 
         private void OnPlayerStateChanged()
         {
-            if(gameManager == null)
-            {
-                Debug.LogError("Game manager is invalid.");
-                return;
-            }
-
-            if(gameManager.Player1 == null || gameManager.Player2 == null)
-            {
-                Debug.LogError("Player 1 or Player 2 is invalid.");
-                return;
-            }
-
-            if(gameManager.Player1.PlayerState == EPlayerState.Finished && gameManager.Player2.PlayerState == EPlayerState.Finished)
+            if (_gameManager.Player1.PlayerState == EPlayerState.Finished && _gameManager.Player2.PlayerState == EPlayerState.Finished)
             {
                 ShowTutorialStep(TutorialStepId.EndGame);
-                gameManager.Player1.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
-                gameManager.Player2.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
+                _gameManager.Player1.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
+                _gameManager.Player2.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
             }
         }
     }

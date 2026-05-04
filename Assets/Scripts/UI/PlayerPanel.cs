@@ -4,6 +4,7 @@ using PSG.IsleOfColors.Gameplay.Scoring;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -15,20 +16,26 @@ namespace PSG.IsleOfColors.UI
 
         private Player currentPlayer;
 
-        private GameManager gameManager;
         private ColorUsagePanel[] colorUsagePanels;
+
+        [Inject] private GameManager _gameManager;
 
         private void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-
             colorUsagePanels = GetComponentsInChildren<ColorUsagePanel>();
 
-            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-            gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
-            gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
+        }
 
-            OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
+        private void OnGameInitialized()
+        {
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+            _gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+            _gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+
+            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
@@ -51,8 +58,23 @@ namespace PSG.IsleOfColors.UI
 
         private void OnPlayerScoreChanged(Player player)
         {
-            if(player == currentPlayer && isCurrentPlayer || player != currentPlayer && !isCurrentPlayer)
+            if (player == null)
+            {
+                Debug.LogError($"[PlayerPanel::OnPlayerScoreChanged] Player is invalid");
+                return;
+            }
+
+            if (player.Score == null)
+            {
+                return;
+            }
+
+            if (
+                player == currentPlayer && isCurrentPlayer ||
+                player != currentPlayer && !isCurrentPlayer)
+            {
                 scoreText.text = player.Score.TotalScore.ToString();
+            }
         }
     }
 }

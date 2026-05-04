@@ -1,5 +1,7 @@
+using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -35,7 +37,6 @@ namespace PSG.IsleOfColors.UI
         #region private variables
 
         private Transform activePlayer;
-        private GameManager gameManager;
         private Camera mainCamera;
 
         private float startingZoom = 0;
@@ -54,12 +55,11 @@ namespace PSG.IsleOfColors.UI
 
         #endregion
 
+        [Inject] private GameManager _gameManager;
+
         private void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-
-            OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
 
             screenSize = new Vector2(Screen.width, Screen.height);
             mainCamera = Camera.main;
@@ -68,9 +68,22 @@ namespace PSG.IsleOfColors.UI
             UpdateCameraZoom();
         }
 
+        private void OnGameInitialized()
+        {
+            player1Transform = _gameManager.Player1.transform;
+            player2Transform = _gameManager.Player2.transform;
+            activePlayer = player1Transform;
+
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+
+            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
+        }
+
         private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
         {
-            if (currentPlayer == gameManager.Player1)
+            if (currentPlayer == _gameManager.Player1)
                 activePlayer = player1Transform;
             else
                 activePlayer = player2Transform;
@@ -123,7 +136,7 @@ namespace PSG.IsleOfColors.UI
             targetPosition = transform.position + new Vector3(cameraMovement.x, cameraMovement.y, 0);
             targetPosition.x = Mathf.Clamp(targetPosition.x, activePlayer.position.x - boundsX, activePlayer.position.x + boundsX);
             targetPosition.y = Mathf.Clamp(targetPosition.y, activePlayer.position.y - boundsY, activePlayer.position.y + boundsY);
-            
+
             // Apply movement, rotation and FOV
             transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * cameraPanSpeed);
             mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetOrthoSize, Time.deltaTime * cameraPanSpeed);
@@ -136,7 +149,7 @@ namespace PSG.IsleOfColors.UI
 
             currentZoom = Mathf.Clamp(currentZoom + Input.GetAxis("Mouse ScrollWheel") * orthoSizeChangeSpeed * Time.deltaTime, 0, 1);
 
-            if(lastZoom != currentZoom)
+            if (lastZoom != currentZoom)
             {
                 UpdateCameraZoom();
             }

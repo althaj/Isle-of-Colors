@@ -1,6 +1,7 @@
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Managers;
 using Unity.Services.Analytics;
+using Zenject;
 
 namespace PSG.IsleOfColors.Analytics
 {
@@ -26,15 +27,11 @@ namespace PSG.IsleOfColors.Analytics
         public int RedScore2 { set { SetParameter("RedScore2", value); } }
         public int TotalScore2 { set { SetParameter("TotalScore2", value); } }
 
-        public GameEndedEvent() : base("GameEnded")
+        public GameEndedEvent(GameManager gameManager, ApplicationManager applicationManager) : base("GameEnded")
         {
-        }
-
-        public GameEndedEvent(GameManager gameManager) : base("GameEnded")
-        {
-            GameOptions.BotDifficulty? difficulty = 
-                ApplicationManager.Instance.GameOptions.IsSinglePlayer
-                ? ApplicationManager.Instance.GameOptions.Difficulty
+            GameOptions.BotDifficulty? difficulty =
+                applicationManager.GameOptions.IsSinglePlayer
+                ? applicationManager.GameOptions.Difficulty
                 : null;
 
             BotDifficulty = GameOptions.GetBotDifficultyString(difficulty);

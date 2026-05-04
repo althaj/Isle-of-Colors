@@ -3,6 +3,7 @@ using PSG.IsleOfColors.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -44,18 +45,19 @@ namespace PSG.IsleOfColors.UI
         [SerializeField] private Image totalScore1Background;
         [SerializeField] private Image totalScore2Background;
 
-        private GameManager gameManager;
+        [Inject] private ApplicationManager _applicationManager;
+        [Inject] private AnalyticsManager _analyticsManager;
+        [Inject] private GameManager _gameManager;
 
         private void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnGameEnded.AddListener(OnGameEnded);
+            _gameManager.OnGameEnded.AddListener(OnGameEnded);
             ClosePopup();
         }
 
         private void OnGameEnded()
         {
-            OpenPopup(gameManager.Player1, gameManager.Player2);
+            OpenPopup(_gameManager.Player1, _gameManager.Player2);
         }
 
         public void OpenPopup(Player player1, Player player2)
@@ -79,14 +81,14 @@ namespace PSG.IsleOfColors.UI
 
             popup.SetActive(true);
 
-            AnalyticsManager.Instance.GameEnded(gameManager);
+            _analyticsManager.GameEnded(_gameManager, _applicationManager);
         }
 
         private void FillColorRow(Player player1, Player player2, string colorName, Image image, TextMeshProUGUI title, TextMeshProUGUI player1Score, TextMeshProUGUI player2Score)
         {
-            var color = gameManager.GetColorByName(colorName);
+            var color = _gameManager.GetColorByName(colorName);
             image.color = color.Color;
-            title.text = gameManager.GetScoring(color).GetName();
+            title.text = _gameManager.GetScoring(color).GetName();
             player1Score.text = player1.Score.ColorScores[color].ToString();
             player2Score.text = player2.Score.ColorScores[color].ToString();
         }
@@ -98,7 +100,7 @@ namespace PSG.IsleOfColors.UI
 
         public void CloseToMainMenu()
         {
-            ApplicationManager.Instance.LoadMainMenu();
+            _applicationManager.LoadMainMenu();
         }
     }
 }

@@ -109,6 +109,11 @@ namespace PSG.IsleOfColors.Gameplay
 
         public List<List<PlayerSheetSpace>> GetAllGroups(PencilColor color)
         {
+            if(Spaces == null)
+            {
+                return new();
+            }
+
             List<List<PlayerSheetSpace>> result = new();
 
             foreach (var spaceY in Spaces)
@@ -170,6 +175,11 @@ namespace PSG.IsleOfColors.Gameplay
 
         private void ClearAllSpaces()
         {
+            if(Spaces == null)
+            {
+                return;
+            }
+
             foreach (var spaceY in Spaces)
             {
                 foreach (var space in spaceY)

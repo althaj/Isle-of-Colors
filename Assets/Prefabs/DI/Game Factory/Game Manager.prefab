@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &890064295588133693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3353963273644183270}
+  - component: {fileID: 1613941748188303002}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3353963273644183270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890064295588133693}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1613941748188303002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890064295588133693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf6d0789a4f6855428afe035d59d8dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - {fileID: 11400000, guid: ee9cece9c21e2f44a80f4f7028756b34, type: 2}
+  - {fileID: 11400000, guid: 088dcd9be699fc549a0f35a5317e8458, type: 2}
+  - {fileID: 11400000, guid: 54583178e54e830418e0fdd8ad22e931, type: 2}
+  - {fileID: 11400000, guid: 1bce488b878d61a48b774d0cfb94c67b, type: 2}
+  OnDieRolled:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCurrentPlayerChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLastRoundStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameInitialized:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTutorialStepEnded:
+    m_PersistentCalls:
+      m_Calls: []

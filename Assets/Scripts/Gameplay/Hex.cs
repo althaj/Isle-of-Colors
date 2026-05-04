@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using PSG.IsleOfColors.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 namespace PSG.IsleOfColors.Gameplay
 {
-    [RequireComponent(typeof(AudioSource))]
     public class Hex : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer baseSpriteRenderer;
@@ -17,8 +18,6 @@ namespace PSG.IsleOfColors.Gameplay
 
         [SerializeField] private List<Sprite> emptySprites;
 
-        [SerializeField] private AudioSource colorHexAudioSource;
-
         private Player player;
         private PlayerSheetSpace space;
 
@@ -27,6 +26,8 @@ namespace PSG.IsleOfColors.Gameplay
         private RNGManager.RNGInstance rngInstance;
 
         private bool showEnabledMoves = true;
+
+        [Inject] private AudioManager _audioManager;
 
         public void Initialize(PlayerSheetSpace space, Player player, bool showEnabledMoves)
         {
@@ -69,7 +70,7 @@ namespace PSG.IsleOfColors.Gameplay
         {
             UpdateVisual();
         }
-        
+
         private void OnMouseDown()
         {
             // Check if the mouse is over a UI element
@@ -88,7 +89,9 @@ namespace PSG.IsleOfColors.Gameplay
         private void UpdateVisual()
         {
             foreach (var propRenderer in propSpriteRenderers)
+            {
                 propRenderer.enabled = false;
+            }
 
             highlightSpriteRenderer.enabled = space.IsNew;
 
@@ -100,8 +103,10 @@ namespace PSG.IsleOfColors.Gameplay
 
                 backgroundSpriteRenderer.enabled = false;
 
-                if(space.IsNew && player.IsSoundEnabled)
-                    colorHexAudioSource.Play();
+                if (space.IsNew && player.IsSoundEnabled)
+                {
+                    _audioManager.PlayUISound(UIAudioType.HexSound);
+                }
             }
             else
             {
@@ -119,8 +124,10 @@ namespace PSG.IsleOfColors.Gameplay
                     propRenderer.enabled = true;
                 }
 
-                if(player.IsSoundEnabled)
-                    colorHexAudioSource.Play();
+                if (space.IsNew && player.IsSoundEnabled)
+                {
+                    _audioManager.PlayUISound(UIAudioType.HexSound);
+                }
             }
         }
     }

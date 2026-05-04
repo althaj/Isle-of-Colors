@@ -4,6 +4,7 @@ using PSG.IsleOfColors.Gameplay.Scoring;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -21,22 +22,20 @@ namespace PSG.IsleOfColors.UI
 
         private bool isShown;
 
-        private GameManager gameManager;
-
         private Player currentPlayer;
+
+        [Inject] private GameManager _gameManager;
 
         private void Start()
         {
             Display(false);
-
-            gameManager = FindFirstObjectByType<GameManager>();
-            gameManager.OnScoringSetupFinished.AddListener(OnScoringSetupFinished);
-            OnScoringSetupFinished();
+            
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
         }
 
-        private void OnScoringSetupFinished()
+        private void OnGameInitialized()
         {
-            IScoring scoring = gameManager.GetScoring(color);
+            IScoring scoring = _gameManager.GetScoring(color);
             if (scoring == null)
                 return;
 
@@ -48,12 +47,14 @@ namespace PSG.IsleOfColors.UI
 
             if (!isSetupScoring)
             {
-                gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-                gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
-                gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+                _gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                _gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
                 
-                OnCurrentPlayerChanged(gameManager.Player1, gameManager.Player2);
+                OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
             }
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         private void Display(bool show)
@@ -78,6 +79,17 @@ namespace PSG.IsleOfColors.UI
 
         private void OnPlayerScoreChanged(Player currentPlayer)
         {
+            if(currentPlayer == null)
+            {
+                Debug.LogError("[ColorScoringPanel:OnPlayerScoreChanged] Player is invalid.");
+                return;
+            }
+
+            if(currentPlayer.Score == null || !currentPlayer.Score.ColorScores.ContainsKey(color))
+            {
+                return;
+            }
+
             if(this.currentPlayer == currentPlayer)
                 scoreText.text = currentPlayer.Score.ColorScores[color].ToString();
         }

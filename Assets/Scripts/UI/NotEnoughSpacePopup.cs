@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Managers;
 using UnityEngine;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -14,18 +15,25 @@ namespace PSG.IsleOfColors.UI
         private Player currentPlayer;
         private List<Player> popupDisplayedToPlayers = new List<Player>();
 
-        private GameManager gameManager;
+        [Inject] private GameManager _gameManager;
+
+        [Inject] private ApplicationManager _applicationManager;
 
         void Start()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-
-            currentPlayer = gameManager.Player1;
-
-            gameManager.OnDieRolled.AddListener(OnDieRolled);
-            gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+            _gameManager.InvokeAfterInitialization(OnGameInitialized);
 
             ClosePopup();
+        }
+
+        private void OnGameInitialized()
+        {
+            currentPlayer = _gameManager.Player1;
+
+            _gameManager.OnDieRolled.AddListener(OnDieRolled);
+            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
+
+            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
         public void ClosePopup()
@@ -54,7 +62,7 @@ namespace PSG.IsleOfColors.UI
 
         private void DisplayPopupForCurrentPlayer()
         {
-            if(ApplicationManager.Instance.GameOptions.IsSinglePlayer && currentPlayer == gameManager.Player2)
+            if (_applicationManager.GameOptions.IsSinglePlayer && currentPlayer == _gameManager.Player2)
             {
                 return;
             }

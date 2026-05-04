@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI.MainMenu
 {
@@ -24,6 +25,10 @@ namespace PSG.IsleOfColors.UI.MainMenu
         [SerializeField] private TextMeshProUGUI validationErrorLabel;
 
         private bool isSinglePlayer;
+
+        [Inject] private ApplicationManager _applicationManager;
+        [Inject] private AudioManager _audioManager;
+        [Inject] private AnalyticsManager _analyticsManager;
 
         public void OpenPopup(bool isSinglePlayer)
         {
@@ -64,7 +69,7 @@ namespace PSG.IsleOfColors.UI.MainMenu
         {
             if (!ValidateGameOptions())
             {
-                AudioManager.Instance.PlayUISound(UIAudioType.Error);
+                _audioManager.PlayUISound(UIAudioType.Error);
                 return;
             }
 
@@ -89,11 +94,11 @@ namespace PSG.IsleOfColors.UI.MainMenu
                 }
             }
 
-            AudioManager.Instance.PlayUISound(UIAudioType.Confirm);
+            _audioManager.PlayUISound(UIAudioType.Confirm);
 
-            AnalyticsManager.Instance.GameStarted(options.IsSinglePlayer ? options.Difficulty : null);
+            _analyticsManager.GameStarted(options.IsSinglePlayer ? options.Difficulty : null);
 
-            ApplicationManager.Instance.StartGame(options);
+            _applicationManager.StartGame(options);
         }
 
         private void LoadPlayerPrefs()

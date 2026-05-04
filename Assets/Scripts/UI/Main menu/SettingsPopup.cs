@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using PSG.IsleOfColors.Managers;
+using Zenject;
 
 namespace PSG.IsleOfColors.UI.MainMenu
 {
@@ -17,9 +18,12 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
         private Managers.AudioSettings audioSettings;
 
+        [Inject] private AudioManager _audioManager;
+        [Inject] private AnalyticsManager _analyticsManager;
+
         public void OpenPopup()
         {
-            audioSettings = AudioManager.Instance.LoadAudioSettings();
+            audioSettings = _audioManager.LoadAudioSettings();
 
             masterVolumeSlider.onValueChanged.RemoveAllListeners();
             musicVolumeSlider.onValueChanged.RemoveAllListeners();
@@ -36,12 +40,12 @@ namespace PSG.IsleOfColors.UI.MainMenu
             background.SetActive(true);
             popupPanel.SetActive(true);
 
-            AnalyticsManager.Instance.UserOpenedSettingsPopup();
+            _analyticsManager.UserOpenedSettingsPopup();
         }
 
         public void ClosePopup()
         {
-            AudioManager.Instance.ReloadAudioSettings();
+            _audioManager.ReloadAudioSettings();
 
             background.SetActive(false);
             popupPanel.SetActive(false);
@@ -58,17 +62,17 @@ namespace PSG.IsleOfColors.UI.MainMenu
             audioSettings.MusicVolume = Mathf.Log10(musicVolumeSlider.value) * volumeMultiplier;
             audioSettings.UISoundVolume = Mathf.Log10(uiSoundsVolumeSlider.value) * volumeMultiplier;
 
-            AudioManager.Instance.ApplyAudioSettings(audioSettings);
+            _audioManager.ApplyAudioSettings(audioSettings);
         }
 
         public void Save()
         {
             UpdateAudioSettings();
-            AudioManager.Instance.SaveAudioSettings(audioSettings);
+            _audioManager.SaveAudioSettings(audioSettings);
             background.SetActive(false);
             popupPanel.SetActive(false);
 
-            AnalyticsManager.Instance.UserSavedSettingsPopup(audioSettings);
+            _analyticsManager.UserSavedSettingsPopup(audioSettings);
         }
     }
 }

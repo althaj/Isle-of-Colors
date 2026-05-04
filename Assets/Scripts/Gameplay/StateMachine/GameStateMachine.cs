@@ -1,7 +1,9 @@
 using PSG.IsleOfColors.Gameplay.StateMachine.States;
+using PSG.IsleOfColors.Managers;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
 namespace PSG.IsleOfColors.Gameplay.StateMachine
 {
@@ -12,12 +14,11 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
         public UnityEvent<IState> OnStateChanged;
         public UnityEvent<string> OnStateDescriptionChanged;
 
-        private GameManager gameManager;
+        [Inject] private GameManager _gameManager;
+        [Inject] private ApplicationManager _applicationManager;
 
-        private void Start()
+        public void StartStateMachine()
         {
-            gameManager = FindFirstObjectByType<GameManager>();
-
             NextState();
         }
 
@@ -40,7 +41,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
 
             if (currentState == null)
             {
-                currentState = new SetupState(gameManager);
+                currentState = new SetupState(_gameManager, _applicationManager);
             }
             else
             {
@@ -48,7 +49,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
                 {
                     case SetupState: currentState = NewRound(); break;
                     case RoundState:
-                        currentState = gameManager.IsGameFinished() ? new EndGameState() : NewRound();
+                        currentState = _gameManager.IsGameFinished() ? new EndGameState() : NewRound();
                         break;
                     default: throw new ArgumentException($"NextState: Cannot exit from state {currentState.GetType().Name}.");
                 }
@@ -60,7 +61,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine
 
         private IState NewRound()
         {
-            var state = new RoundState(gameManager);
+            var state = new RoundState(_gameManager);
             state.OnDescriptionChanged.AddListener(OnDescriptionChanged);
             return state;
         }
