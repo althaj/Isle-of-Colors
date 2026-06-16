@@ -1,13 +1,23 @@
+using System.Linq;
+using Newtonsoft.Json;
 using PSG.IsleOfColors.Gameplay;
+using PSG.IsleOfColors.Gameplay.Scoring;
 using PSG.IsleOfColors.Managers;
 using Unity.Services.Analytics;
+using UnityEngine;
 using Zenject;
 
 namespace PSG.IsleOfColors.Analytics
 {
-    public class GameEndedEvent : Event
+    public class GameEndedEvent : Unity.Services.Analytics.Event
     {
-        public string BotDifficulty { set { SetParameter("BotDifficulty", value); } }
+        public class PlayerScoreAnalyticsData
+        {
+            public string PlayerName { get; set; }
+            public int[] Scores { get; set; }
+        }
+
+        public string GameOptions { set { SetParameter("GameOptions", value); } }
         public float GameDuration { set { SetParameter("GameDuration", value); } }
 
         public string GreenScoring { set { SetParameter("GreenScoring", value); } }
@@ -15,26 +25,17 @@ namespace PSG.IsleOfColors.Analytics
         public string BrownScoring { set { SetParameter("BrownScoring", value); } }
         public string RedScoring { set { SetParameter("RedScoring", value); } }
 
-        public int GreenScore1 { set { SetParameter("GreenScore1", value); } }
-        public int BlueScore1 { set { SetParameter("BlueScore1", value); } }
-        public int BrownScore1 { set { SetParameter("BrownScore1", value); } }
-        public int RedScore1 { set { SetParameter("RedScore1", value); } }
-        public int TotalScore1 { set { SetParameter("TotalScore1", value); } }
-
-        public int GreenScore2 { set { SetParameter("GreenScore2", value); } }
-        public int BlueScore2 { set { SetParameter("BlueScore2", value); } }
-        public int BrownScore2 { set { SetParameter("BrownScore2", value); } }
-        public int RedScore2 { set { SetParameter("RedScore2", value); } }
-        public int TotalScore2 { set { SetParameter("TotalScore2", value); } }
+        public string PlayerScores { set { SetParameter("PlayerScores", value); } }
 
         public GameEndedEvent(GameManager gameManager, ApplicationManager applicationManager) : base("GameEnded")
         {
-            GameOptions.BotDifficulty? difficulty =
-                applicationManager.GameOptions.IsSinglePlayer
-                ? applicationManager.GameOptions.Difficulty
-                : null;
+            if (gameManager == null || applicationManager == null)
+            {
+                Debug.LogError($"[GameEndedEvent::GetPlayerScoresAnalyticsData] Game Manager or Application Manager is invalid.");
+                return;
+            }
 
-            BotDifficulty = GameOptions.GetBotDifficultyString(difficulty);
+            GameOptions = JsonConvert.SerializeObject(applicationManager.GameOptions);
             GameDuration = gameManager.GameDuration;
 
             GreenScoring = gameManager.GreenScoring.GetName();
@@ -42,17 +43,28 @@ namespace PSG.IsleOfColors.Analytics
             BrownScoring = gameManager.BrownScoring.GetName();
             RedScoring = gameManager.RedScoring.GetName();
 
-            GreenScore1 = gameManager.Player1.Score.ColorScores[gameManager.GetColorByName("Green")];
-            BlueScore1 = gameManager.Player1.Score.ColorScores[gameManager.GetColorByName("Blue")];
-            BrownScore1 = gameManager.Player1.Score.ColorScores[gameManager.GetColorByName("Brown")];
-            RedScore1 = gameManager.Player1.Score.ColorScores[gameManager.GetColorByName("Red")];
-            TotalScore1 = gameManager.Player1.Score.TotalScore;
+            PlayerScores = JsonConvert.SerializeObject(GetPlayerScoresAnalyticsData(gameManager));
+        }
 
-            GreenScore2 = gameManager.Player2.Score.ColorScores[gameManager.GetColorByName("Green")];
-            BlueScore2 = gameManager.Player2.Score.ColorScores[gameManager.GetColorByName("Blue")];
-            BrownScore2 = gameManager.Player2.Score.ColorScores[gameManager.GetColorByName("Brown")];
-            RedScore2 = gameManager.Player2.Score.ColorScores[gameManager.GetColorByName("Red")];
-            TotalScore2 = gameManager.Player2.Score.TotalScore;
+        private PlayerScoreAnalyticsData[] GetPlayerScoresAnalyticsData(GameManager gameManager)
+        {
+            if (gameManager == null)
+            {
+                Debug.LogError($"[GameEndedEvent::GetPlayerScoresAnalyticsData] Game Manager is invalid.");
+                return new PlayerScoreAnalyticsData[0];
+            }
+
+            return gameManager.Players.Select(p => new PlayerScoreAnalyticsData
+            {
+                PlayerName = p.Name,
+                Scores = new int[]
+                {
+                    p.Score.ColorScores[gameManager.GetColorByName("Green")],
+                    p.Score.ColorScores[gameManager.GetColorByName("Blue")],
+                    p.Score.ColorScores[gameManager.GetColorByName("Brown")],
+                    p.Score.ColorScores[gameManager.GetColorByName("Red")]
+                }
+            }).ToArray();
         }
     }
 }

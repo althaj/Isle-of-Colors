@@ -96,14 +96,16 @@ namespace PSG.IsleOfColors.UI.Tutorial
             };
 
             HideBackgrounds();
-            
+
             ShowTutorialStep(TutorialStepId.Welcome);
         }
 
         private void OnGameInitialized()
         {
-            _gameManager.Player1.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
-            _gameManager.Player2.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+            foreach (Player player in _gameManager.Players)
+            {
+                player.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+            }
 
             _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
@@ -359,11 +361,14 @@ namespace PSG.IsleOfColors.UI.Tutorial
 
         private void OnPlayerStateChanged()
         {
-            if (_gameManager.Player1.PlayerState == EPlayerState.Finished && _gameManager.Player2.PlayerState == EPlayerState.Finished)
+            if (_gameManager.Players.All(p => p.PlayerState == EPlayerState.Finished))
             {
                 ShowTutorialStep(TutorialStepId.EndGame);
-                _gameManager.Player1.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
-                _gameManager.Player2.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
+
+                foreach (Player player in _gameManager.Players)
+                {
+                    player.OnPlayerStateChanged.RemoveListener(OnPlayerStateChanged);
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 using Zenject;
@@ -8,9 +9,6 @@ namespace PSG.IsleOfColors.UI
     public class CameraControl : MonoBehaviour
     {
         #region serialized variables
-
-        [SerializeField] Transform player1Transform;
-        [SerializeField] Transform player2Transform;
 
         [Header("Camera pan settings")]
         [SerializeField]
@@ -70,23 +68,24 @@ namespace PSG.IsleOfColors.UI
 
         private void OnGameInitialized()
         {
-            player1Transform = _gameManager.Player1.transform;
-            player2Transform = _gameManager.Player2.transform;
-            activePlayer = player1Transform;
+            activePlayer = _gameManager.Players.Select(p => p.transform).FirstOrDefault();
 
             _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
 
-            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+            OnCurrentPlayerChanged(_gameManager.Players.FirstOrDefault());
 
             _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
-        private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
+        private void OnCurrentPlayerChanged(Player currentPlayer)
         {
-            if (currentPlayer == _gameManager.Player1)
-                activePlayer = player1Transform;
-            else
-                activePlayer = player2Transform;
+            if(currentPlayer == null)
+            {
+                Debug.LogError($"[CameraControl::OnCurrentPlayerChanged] Current player is invalid.");
+                return;                
+            }
+
+            activePlayer = currentPlayer.transform;
         }
 
         private void Update()

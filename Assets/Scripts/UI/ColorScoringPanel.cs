@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Gameplay.Scoring;
 using TMPro;
@@ -48,10 +49,12 @@ namespace PSG.IsleOfColors.UI
             if (!isSetupScoring)
             {
                 _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-                _gameManager.Player1.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
-                _gameManager.Player2.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
+                foreach(Player player in _gameManager.Players)
+                {
+                    OnPlayerScoreChanged(player);
+                }
                 
-                OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+                OnCurrentPlayerChanged(_gameManager.Players.FirstOrDefault());
             }
 
             _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
@@ -71,7 +74,7 @@ namespace PSG.IsleOfColors.UI
             isShown = show;
         }
 
-        private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
+        private void OnCurrentPlayerChanged(Player currentPlayer)
         {
             this.currentPlayer = currentPlayer;
             OnPlayerScoreChanged(currentPlayer);

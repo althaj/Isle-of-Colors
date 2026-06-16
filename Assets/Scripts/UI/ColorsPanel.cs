@@ -1,3 +1,4 @@
+using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 using Zenject;
@@ -22,13 +23,19 @@ namespace PSG.IsleOfColors.UI
         {
             _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
 
-            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+            OnCurrentPlayerChanged(_gameManager.Players.FirstOrDefault());
 
             _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
 
-        private void OnCurrentPlayerChanged(Player currentPlayer, Player otherPlayer)
+        private void OnCurrentPlayerChanged(Player currentPlayer)
         {
+            if(currentPlayer == null)
+            {
+                Debug.LogError($"[ColorsPanel::OnCurrentPlayerChanged] Current player is invalid.");
+                return;
+            }
+
             if (player != null)
             {
                 player.OnColorUsageChanged.RemoveListener(OnPlayerColorsChanged);

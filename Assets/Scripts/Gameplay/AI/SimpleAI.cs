@@ -13,14 +13,14 @@ namespace PSG.IsleOfColors.Gameplay.AI
         
         private GameManager _gameManager;
 
-        public SimpleAI(ApplicationManager applicationManager, GameManager gameManager)
+        public SimpleAI(ApplicationManager applicationManager, GameManager gameManager, GameOptions.PlayerType playerType)
         {
-            switch (applicationManager.GameOptions.Difficulty)
+            switch (playerType)
             {
-                case GameOptions.BotDifficulty.MainMenu: retryCount = 1; break;
-                case GameOptions.BotDifficulty.Easy: retryCount = 75; break;
-                case GameOptions.BotDifficulty.Medium: retryCount = 150; break;
-                case GameOptions.BotDifficulty.Hard: retryCount = 300; break;
+                case GameOptions.PlayerType.MainMenu: retryCount = 1; break;
+                case GameOptions.PlayerType.EasyBot: retryCount = 75; break;
+                case GameOptions.PlayerType.MediumBot: retryCount = 150; break;
+                case GameOptions.PlayerType.HardBot: retryCount = 300; break;
             }
 
             _gameManager = gameManager;

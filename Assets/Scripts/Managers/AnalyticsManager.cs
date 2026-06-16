@@ -36,7 +36,7 @@ namespace PSG.IsleOfColors.Managers
             AnalyticsService.Instance.RecordEvent(new GameEndedEvent(gameManager, applicationManager));
         }
 
-        public void GameStarted(GameOptions.BotDifficulty? difficulty)
+        public void GameStarted(GameOptions.PlayerType? difficulty)
         {
             AnalyticsService.Instance.RecordEvent(new GameStartedEvent(difficulty));
         }

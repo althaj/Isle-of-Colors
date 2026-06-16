@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Managers;
 using TMPro;
@@ -77,28 +78,58 @@ namespace PSG.IsleOfColors.UI.MainMenu
 
             GameOptions options = new GameOptions
             {
-                Player1Name = player1NameInput.text,
-                Player2Name = player2NameInput.text,
-                Difficulty = (GameOptions.BotDifficulty)difficultyDropdown.value,
-                ShowTutorial = tutorialToggle.isOn,
-                IsSinglePlayer = isSinglePlayer
+                Players = new ()
+                {
+                    new()
+                    {
+                        PlayerName = player1NameInput.text,
+                        PlayerType = GameOptions.PlayerType.Human
+                    },
+                    new()
+                    {
+                        PlayerName = isSinglePlayer ? GetBotName() : player2NameInput.text,
+                        PlayerType = GetSecondPlayerType()
+                        
+                    }
+                },
+                ShowTutorial = tutorialToggle.isOn
             };
 
+            _audioManager.PlayUISound(UIAudioType.Confirm);
+
+            _analyticsManager.GameStarted(isSinglePlayer ? GetSecondPlayerType() : null);
+
+            _applicationManager.StartGame(options);
+        }
+
+        private GameOptions.PlayerType GetSecondPlayerType()
+        {
             if (isSinglePlayer)
             {
                 switch (difficultyDropdown.value)
                 {
-                    case 0: options.Player2Name = "David BOT"; break;
-                    case 1: options.Player2Name = "Vierka BOT"; break;
-                    case 2: options.Player2Name = "Janči BOT"; break;
+                    case 0: return GameOptions.PlayerType.EasyBot;
+                    case 1: return GameOptions.PlayerType.MediumBot;
+                    case 2: return GameOptions.PlayerType.HardBot;
                 }
             }
 
-            _audioManager.PlayUISound(UIAudioType.Confirm);
+            return GameOptions.PlayerType.Human;
+        }
 
-            _analyticsManager.GameStarted(options.IsSinglePlayer ? options.Difficulty : null);
+        private string GetBotName()
+        {
+            if (isSinglePlayer)
+            {
+                switch (difficultyDropdown.value)
+                {
+                    case 0: return "David BOT";
+                    case 1: return "Vierka BOT";
+                    case 2: return "Janči BOT";
+                }
+            }
 
-            _applicationManager.StartGame(options);
+            return null;
         }
 
         private void LoadPlayerPrefs()

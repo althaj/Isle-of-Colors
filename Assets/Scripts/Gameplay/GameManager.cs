@@ -17,22 +17,18 @@ namespace PSG.IsleOfColors.Gameplay
 
         public bool IsGameInitialized { get; private set; } = false;
 
-        private Player[] players;
 
-        public Player Player1 { get => players != null && players.Length > 0 ? players[0] : null; }
-        public Player Player2 { get => players != null && players.Length > 1 ? players[1] : null; }
-        public List<PencilColor> Colors { get => colors; set => colors = value; }
+        public Player[] Players { get; private set; }
+
+        public List<PencilColor> ColorTypes { get => colors; set => colors = value; }
 
         public UnityEvent<int> OnDieRolled;
-        public UnityEvent<Player, Player> OnCurrentPlayerChanged;
+        public UnityEvent<Player> OnCurrentPlayerChanged;
         public UnityEvent OnLastRoundStarted;
         public UnityEvent OnGameEnded;
         public UnityEvent OnGameInitialized;
 
         public UnityEvent<TutorialStepId> OnTutorialStepEnded;
-
-        private PencilColor player1Color;
-        private PencilColor player2Color;
 
         private bool lastRound = false;
         private bool noMoves = false;
@@ -43,7 +39,6 @@ namespace PSG.IsleOfColors.Gameplay
         public IScoring RedScoring { get; private set; }
 
         private Player currentPlayer;
-        private Player otherPlayer;
 
         public int CurrentDieRoll { get; private set; }
 
@@ -55,10 +50,10 @@ namespace PSG.IsleOfColors.Gameplay
 
         private void Start()
         {
-            players = _gameFactory.InitializePlayers(2).ToArray();
+            Players = _gameFactory.InitializePlayers().ToArray();
 
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
-            SetCurrentPlayer(Player1);
+            SetCurrentPlayer(Players[0]);
 
             SetupScoring();
 
@@ -92,7 +87,7 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
-        public PencilColor GetColorByName(string name) => Colors.Single(x => x.Name.CompareTo(name) == 0);
+        public PencilColor GetColorByName(string name) => ColorTypes.Single(x => x.Name.CompareTo(name) == 0);
 
         public void SetupScoring()
         {
@@ -189,40 +184,13 @@ namespace PSG.IsleOfColors.Gameplay
                 return true;
             }
 
-            if (Player1.ColorUsage.Any(x => x.Value >= 6) || Player2.ColorUsage.Any(x => x.Value >= 6) || noMoves)
+            if (Players.Any(p => p.ColorUsage.Any(c => c.Value >= 6)) || noMoves)
             {
                 OnLastRoundStarted?.Invoke();
                 lastRound = true;
             }
 
             return false;
-        }
-
-        public void UseColor(PencilColor color)
-        {
-            if (Player1.Colors.Contains(color))
-            {
-                Player1.UseColor(color);
-                player1Color = color;
-            }
-
-            if (Player2.Colors.Contains(color))
-            {
-                Player2.UseColor(color);
-                player2Color = color;
-            }
-
-            SwapColors();
-        }
-
-        public void SwapColors()
-        {
-            if (player1Color == null || player2Color == null)
-                return;
-
-            Player1.AddColor(player2Color);
-            Player2.AddColor(player1Color);
-            player1Color = player2Color = null;
         }
 
         public void RollDie(int value)
@@ -234,20 +202,8 @@ namespace PSG.IsleOfColors.Gameplay
         private void SetCurrentPlayer(Player player)
         {
             currentPlayer = player;
-            if (player == Player1)
-                otherPlayer = Player2;
-            else
-                otherPlayer = Player1;
 
-            OnCurrentPlayerChanged?.Invoke(currentPlayer, otherPlayer);
-        }
-
-        public void ChangeCurrentPlayer()
-        {
-            if (currentPlayer == Player1)
-                SetCurrentPlayer(Player2);
-            else
-                SetCurrentPlayer(Player1);
+            OnCurrentPlayerChanged?.Invoke(currentPlayer);
         }
 
         public void Confirm()
@@ -264,8 +220,12 @@ namespace PSG.IsleOfColors.Gameplay
         {
             lastRound = false;
             noMoves = false;
-            Player1.Reset();
-            Player2.Reset();
+
+            foreach (Player player in Players)
+            {
+                player.Reset();
+            }
+
             SetupScoring();
         }
 

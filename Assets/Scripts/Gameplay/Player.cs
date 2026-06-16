@@ -72,9 +72,9 @@ namespace PSG.IsleOfColors.Gameplay
 
         [Inject] private GameManager _gameManager;
 
-        internal void Initialize()
+        internal void Initialize(GameOptions.PlayerOptions playerOptions)
         {
-            foreach (PencilColor color in _gameManager.Colors)
+            foreach (PencilColor color in _gameManager.ColorTypes)
             {
                 ColorUsage.Add(color, 0);
             }
@@ -83,6 +83,8 @@ namespace PSG.IsleOfColors.Gameplay
 
             PlayerSheet.GenerateMap(map);
             GetComponent<GameMap>().CreateMap();
+
+            Name = playerOptions.PlayerName;
         }
 
         internal void SetBot(IBot bot)
@@ -179,7 +181,7 @@ namespace PSG.IsleOfColors.Gameplay
 
             PlayerSheet.Confirm();
 
-            _gameManager.UseColor(coloringColor);
+            UseColor(coloringColor);
 
             PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
 

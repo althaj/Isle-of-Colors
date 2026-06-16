@@ -12,7 +12,6 @@ namespace PSG.IsleOfColors.Graphics
     {
         [SerializeField] private float turnDelay;
 
-        private Player[] players;
         private IBot ai;
 
         [Inject] private ApplicationManager _applicationManager;
@@ -26,15 +25,7 @@ namespace PSG.IsleOfColors.Graphics
 
         private void OnGameInitialized()
         {
-            players = new[] { _gameManager.Player1, _gameManager.Player2 };
-
-            _applicationManager.GameOptions = new GameOptions
-            {
-                Difficulty = GameOptions.BotDifficulty.MainMenu,
-                ShowTutorial = false
-            };
-
-            ai = new SimpleAI(_applicationManager, _gameManager);
+            ai = new SimpleAI(_applicationManager, _gameManager, GameOptions.PlayerType.MainMenu);
 
             StartCoroutine(PlayAnimation());
 
@@ -54,7 +45,7 @@ namespace PSG.IsleOfColors.Graphics
 
                 yield return new WaitForSeconds(Random.Range(turnDelay * 0.1f, turnDelay));
 
-                foreach (Player player in players)
+                foreach (Player player in _gameManager.Players)
                 {
                     ai.DoTurn(player);
                 }

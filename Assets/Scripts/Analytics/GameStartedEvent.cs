@@ -10,9 +10,9 @@ namespace PSG.IsleOfColors.Analytics
         {
         }
 
-        public GameStartedEvent(GameOptions.BotDifficulty? difficulty) : base("GameStarted")
+        public GameStartedEvent(GameOptions.PlayerType? playerType) : base("GameStarted")
         {
-            BotDifficulty = GameOptions.GetBotDifficultyString(difficulty);
+            BotDifficulty = GameOptions.GetPlayerTypeString(playerType);
         }
     }
 }

@@ -41,8 +41,10 @@ namespace PSG.IsleOfColors.UI.Developer
         public void RollDie(int value)
         {
             _gameManager.RollDie(value);
-            _gameManager.Player1.StartTurn(value);
-            _gameManager.Player2.StartTurn(value);
+            foreach(Player player in _gameManager.Players)
+            {
+                player.StartTurn(value);
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace PSG.IsleOfColors.Gameplay.Scoring
 
         public PlayerScore(GameManager gameManager)
         {
-            foreach (var color in gameManager.Colors)
+            foreach (var color in gameManager.ColorTypes)
             {
                 ColorScores.Add(color, 0);
             }

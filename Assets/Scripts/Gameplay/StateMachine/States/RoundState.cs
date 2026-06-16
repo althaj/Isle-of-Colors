@@ -1,30 +1,28 @@
+using System.Linq;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 {
     public class RoundState : IState
     {
-        public UnityEvent OnDescriptionChanged;
-
-        private Player player1;
-        private Player player2;
+        public UnityEvent OnDescriptionChanged = new();
 
         private bool isDone = false;
         private string description;
 
+        private GameManager gameManager;
+
         public RoundState(GameManager gameManager)
         {
-            OnDescriptionChanged = new();
-
-            player1 = gameManager.Player1;
-            player2 = gameManager.Player2;
-
-            player1.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
-            player2.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+            this.gameManager = gameManager;
 
             int dieValue = RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
-            player1.StartTurn(dieValue);
-            player2.StartTurn(dieValue);
+            foreach(Player player in gameManager.Players)
+            {
+                player.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
+                player.StartTurn(dieValue);
+            }
             
             gameManager.RollDie(dieValue);
 
@@ -33,7 +31,13 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
         private void OnPlayerStateChanged()
         {
-            if (player1.PlayerState == EPlayerState.Finished && player2.PlayerState == EPlayerState.Finished)
+            if(gameManager == null)
+            {
+                Debug.LogError($"[RoundState::OnPlayerStateChanged] Game manager is invalid.");
+                return;
+            }
+
+            if (gameManager.Players.All(p => p.PlayerState == EPlayerState.Finished))
             {
                 isDone = true;
                 return;

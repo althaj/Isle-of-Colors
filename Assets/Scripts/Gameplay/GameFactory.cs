@@ -16,37 +16,28 @@ namespace PSG.IsleOfColors.Gameplay
         [Inject] private ApplicationManager _applicationManager;
         [Inject] private DiContainer _container;
 
-        public IEnumerable<Player> InitializePlayers(int numberOfPlayers)
+        public IEnumerable<Player> InitializePlayers()
         {
             IEnumerable<Player> result = Enumerable.Empty<Player>();
             
-            if(numberOfPlayers < 0)
+            int numberOfPlayers = _applicationManager.GameOptions.Players.Count;
+
+            if(_applicationManager.GameOptions.Players.Count < 2 || _applicationManager.GameOptions.Players.Count > 4)
             {
-                Debug.LogError($"[GameFactory::InitializePlayer] Number of players cannot be negative.");
+                Debug.LogError($"[GameFactory::InitializePlayer] Number of players must be between 2 and 4, but is {_applicationManager.GameOptions.Players.Count}.");
                 return result;
             }
 
-            if(playerParents.Count < numberOfPlayers)
+            if(playerParents.Count < _applicationManager.GameOptions.Players.Count)
             {
-                Debug.LogError($"[GameFactory::InitializePlayer] Not enough player positions, need {numberOfPlayers}, have {playerParents.Count}.");
+                Debug.LogError($"[GameFactory::InitializePlayer] Not enough player positions, need {_applicationManager.GameOptions.Players.Count}, have {playerParents.Count}.");
                 return result;
             }
-
             
-            for(int i = 0; i < numberOfPlayers; i++)
+            for(int i = 0; i < _applicationManager.GameOptions.Players.Count; i++)
             {
                 Player player = _container.InstantiatePrefab(playerPrefab, playerParents[i]).GetComponent<Player>();
-                player.Initialize();
-
-                if (!String.IsNullOrWhiteSpace(_applicationManager.GameOptions.Player1Name) && i == 0)
-                {
-                    player.Name = _applicationManager.GameOptions.Player1Name;
-                }
-
-                if (!String.IsNullOrWhiteSpace(_applicationManager.GameOptions.Player2Name) && i == 1)
-                {
-                    player.Name = _applicationManager.GameOptions.Player2Name;
-                }
+                player.Initialize(_applicationManager.GameOptions.Players[i]);
 
                 result = result.Append(player);
             }
