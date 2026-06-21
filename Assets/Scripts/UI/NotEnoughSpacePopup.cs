@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Managers;
 using UnityEngine;
@@ -28,7 +29,12 @@ namespace PSG.IsleOfColors.UI
 
         private void OnGameInitialized()
         {
-            currentPlayer = _gameManager.Player1;
+            if (_gameManager == null)
+            {
+                Debug.LogError($"[NotEnoughSpacePopup::OnGameInitialized] Game Manager is invalid.");
+                return;
+            }
+            currentPlayer = _gameManager.Players.First();
 
             _gameManager.OnDieRolled.AddListener(OnDieRolled);
             _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
@@ -54,7 +60,7 @@ namespace PSG.IsleOfColors.UI
             DisplayPopupForCurrentPlayer();
         }
 
-        private void OnCurrentPlayerChanged(Player activePlayer, Player otherPlayer)
+        private void OnCurrentPlayerChanged(Player activePlayer)
         {
             currentPlayer = activePlayer;
             DisplayPopupForCurrentPlayer();
@@ -62,7 +68,7 @@ namespace PSG.IsleOfColors.UI
 
         private void DisplayPopupForCurrentPlayer()
         {
-            if (_applicationManager.GameOptions.IsSinglePlayer && currentPlayer == _gameManager.Player2)
+            if (currentPlayer)
             {
                 return;
             }

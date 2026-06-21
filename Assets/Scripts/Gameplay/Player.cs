@@ -1,6 +1,7 @@
 using PSG.IsleOfColors.Gameplay.AI;
 using PSG.IsleOfColors.Gameplay.Scoring;
 using PSG.IsleOfColors.Gameplay.StateMachine.States;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace PSG.IsleOfColors.Gameplay
         public UnityEvent<Player> OnPlayerMove;
 
         public bool IsSoundEnabled { get => !disableSound && ai == null; }
+        public bool IsAI { get => ai != null; }
 
         public int DieValue { get; private set; }
         private int currentMoveIndex = 0;
@@ -94,11 +96,19 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void UseColor(PencilColor color)
         {
+            if (color == null)
+            {
+                Debug.LogError($"[Player::AddColor] Color is invalid.");
+                return;
+            }
+
             if (!Colors.Contains(color))
             {
                 Debug.LogError($"[Player:UseColor] Player {Name} does not own the color {color}.", this);
                 return;
             }
+
+            _gameManager.UseColor(this, color);
 
             Colors.Remove(color);
             ColorUsage[color]++;
@@ -108,6 +118,12 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void AddColor(PencilColor color)
         {
+            if (color == null)
+            {
+                Debug.LogError($"[Player::AddColor] Color is invalid.");
+                return;
+            }
+
             if (Colors.Contains(color))
             {
                 Debug.LogError($"[Player:AddColor] AddColor: Player {Name} already owns the color {color}.", this);
@@ -218,9 +234,6 @@ namespace PSG.IsleOfColors.Gameplay
 
             PlayerSheet.UpdateAvailableMoves(currentMoveIndex, DieValue);
 
-            if (ai != null)
-                ai.DoTurn(this);
-
             OnPlayerMove?.Invoke(this);
         }
 
@@ -235,6 +248,17 @@ namespace PSG.IsleOfColors.Gameplay
             Colors = new();
 
             PlayerSheet.Reset();
+        }
+
+        internal void DoAITurn()
+        {
+            if (ai == null)
+            {
+                Debug.LogError($"[Player::DoAITurn] AI is invaild.");
+                return;
+            }
+
+            ai.DoTurn(this);
         }
     }
 }

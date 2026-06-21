@@ -1,3 +1,4 @@
+using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Managers;
 using TMPro;
@@ -57,11 +58,26 @@ namespace PSG.IsleOfColors.UI
 
         private void OnGameEnded()
         {
-            OpenPopup(_gameManager.Player1, _gameManager.Player2);
+            OpenPopup();
         }
 
-        public void OpenPopup(Player player1, Player player2)
+        public void OpenPopup()
         {
+            if(_gameManager == null)
+            {
+                Debug.LogError($"[EndGamePopup::OpenPopup] Game Manager is invalid.");
+                return;
+            }
+
+            if(_gameManager.Players.Count() < 2)
+            {
+                Debug.LogError($"[EndGamePopup::OpenPopup] Not enough players in Game Mamanger.");
+                return;
+            }
+
+            Player player1 = _gameManager.Players[0];
+            Player player2 = _gameManager.Players[1];
+
             player1Name.text = player1.Name;
             player2Name.text = player2.Name;
 

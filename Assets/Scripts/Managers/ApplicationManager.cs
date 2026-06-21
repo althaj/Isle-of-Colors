@@ -10,7 +10,38 @@ namespace PSG.IsleOfColors.Managers
 
         public string VersionString { get => versionString; }
 
-        public GameOptions GameOptions { get; set; }
+        private GameOptions gameOptions;
+
+        public GameOptions GameOptions
+        {
+            get
+            {
+                if (!gameOptions.AreOptionsValid())
+                {
+                    gameOptions = new()
+                    {
+                        Players = new()
+                        {
+                            new()
+                            {
+                                PlayerName = "Fero",
+                                PlayerType = GameOptions.PlayerType.MainMenu
+                            },
+                            new()
+                            {
+                                PlayerName = "Jožo",
+                                PlayerType = GameOptions.PlayerType.MainMenu
+
+                            }
+                        }
+                    };
+                }
+
+                return gameOptions;
+            }
+
+            set => gameOptions = value;
+        }
 
         public void LoadMainMenu()
         {

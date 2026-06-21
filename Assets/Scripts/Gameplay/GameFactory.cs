@@ -1,7 +1,6 @@
 using UnityEngine;
 using Zenject;
 using PSG.IsleOfColors.Managers;
-using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -11,7 +10,6 @@ namespace PSG.IsleOfColors.Gameplay
     {
         [SerializeField] private Player playerPrefab;
         [SerializeField] private List<Transform> playerParents = new();
-        
 
         [Inject] private ApplicationManager _applicationManager;
         [Inject] private DiContainer _container;
@@ -19,8 +17,6 @@ namespace PSG.IsleOfColors.Gameplay
         public IEnumerable<Player> InitializePlayers()
         {
             IEnumerable<Player> result = Enumerable.Empty<Player>();
-            
-            int numberOfPlayers = _applicationManager.GameOptions.Players.Count;
 
             if(_applicationManager.GameOptions.Players.Count < 2 || _applicationManager.GameOptions.Players.Count > 4)
             {

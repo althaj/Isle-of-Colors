@@ -6592,18 +6592,18 @@ PrefabInstance:
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 701550589}
+      objectReference: {fileID: 701550595}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeCurrentPlayer
+      value: SwitchPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PSG.IsleOfColors.UI.CameraControlButton, Assembly-CSharp
+      value: CameraSwitchButton, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -6702,7 +6702,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 701550589}
+      addedObject: {fileID: 701550595}
   m_SourcePrefab: {fileID: 100100000, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
 --- !u!224 &701550587 stripped
 RectTransform:
@@ -6714,7 +6714,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
   m_PrefabInstance: {fileID: 701550586}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &701550589
+--- !u!114 &701550595
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6723,10 +6723,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 701550588}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d6b4b52321197246841c6a62b54930d, type: 3}
+  m_Script: {fileID: 11500000, guid: c8900d3cc2e26bd419fe6cc4851f0ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
 --- !u!1 &707503049
 GameObject:
   m_ObjectHideFlags: 0
@@ -8148,18 +8147,18 @@ PrefabInstance:
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1507577921}
+      objectReference: {fileID: 1507577926}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChangeCurrentPlayer
+      value: SwitchPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PSG.IsleOfColors.UI.CameraControlButton, Assembly-CSharp
+      value: CameraSwitchButton, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1910408214165065162, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -8258,7 +8257,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1722407748120075360, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1507577921}
+      addedObject: {fileID: 1507577926}
   m_SourcePrefab: {fileID: 100100000, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
 --- !u!1 &862604459
 GameObject:
@@ -9289,7 +9288,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNameText: {fileID: 1242709700}
   scoreText: {fileID: 1478511721}
-  isCurrentPlayer: 0
 --- !u!114 &935391172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10749,8 +10747,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bf715012f9a1364e894a63d2f14c952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1Transform: {fileID: 0}
-  player2Transform: {fileID: 0}
   cameraPanSpeed: 3
   distanceFromEdge: 15
   xPositionBounds:
@@ -14150,7 +14146,7 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5972747357820808935, guid: 72a3ddd243b0f6c49934ff364ed95c26, type: 3}
   m_PrefabInstance: {fileID: 860110662}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1507577921
+--- !u!114 &1507577926
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14159,10 +14155,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1507577919}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d6b4b52321197246841c6a62b54930d, type: 3}
+  m_Script: {fileID: 11500000, guid: c8900d3cc2e26bd419fe6cc4851f0ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
 --- !u!1 &1521572691
 GameObject:
   m_ObjectHideFlags: 0
@@ -19838,7 +19833,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNameText: {fileID: 198824693}
   scoreText: {fileID: 283386329}
-  isCurrentPlayer: 1
 --- !u!114 &2092483502
 MonoBehaviour:
   m_ObjectHideFlags: 0

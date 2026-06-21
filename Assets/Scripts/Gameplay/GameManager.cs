@@ -1,5 +1,6 @@
 using PSG.IsleOfColors.Gameplay.Scoring;
 using PSG.IsleOfColors.Gameplay.StateMachine;
+using PSG.IsleOfColors.Managers;
 using PSG.IsleOfColors.UI.Tutorial;
 using RNGManager;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace PSG.IsleOfColors.Gameplay
 
 
         public Player[] Players { get; private set; }
+        private PencilColor[] UsedColors { get; set; }
 
         public List<PencilColor> ColorTypes { get => colors; set => colors = value; }
 
@@ -45,12 +47,14 @@ namespace PSG.IsleOfColors.Gameplay
         public float GameDuration { get => gameDurationStopwatch != null ? (float)gameDurationStopwatch.Elapsed.TotalSeconds : 0; }
         private Stopwatch gameDurationStopwatch;
 
+
         [Inject] private GameFactory _gameFactory;
         [Inject] private GameStateMachine _stateMachine;
 
         private void Start()
         {
             Players = _gameFactory.InitializePlayers().ToArray();
+            UsedColors = new PencilColor[Players.Length];
 
             RNGManager.RNGManager.Manager.AddInstance(new RNGInstance(title: "Game"));
             SetCurrentPlayer(Players[0]);
@@ -196,7 +200,25 @@ namespace PSG.IsleOfColors.Gameplay
         public void RollDie(int value)
         {
             CurrentDieRoll = value;
+
+            RotateColors();
+
             OnDieRolled?.Invoke(CurrentDieRoll);
+        }
+
+        private void RotateColors()
+        {
+            for (int i = 0; i < Players.Length; i++)
+            {
+                if (UsedColors[i] == null)
+                {
+                    continue;
+                }
+
+                int nextIndex = (i + 1) % Players.Length;
+                Players[nextIndex].AddColor(UsedColors[i]);
+                UsedColors[i] = null;
+            }
         }
 
         private void SetCurrentPlayer(Player player)
@@ -206,9 +228,47 @@ namespace PSG.IsleOfColors.Gameplay
             OnCurrentPlayerChanged?.Invoke(currentPlayer);
         }
 
+        public void SwitchPlayer()
+        {
+            if (currentPlayer == null)
+            {
+                UnityEngine.Debug.LogError($"[GameManager::SwitchPlayer] Current Player is invalid.");
+                return;
+            }
+
+            if (Players == null || Players.Length == 0)
+            {
+                UnityEngine.Debug.LogError($"[GameManager::SwitchPlayer] No players available.");
+                return;
+            }
+
+            int index = System.Array.IndexOf(Players, currentPlayer);
+            if (index < 0)
+            {
+                UnityEngine.Debug.LogError($"[GameManager::SwitchPlayer] Current player not found in Players array.");
+                return;
+            }
+
+            int nextIndex = (index + 1) % Players.Length;
+            currentPlayer = Players[nextIndex];
+            OnCurrentPlayerChanged?.Invoke(currentPlayer);
+        }
+
         public void Confirm()
         {
             currentPlayer.Confirm();
+        }
+
+        public void UseColor(Player player, PencilColor color)
+        {
+            for (int i = 0; i < Players.Length; i++)
+            {
+                if (Players[i] == player)
+                {
+                    UsedColors[i] = color;
+                    return;
+                }
+            }
         }
 
         public void Undo()

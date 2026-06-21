@@ -4,6 +4,7 @@ using PSG.IsleOfColors.Gameplay;
 using Zenject;
 using System;
 using Unity.VisualScripting;
+using System.Linq;
 
 namespace PSG.IsleOfColors.UI
 {
@@ -20,10 +21,11 @@ namespace PSG.IsleOfColors.UI
         private void OnGameInitialized()
         {
             _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-            _gameManager.Player1.OnPlayerMove.AddListener(OnPlayerMove);
-            _gameManager.Player2.OnPlayerMove.AddListener(OnPlayerMove);
-
-            OnCurrentPlayerChanged(_gameManager.Player1, _gameManager.Player2);
+            foreach(Player player in _gameManager.Players)
+            {
+                player.OnPlayerMove.AddListener(OnPlayerMove);
+            }
+            OnCurrentPlayerChanged(_gameManager.Players.First());
 
             _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
@@ -31,8 +33,10 @@ namespace PSG.IsleOfColors.UI
         void OnDisable()
         {
             _gameManager.OnCurrentPlayerChanged.RemoveListener(OnCurrentPlayerChanged);
-            _gameManager.Player1.OnPlayerMove.RemoveListener(OnPlayerMove);
-            _gameManager.Player2.OnPlayerMove.RemoveListener(OnPlayerMove);
+           foreach(Player player in _gameManager.Players)
+            {
+                player.OnPlayerMove.RemoveListener(OnPlayerMove);
+            }
 
             button.onClick.RemoveListener(OnButtonClicked);
         }
@@ -61,8 +65,14 @@ namespace PSG.IsleOfColors.UI
             }
         }
 
-        void OnCurrentPlayerChanged(Player currentPlayer, Player previousPlayer)
+        void OnCurrentPlayerChanged(Player currentPlayer)
         {
+            if(currentPlayer == null)
+            {
+                Debug.LogError($"[ControlButton::OnCurrentPlayerChanged] Current player is invalid.");
+                return;
+            }
+
             this.currentPlayer = currentPlayer;
             UpdateButtonState(currentPlayer);
         }

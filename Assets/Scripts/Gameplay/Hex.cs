@@ -80,7 +80,7 @@ namespace PSG.IsleOfColors.Gameplay
                 return;
             }
 
-            if (isEnabled)
+            if (isEnabled && !player.IsAI)
             {
                 player.SetColor(space.X, space.Y);
             }
@@ -97,7 +97,7 @@ namespace PSG.IsleOfColors.Gameplay
 
             if (space.Color == null)
             {
-                enabledSpriteRenderer.enabled = isEnabled && showEnabledMoves;
+                enabledSpriteRenderer.enabled = isEnabled && showEnabledMoves && !player.IsAI;
 
                 mainSpriteRenderer.enabled = false;
 

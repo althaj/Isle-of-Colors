@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,12 +19,12 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
             this.gameManager = gameManager;
 
             int dieValue = RNGManager.RNGManager.Manager["Game"].NextInt(1, 7);
-            foreach(Player player in gameManager.Players)
+            foreach (Player player in gameManager.Players)
             {
                 player.OnPlayerStateChanged.AddListener(OnPlayerStateChanged);
                 player.StartTurn(dieValue);
             }
-            
+
             gameManager.RollDie(dieValue);
 
             OnPlayerStateChanged();
@@ -31,7 +32,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
         private void OnPlayerStateChanged()
         {
-            if(gameManager == null)
+            if (gameManager == null)
             {
                 Debug.LogError($"[RoundState::OnPlayerStateChanged] Game manager is invalid.");
                 return;
@@ -43,32 +44,54 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
                 return;
             }
 
-            description = string.Empty;
+            if (
+                gameManager.Players
+                    .Where(p => !p.IsAI)
+                    .All(p => p.PlayerState == EPlayerState.Finished)
+                )
+            {
+                foreach (Player aiPlayer in gameManager.Players.Where(p => p.IsAI))
+                {
+                    aiPlayer.DoAITurn();
+                }
+            }
 
-            if (player1.PlayerState == EPlayerState.PickingColor)
-                description = $"{player1.Name} is picking color. ";
-
-            if (player1.PlayerState == EPlayerState.Coloring)
-                description = $"{player1.Name} is coloring. ";
-
-            if (player2.PlayerState == EPlayerState.PickingColor)
-                description += $"{player2.Name} is picking color. ";
-
-            if (player2.PlayerState == EPlayerState.Coloring)
-                description += $"{player2.Name} is coloring. ";
-
-            if (player1.PlayerState == EPlayerState.PickingColor && player2.PlayerState == EPlayerState.PickingColor)
-                description = "Both players are picking colors.";
-
-            if (player1.PlayerState == EPlayerState.Coloring && player2.PlayerState == EPlayerState.Coloring)
-                description = "Both players are coloring.";
-
+            UpdateDescription();
             OnDescriptionChanged?.Invoke();
+        }
+
+        private void UpdateDescription()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (gameManager.Players.Any(p => p.PlayerState == EPlayerState.PickingColor))
+            {
+                stringBuilder.Append("Players picking a color: ");
+                stringBuilder.AppendJoin(", ",
+                    gameManager
+                        .Players
+                        .Where(p => p.PlayerState == EPlayerState.PickingColor)
+                        .Select(p => p.Name));
+                stringBuilder.AppendLine();
+            }
+
+            if (gameManager.Players.Any(p => p.PlayerState == EPlayerState.Coloring))
+            {
+                stringBuilder.Append("Players coloring: ");
+                stringBuilder.AppendJoin(", ",
+                    gameManager
+                        .Players
+                        .Where(p => p.PlayerState == EPlayerState.Coloring)
+                        .Select(p => p.Name));
+                stringBuilder.AppendLine(".");
+            }
+
+            description = stringBuilder.ToString();
         }
 
         public void Execute()
         {
-            
+
         }
 
         public void Exit()
