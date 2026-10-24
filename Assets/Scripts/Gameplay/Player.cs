@@ -124,12 +124,6 @@ namespace PSG.IsleOfColors.Gameplay
                 return;
             }
 
-            if (Colors.Contains(color))
-            {
-                Debug.LogError($"[Player:AddColor] AddColor: Player {Name} already owns the color {color}.", this);
-                return;
-            }
-
             Colors.Add(color);
             OnPlayerColorsChanged?.Invoke();
         }

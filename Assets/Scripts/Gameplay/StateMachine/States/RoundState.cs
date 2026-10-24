@@ -96,6 +96,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 
         public void Exit()
         {
+            gameManager.RotateColors();
             OnDescriptionChanged?.RemoveAllListeners();
         }
 

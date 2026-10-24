@@ -200,13 +200,10 @@ namespace PSG.IsleOfColors.Gameplay
         public void RollDie(int value)
         {
             CurrentDieRoll = value;
-
-            RotateColors();
-
             OnDieRolled?.Invoke(CurrentDieRoll);
         }
 
-        private void RotateColors()
+        public void RotateColors()
         {
             for (int i = 0; i < Players.Length; i++)
             {
@@ -284,6 +281,11 @@ namespace PSG.IsleOfColors.Gameplay
             foreach (Player player in Players)
             {
                 player.Reset();
+            }
+
+            for(int i = 0; i < UsedColors.Length; i++)
+            {
+                UsedColors[i] = null;
             }
 
             SetupScoring();
