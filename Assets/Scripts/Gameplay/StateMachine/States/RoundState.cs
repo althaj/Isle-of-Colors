@@ -10,6 +10,7 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
         public UnityEvent OnDescriptionChanged = new();
 
         private bool isDone = false;
+        private bool aiTurnsStarted = false;
         private string description;
 
         private GameManager gameManager;
@@ -47,9 +48,11 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
             if (
                 gameManager.Players
                     .Where(p => !p.IsAI)
-                    .All(p => p.PlayerState == EPlayerState.Finished)
+                    .All(p => p.PlayerState == EPlayerState.Finished) &&
+                    !aiTurnsStarted
                 )
             {
+                aiTurnsStarted = true;
                 foreach (Player aiPlayer in gameManager.Players.Where(p => p.IsAI))
                 {
                     aiPlayer.DoAITurn();
