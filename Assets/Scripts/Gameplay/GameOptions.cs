@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace PSG.IsleOfColors.Gameplay
 {
+    [System.Serializable]
     public struct GameOptions
     {
         public enum PlayerType
@@ -14,15 +15,16 @@ namespace PSG.IsleOfColors.Gameplay
             MainMenu
         }
 
+        [System.Serializable]
         public struct PlayerOptions
         {
-            public string PlayerName { get; set; }
+            public string PlayerName;
             public PlayerType PlayerType;
         }
 
         public List<PlayerOptions> Players;
 
-        public bool ShowTutorial { get; set; }
+        public bool ShowTutorial;
 
         public bool AreOptionsValid() => 
             Players != null &&

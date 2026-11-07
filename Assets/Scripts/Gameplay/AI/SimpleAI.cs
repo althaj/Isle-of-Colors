@@ -98,7 +98,6 @@ namespace PSG.IsleOfColors.Gameplay.AI
 
             if (!player.CanConfirm)
             {
-                // TODO: Fix this issue.
                 Debug.LogError("SimpleAI.DoTurn: Player cannot confirm the turn. Cannot do a turn.");
 
                 foreach (PlayerSheetSpace space in player.PlayerSheet.GetNewSpaces())

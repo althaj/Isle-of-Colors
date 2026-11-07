@@ -29,14 +29,9 @@ namespace PSG.IsleOfColors.UI.MainMenu
             versionLabel.text = _applicationManager.VersionString;
         }
 
-        public void StartSinglePlayer()
+        public void StartLocalGame()
         {
-            gameSettingsPopup.OpenPopup(true);
-        }
-
-        public void StartMultiplayer()
-        {
-            gameSettingsPopup.OpenPopup(false);
+            gameSettingsPopup.OpenPopup();
         }
 
         public void OpenSettings()

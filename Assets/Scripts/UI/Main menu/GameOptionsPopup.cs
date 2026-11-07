@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Managers;
 using TMPro;
@@ -7,51 +8,39 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Zenject;
+using static PSG.IsleOfColors.Gameplay.GameOptions;
 
 namespace PSG.IsleOfColors.UI.MainMenu
 {
     public class GameOptionsPopup : MonoBehaviour
     {
+        private const string GAME_OPTIONS_KEY = "GameOptions";
+
         [SerializeField] private GameObject background;
         [SerializeField] private GameObject popupPanel;
 
-        [SerializeField] private GameObject[] hideWhenSinglePlayer;
-        [SerializeField] private GameObject[] hideWhenMultiplayer;
+        [SerializeField] private RectTransform playerRowContainer;
+        [SerializeField] private PlayerRow playerRowPrefab;
 
-        [SerializeField] private TMP_InputField player1NameInput;
-        [SerializeField] private TMP_InputField player2NameInput;
-        [SerializeField] private TMP_Dropdown difficultyDropdown;
         [SerializeField] private Toggle tutorialToggle;
 
         [SerializeField] private TextMeshProUGUI validationErrorLabel;
 
-        private bool isSinglePlayer;
+        [Header("Bot names")]
+        [SerializeField] private string[] easyBotNames;
+        [SerializeField] private string[] mediumBotNames;
+        [SerializeField] private string[] hardBotNames;
+
+        private List<PlayerRow> playerRows = new();
 
         [Inject] private ApplicationManager _applicationManager;
         [Inject] private AudioManager _audioManager;
         [Inject] private AnalyticsManager _analyticsManager;
 
-        public void OpenPopup(bool isSinglePlayer)
+        [Inject] private DiContainer _container;
+
+        public void OpenPopup()
         {
-            this.isSinglePlayer = isSinglePlayer;
-
-            if (isSinglePlayer)
-            {
-                foreach (var element in hideWhenMultiplayer)
-                    element.SetActive(true);
-
-                foreach (var element in hideWhenSinglePlayer)
-                    element.SetActive(false);
-            }
-            else
-            {
-                foreach (var element in hideWhenMultiplayer)
-                    element.SetActive(false);
-
-                foreach (var element in hideWhenSinglePlayer)
-                    element.SetActive(true);
-            }
-
             ClearValidationError();
 
             LoadPlayerPrefs();
@@ -60,8 +49,72 @@ namespace PSG.IsleOfColors.UI.MainMenu
             popupPanel.SetActive(true);
         }
 
+        public void AddPlayer()
+        {
+            AddPlayer(new());
+        }
+
+        public void AddPlayer(PlayerOptions playerOptions)
+        {
+            if (playerRows.Count >= 4)
+            {
+                ShowValidationError("Maximum player count is 4.");
+                _audioManager.PlayUISound(UIAudioType.Error);
+                return;
+            }
+
+            ClearValidationError();
+
+            PlayerRow newPlayerRow = _container.InstantiatePrefab(playerRowPrefab, playerRowContainer).GetComponent<PlayerRow>();
+            if (newPlayerRow == null)
+            {
+                Debug.LogError($"[GameOptionsPopup::AddPlayer] Failed to instantiate new player row.");
+                return;
+            }
+
+            int botDifficulty = 0;
+            if (playerOptions.PlayerType == PlayerType.MediumBot)
+                botDifficulty = 1;
+            else if (playerOptions.PlayerType == PlayerType.HardBot)
+                botDifficulty = 2;
+
+            playerRows.Add(newPlayerRow);
+            newPlayerRow.Initialize(
+                playerRows.Count,
+                playerOptions.PlayerType == PlayerType.Human,
+                playerOptions.PlayerName,
+                botDifficulty);
+
+            newPlayerRow.OnPlayerRemoved?.AddListener(OnPlayerRowRemoved);
+        }
+
+        private void OnPlayerRowRemoved(int playerNumber)
+        {
+            PlayerRow playerRow = playerRows.FirstOrDefault(pr => pr.PlayerNumber == playerNumber);
+            if (playerRow == null)
+            {
+                Debug.LogError($"[GameOptionsPopup::OnPlayerRemoved] Player with number {playerNumber} does not exist.");
+                return;
+            }
+
+            playerRows.Remove(playerRow);
+            for (int i = 0; i < playerRows.Count; i++)
+            {
+                playerRows[i].SetPlayerNumber(i + 1);
+            }
+
+            ClearValidationError();
+        }
+
         public void ClosePopup()
         {
+            for (int i = 0; i < playerRowContainer.childCount; i++)
+            {
+                Destroy(playerRowContainer.GetChild(i).gameObject);
+            }
+
+            playerRows.Clear();
+
             background.SetActive(false);
             popupPanel.SetActive(false);
         }
@@ -75,93 +128,69 @@ namespace PSG.IsleOfColors.UI.MainMenu
             }
 
             SavePlayerPrefs();
-
-            GameOptions options = new GameOptions
-            {
-                Players = new ()
-                {
-                    new()
-                    {
-                        PlayerName = player1NameInput.text,
-                        PlayerType = GameOptions.PlayerType.Human
-                    },
-                    new()
-                    {
-                        PlayerName = isSinglePlayer ? GetBotName() : player2NameInput.text,
-                        PlayerType = GetSecondPlayerType()
-                        
-                    }
-                },
-                ShowTutorial = tutorialToggle.isOn
-            };
+            GameOptions options = GetGameOptions();
 
             _audioManager.PlayUISound(UIAudioType.Confirm);
 
-            _analyticsManager.GameStarted(isSinglePlayer ? GetSecondPlayerType() : null);
+            // TODO: Fix analytics for multiplayer
+            // _analyticsManager.GameStarted(isSinglePlayer ? GetSecondPlayerType() : null);
 
             _applicationManager.StartGame(options);
         }
 
-        private GameOptions.PlayerType GetSecondPlayerType()
+        private GameOptions GetGameOptions()
         {
-            if (isSinglePlayer)
+            return new GameOptions
             {
-                switch (difficultyDropdown.value)
-                {
-                    case 0: return GameOptions.PlayerType.EasyBot;
-                    case 1: return GameOptions.PlayerType.MediumBot;
-                    case 2: return GameOptions.PlayerType.HardBot;
-                }
-            }
-
-            return GameOptions.PlayerType.Human;
-        }
-
-        private string GetBotName()
-        {
-            if (isSinglePlayer)
-            {
-                switch (difficultyDropdown.value)
-                {
-                    case 0: return "David BOT";
-                    case 1: return "Vierka BOT";
-                    case 2: return "Janči BOT";
-                }
-            }
-
-            return null;
+                Players = playerRows.Select(pr => GetPlayerOptionsFromRow(pr)).ToList(),
+                ShowTutorial = tutorialToggle.isOn
+            };
         }
 
         private void LoadPlayerPrefs()
         {
-            player1NameInput.text = PlayerPrefs.GetString("Player1Name");
-            player2NameInput.text = PlayerPrefs.GetString("Player2Name");
-            difficultyDropdown.value = PlayerPrefs.GetInt("Difficulty");
-            tutorialToggle.isOn = PlayerPrefs.GetInt("ShowTutorial") == 1;
+            if (!PlayerPrefs.HasKey(GAME_OPTIONS_KEY))
+            {
+                return;
+            }
+
+            GameOptions gameOptions = JsonUtility.FromJson<GameOptions>(PlayerPrefs.GetString(GAME_OPTIONS_KEY));
+
+            if (gameOptions.Players == null)
+            {
+                return;
+            }
+
+            foreach (PlayerOptions playerOptions in gameOptions.Players)
+            {
+                AddPlayer(playerOptions);
+            }
+
+            tutorialToggle.isOn = gameOptions.ShowTutorial;
         }
 
-        private void SavePlayerPrefs()
+        public void SavePlayerPrefs()
         {
-            PlayerPrefs.SetString("Player1Name", player1NameInput.text);
-            PlayerPrefs.SetInt("ShowTutorial", tutorialToggle.isOn ? 1 : 0);
-
-            if (isSinglePlayer)
-                PlayerPrefs.SetInt("Difficulty", difficultyDropdown.value);
-            else
-                PlayerPrefs.SetString("Player2Name", player2NameInput.text);
+            PlayerPrefs.SetString(GAME_OPTIONS_KEY, JsonUtility.ToJson(GetGameOptions()));
         }
 
         private bool ValidateGameOptions()
         {
-            if (String.IsNullOrWhiteSpace(player1NameInput.text))
+            if (playerRows.Count < 2)
             {
-                ShowValidationError("Player 1 name cannot be empty.", player1NameInput.gameObject);
+                ShowValidationError("At least 2 players are needed to play the game.");
                 return false;
             }
 
-            if (String.IsNullOrWhiteSpace(player2NameInput.text) && !isSinglePlayer)
+            if (!playerRows.Any(pr => pr.IsHuman))
             {
-                ShowValidationError("Player 2 name cannot be empty.", player2NameInput.gameObject);
+                ShowValidationError("At least one player has to be human.");
+                return false;
+            }
+
+            if (playerRows.Any(pr => pr.IsHuman && string.IsNullOrEmpty(pr.HumanPlayerName)))
+            {
+                ShowValidationError("Player name cannot be empty.");
                 return false;
             }
 
@@ -175,12 +204,64 @@ namespace PSG.IsleOfColors.UI.MainMenu
             validationErrorLabel.gameObject.SetActive(false);
         }
 
-        private void ShowValidationError(string errorMessage, GameObject element)
+        private void ShowValidationError(string errorMessage, GameObject element = null)
         {
             validationErrorLabel.text = errorMessage;
             validationErrorLabel.gameObject.SetActive(true);
 
-            EventSystem.current.SetSelectedGameObject(element);
+            if (element != null)
+                EventSystem.current.SetSelectedGameObject(element);
+        }
+
+        private PlayerOptions GetPlayerOptionsFromRow(PlayerRow playerRow)
+        {
+            if (playerRow == null)
+            {
+                Debug.LogError($"[GameOptionsPopup::GetPlayerOptionsFromRow] Player row is invalid.");
+                return default;
+            }
+
+            return new()
+            {
+                PlayerName = playerRow.IsHuman ? playerRow.HumanPlayerName : GetBotName(playerRow),
+                PlayerType = playerRow.PlayerType
+
+            };
+        }
+
+        private string GetBotName(PlayerRow playerRow)
+        {
+            if (playerRow.IsHuman)
+                return null;
+
+            switch (playerRow.BotDifficulty)
+            {
+                case 0:
+                    if (easyBotNames == null || easyBotNames.Length == 0)
+                    {
+                        Debug.LogError($"[GameOptionsPopup::GetBotName] Easy bot names is invalid.");
+                        return null;
+                    }
+                    return easyBotNames[playerRow.PlayerNumber % easyBotNames.Length];
+                case 1:
+                    if (mediumBotNames == null || mediumBotNames.Length == 0)
+                    {
+                        Debug.LogError($"[GameOptionsPopup::GetBotName] Medium bot names is invalid.");
+                        return null;
+                    }
+                    return mediumBotNames[playerRow.PlayerNumber % mediumBotNames.Length];
+                case 2:
+                    if (hardBotNames == null || hardBotNames.Length == 0)
+                    {
+                        Debug.LogError($"[GameOptionsPopup::GetBotName] Hard bot names is invalid.");
+                        return null;
+                    }
+                    return hardBotNames[playerRow.PlayerNumber % hardBotNames.Length];
+                default:
+                    Debug.LogError($"[GameOptionsPopup::GetBotName] Bot difficulty {playerRow.BotDifficulty} is invalid.");
+                    return null;
+
+            }
         }
     }
 }
