@@ -1,75 +1,52 @@
-using System;
-using System.Linq;
 using PSG.IsleOfColors.Gameplay;
-using PSG.IsleOfColors.Gameplay.Scoring;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
     public class PlayerPanel : MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI playerNumberText;
         [SerializeField] private TextMeshProUGUI playerNameText;
-        [SerializeField] private TextMeshProUGUI scoreText;
 
-        private Player currentPlayer;
-
-        private ColorUsagePanel[] colorUsagePanels;
-
-        [Inject] private GameManager _gameManager;
-
-        private void Start()
-        {
-            colorUsagePanels = GetComponentsInChildren<ColorUsagePanel>();
-
-            _gameManager.InvokeAfterInitialization(OnGameInitialized);
-        }
-
-        private void OnGameInitialized()
-        {
-            _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-            foreach (Player player in _gameManager.Players)
-            {
-                player.OnPlayerScoreChanged.AddListener(OnPlayerScoreChanged);
-            }
-
-            OnCurrentPlayerChanged(_gameManager.Players.First());
-
-            _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
-        }
-
-        private void OnCurrentPlayerChanged(Player currentPlayer)
-        {
-            this.currentPlayer = currentPlayer;
-            playerNameText.text = currentPlayer.Name;
-
-            OnPlayerScoreChanged(currentPlayer);
-
-            foreach (var panel in colorUsagePanels)
-            {
-                panel.PlayerChanged(currentPlayer);
-            }
-        }
-
-        private void OnPlayerScoreChanged(Player player)
+        public void Initialize(int playerNumber, Player player)
         {
             if (player == null)
             {
-                Debug.LogError($"[PlayerPanel::OnPlayerScoreChanged] Player is invalid");
+                Debug.LogError($"[PlayerPanel::Initialize] Player is invalid.");
+                return;
+            }
+            
+            if (playerNameText == null)
+            {
+                Debug.LogError($"[PlayerPanel::Initialize] Player name text is invalid.");
                 return;
             }
 
-            if (player.Score == null)
+            playerNameText.text = player.Name;
+
+            if (playerNumberText == null)
             {
+                Debug.LogError($"[PlayerPanel::Initialize] Player number text is invalid.");
                 return;
             }
 
-            if (player == currentPlayer)
+            playerNumberText.text = playerNumber.ToString();
+
+            ColorScore[] colorScores = GetComponentsInChildren<ColorScore>();
+            foreach (ColorScore colorScore in colorScores)
             {
-                scoreText.text = player.Score.TotalScore.ToString();
+                colorScore.Initialize(player);
             }
+
+            TotalScore totalScore = GetComponentInChildren<TotalScore>();
+            if(totalScore == null)
+            {
+                Debug.LogError($"[PlayerPanel::Initialize] Total score is not valid.");
+                return;
+            }
+            totalScore.Initialize(player);
         }
+
     }
 }

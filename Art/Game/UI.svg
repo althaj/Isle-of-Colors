@@ -25,15 +25,31 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2.1089995"
-     inkscape:cx="564.0115"
-     inkscape:cy="844.47624"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:zoom="4.217999"
+     inkscape:cx="1016.8329"
+     inkscape:cy="592.57956"
+     inkscape:window-width="2560"
+     inkscape:window-height="1361"
+     inkscape:window-x="2391"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="210"
+       height="297"
+       id="page3668" />
+    <inkscape:page
+       x="249.09677"
+       y="124.54839"
+       width="48.982998"
+       height="48.983002"
+       id="page3670"
+       inkscape:export-filename="..\..\Assets\Sprites\UI\Player color highlight 6.png"
+       inkscape:export-xdpi="400"
+       inkscape:export-ydpi="400" />
+  </sodipodi:namedview>
   <defs
      id="defs2">
     <linearGradient
@@ -101,7 +117,7 @@
        x2="1.5"
        y2="117.5"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.90909091,0,0,1.8181091,5.1363636,-98.627819)" />
+       gradientTransform="matrix(-0.90909091,0,0,1.8181091,107.86364,-98.627819)" />
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1294"
@@ -181,7 +197,7 @@
     <path
        id="path3691"
        style="opacity:1;fill:url(#linearGradient3729);fill-opacity:1;stroke:none;stroke-width:4.24256;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:0.983287;paint-order:normal"
-       d="m 6.5,105 v 10 h 100 v -10 z"
+       d="m 106.5,105 v 10 H 6.5 v -10 z"
        inkscape:label="Shadow"
        sodipodi:nodetypes="ccccc"
        inkscape:export-filename="..\..\Assets\Sprites\UI\Panel.png"
@@ -338,5 +354,49 @@
        d="M 132.77464,200.452 H 144.942 v 24.3342 H 157.10917 169.276 V 200.452 l 12.1677,-3.3e-4 -24.33453,-24.33453 z"
        inkscape:label="Frame"
        sodipodi:nodetypes="ccccccccc" />
+    <path
+       sodipodi:type="star"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:15.1181"
+       id="path1605"
+       inkscape:flatsided="true"
+       sodipodi:sides="6"
+       sodipodi:cx="157.54839"
+       sodipodi:cy="260.45163"
+       sodipodi:r1="22.759521"
+       sodipodi:r2="19.710323"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.0471976"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 177.25871,271.83139 -19.71032,11.37976 -19.71033,-11.37976 0,-22.75952 19.71033,-11.37976 19.71032,11.37976 z"
+       inkscape:transform-center-x="1.9848616e-06"
+       inkscape:transform-center-y="-3.2812802e-06"
+       transform="translate(116.0399,-111.41173)" />
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 273.58828,132.42638 v -6.14599 l 19.71032,11.37976 -5.32258,3.073 z"
+       id="path2585" />
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 287.97602,140.73315 5.32258,-3.073 v 22.75953 l -5.32258,-3.073 z"
+       id="path3313"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 287.97602,157.34668 5.32258,3.073 -19.71032,11.37976 v -6.14601 z"
+       id="path3315"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 273.58828,165.65343 v 6.14601 l -19.71033,-11.37976 5.32259,-3.073 z"
+       id="path3317" />
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 259.20054,157.34668 v -16.61353 l -5.32259,-3.073 v 22.75953 z"
+       id="path3319" />
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 259.20054,140.73315 14.38774,-8.30677 v -6.14599 l -19.71033,11.37976 z"
+       id="path3321" />
   </g>
 </svg>

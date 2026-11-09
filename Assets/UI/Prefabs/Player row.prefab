@@ -735,7 +735,6 @@ MonoBehaviour:
   easyButton: {fileID: 8712533210510220547}
   mediumButton: {fileID: 5192186593251159134}
   hardButton: {fileID: 8627857395851205130}
-  selectedButtonColor: {r: 0.23366857, g: 0.39545205, b: 0.8396226, a: 1}
   removePlayerButton: {fileID: 3613116567536573197}
   OnPlayerRemoved:
     m_PersistentCalls:
