@@ -177,7 +177,7 @@ namespace PSG.IsleOfColors.UI
         {
             foreach (Button b in new List<Button> { easyButton, mediumButton, hardButton })
             {
-                HighlightableButton highlight = b.GetComponent<HighlightableButton>();
+                HighlightUI highlight = b.GetComponent<HighlightUI>();
                 if (highlight == null)
                 {
                     Debug.LogError($"[PlayerRow::HighlightButton] Button {b.name} is not highlightable button.");

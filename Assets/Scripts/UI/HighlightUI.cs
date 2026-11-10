@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace PSG.IsleOfColors.UI
 {
-    public class HighlightableButton : MonoBehaviour
+    public class HighlightUI : MonoBehaviour
     {
         [SerializeField] private Image highlightImage;
 

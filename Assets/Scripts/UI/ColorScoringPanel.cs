@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Gameplay.Scoring;
 using TMPro;
@@ -11,101 +9,59 @@ namespace PSG.IsleOfColors.UI
 {
     public class ColorScoringPanel : MonoBehaviour
     {
-        [SerializeField] private bool isSetupScoring;
-
         [SerializeField] private PencilColor color;
 
-        [SerializeField] private Image image;
+        [SerializeField] private Image colorImage;
         [SerializeField] private TextMeshProUGUI scoringTitleText;
-        [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private TextMeshProUGUI descriptionText;
-        [SerializeField] private GameObject descriptionPanel;
-
-        private bool isShown;
-
-        private Player currentPlayer;
 
         [Inject] private GameManager _gameManager;
 
         private void Start()
         {
-            Display(false);
-            
+            if (_gameManager == null)
+            {
+                Debug.LogError($"[ColorScoringPanel::Start] Game manager is invalid.");
+                return;
+            }
             _gameManager.InvokeAfterInitialization(OnGameInitialized);
         }
 
         private void OnGameInitialized()
         {
+            if (_gameManager == null)
+            {
+                Debug.LogError($"[ColorScoringPanel::OnGameInitialized] Game manager is invalid.");
+                return;
+            }
+
+            if (colorImage == null)
+            {
+                Debug.LogError($"[ColorScoringPanel::OnGameInitialized] Color image is invalid.");
+                return;
+            }
+
+            if (scoringTitleText == null)
+            {
+                Debug.LogError($"[ColorScoringPanel::OnGameInitialized] Scoring title text is invalid.");
+                return;
+            }
+
+            if (descriptionText == null)
+            {
+                Debug.LogError($"[ColorScoringPanel::OnGameInitialized] Description text is invalid.");
+                return;
+            }
+
             IScoring scoring = _gameManager.GetScoring(color);
             if (scoring == null)
                 return;
 
-            Display(true);
-
-            image.color = color.Color;
+            colorImage.color = color.Color;
             scoringTitleText.text = scoring.GetName();
             descriptionText.text = scoring.GetDescription();
 
-            if (!isSetupScoring)
-            {
-                _gameManager.OnCurrentPlayerChanged.AddListener(OnCurrentPlayerChanged);
-                foreach(Player player in _gameManager.Players)
-                {
-                    OnPlayerScoreChanged(player);
-                }
-                
-                OnCurrentPlayerChanged(_gameManager.Players.FirstOrDefault());
-            }
-
             _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
-        }
-
-        private void Display(bool show)
-        {
-            image.enabled = show;
-            scoringTitleText.enabled = show;
-            descriptionText.enabled = show;
-
-            if(!isSetupScoring)
-            {
-                scoreText.enabled = show;
-            }
-
-            isShown = show;
-        }
-
-        private void OnCurrentPlayerChanged(Player currentPlayer)
-        {
-            this.currentPlayer = currentPlayer;
-            OnPlayerScoreChanged(currentPlayer);
-        }
-
-        private void OnPlayerScoreChanged(Player currentPlayer)
-        {
-            if(currentPlayer == null)
-            {
-                Debug.LogError("[ColorScoringPanel:OnPlayerScoreChanged] Player is invalid.");
-                return;
-            }
-
-            if(currentPlayer.Score == null || !currentPlayer.Score.ColorScores.ContainsKey(color))
-            {
-                return;
-            }
-
-            if(this.currentPlayer == currentPlayer)
-                scoreText.text = currentPlayer.Score.ColorScores[color].ToString();
-        }
-
-        public void OnPointerEnter()
-        {
-            if(isShown)
-                descriptionPanel.SetActive(true);
-        }
-
-        public void OnPointerExit()
-        {
-            descriptionPanel.SetActive(false);
         }
     }
 }

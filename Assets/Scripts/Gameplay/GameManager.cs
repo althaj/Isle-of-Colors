@@ -40,7 +40,7 @@ namespace PSG.IsleOfColors.Gameplay
         public IScoring BrownScoring { get; private set; }
         public IScoring RedScoring { get; private set; }
 
-        private Player currentPlayer;
+        public Player CurrentPlayer { get; private set; }
 
         public int CurrentDieRoll { get; private set; }
 
@@ -218,16 +218,16 @@ namespace PSG.IsleOfColors.Gameplay
             }
         }
 
-        private void SetCurrentPlayer(Player player)
+        public void SetCurrentPlayer(Player player)
         {
-            currentPlayer = player;
+            CurrentPlayer = player;
 
-            OnCurrentPlayerChanged?.Invoke(currentPlayer);
+            OnCurrentPlayerChanged?.Invoke(CurrentPlayer);
         }
 
         public void SwitchPlayer()
         {
-            if (currentPlayer == null)
+            if (CurrentPlayer == null)
             {
                 UnityEngine.Debug.LogError($"[GameManager::SwitchPlayer] Current Player is invalid.");
                 return;
@@ -239,7 +239,7 @@ namespace PSG.IsleOfColors.Gameplay
                 return;
             }
 
-            int index = System.Array.IndexOf(Players, currentPlayer);
+            int index = System.Array.IndexOf(Players, CurrentPlayer);
             if (index < 0)
             {
                 UnityEngine.Debug.LogError($"[GameManager::SwitchPlayer] Current player not found in Players array.");
@@ -247,13 +247,13 @@ namespace PSG.IsleOfColors.Gameplay
             }
 
             int nextIndex = (index + 1) % Players.Length;
-            currentPlayer = Players[nextIndex];
-            OnCurrentPlayerChanged?.Invoke(currentPlayer);
+            CurrentPlayer = Players[nextIndex];
+            OnCurrentPlayerChanged?.Invoke(CurrentPlayer);
         }
 
         public void Confirm()
         {
-            currentPlayer.Confirm();
+            CurrentPlayer.Confirm();
         }
 
         public void UseColor(Player player, PencilColor color)
@@ -270,7 +270,7 @@ namespace PSG.IsleOfColors.Gameplay
 
         public void Undo()
         {
-            currentPlayer.Undo();
+            CurrentPlayer.Undo();
         }
 
         public void Reset()
@@ -283,7 +283,7 @@ namespace PSG.IsleOfColors.Gameplay
                 player.Reset();
             }
 
-            for(int i = 0; i < UsedColors.Length; i++)
+            for (int i = 0; i < UsedColors.Length; i++)
             {
                 UsedColors[i] = null;
             }

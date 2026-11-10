@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PSG.IsleOfColors.Gameplay.AI;
 using PSG.IsleOfColors.Managers;
+using UnityEngine;
 
 namespace PSG.IsleOfColors.Gameplay.StateMachine.States
 {
@@ -42,16 +43,23 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
         {
             if (_gameManager.ColorTypes.Count != 4)
             {
-
+                Debug.LogError($"[SetupState::SetupGame] Incorrect color types, need 4, found {_gameManager.ColorTypes.Count}");
+                return;
             }
-            List<PencilColor> colors = new();
-            for (int i = 0; i < _gameManager.Players.Count() / 2; i++)
+
+            int playerCount = _gameManager.Players.Count();
+            List<PencilColor> colors = ShuffleColors(_gameManager.ColorTypes);
+            if (playerCount > 2)
             {
-                colors.AddRange(_gameManager.ColorTypes);
+                colors.AddRange(ShuffleColors(_gameManager.ColorTypes));
             }
 
-            // TODO implement shuffle to RNGManager
-            colors = colors.OrderBy(x => RNGManager.RNGManager.Manager["Game"].NextInt(100)).ToList();
+            if (playerCount == 3)
+            {
+                colors.RemoveRange(6, colors.Count - 6);
+            }
+
+            colors = ShuffleColors(colors);
 
             for (int i = 0; i < _applicationManager.GameOptions.Players.Count; i++)
             {
@@ -66,6 +74,20 @@ namespace PSG.IsleOfColors.Gameplay.StateMachine.States
             }
 
             isDone = true;
+        }
+
+        private List<PencilColor> ShuffleColors(IEnumerable<PencilColor> colors)
+        {
+            List<PencilColor> shuffledColors = colors.ToList();
+            for (int i = shuffledColors.Count - 1; i > 0; i--)
+            {
+                int j = RNGManager.RNGManager.Manager["Game"].NextInt(i + 1);
+                PencilColor color = shuffledColors[i];
+                shuffledColors[i] = shuffledColors[j];
+                shuffledColors[j] = color;
+            }
+
+            return shuffledColors;
         }
 
         public void Execute()

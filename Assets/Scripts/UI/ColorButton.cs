@@ -22,7 +22,7 @@ namespace PSG.IsleOfColors.UI
                 buttonComponent.onClick.AddListener(() => player.StartColoring(color));
             }
 
-            HighlightableButton highlightableButtonComponent = GetComponent<HighlightableButton>();
+            HighlightUI highlightableButtonComponent = GetComponent<HighlightUI>();
             if(highlightableButtonComponent != null)
             {
                 highlightableButtonComponent.SetHighlight(player.GetColor() == color);

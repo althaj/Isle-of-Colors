@@ -1,4 +1,3 @@
-using System;
 using PSG.IsleOfColors.Gameplay;
 using UnityEngine;
 using Zenject;
@@ -10,6 +9,7 @@ namespace PSG.IsleOfColors.UI
         [SerializeField] private PlayerPanel playerPanelPrefab;
 
         [Inject] private GameManager _gameManager;
+        [Inject] private DiContainer _diContainer;
 
         void Start()
         {
@@ -43,9 +43,15 @@ namespace PSG.IsleOfColors.UI
                 return;
             }
 
+            if(_diContainer == null)
+            {
+                Debug.LogError($"[PlayerPanelsContainer::InitializePlayerPanels] Dependency injection container is invalid.");
+                return;
+            }
+
             for (int i = 0; i < _gameManager.Players.Length; i++)
             {
-                PlayerPanel playerPanel = Instantiate(playerPanelPrefab, transform);
+                PlayerPanel playerPanel = _diContainer.InstantiatePrefab(playerPanelPrefab, transform).GetComponent<PlayerPanel>();
                 if (playerPanel == null)
                 {
                     Debug.LogError($"[PlayerPanelsContainer::OnGameInitialized] Player panel is invalid.");

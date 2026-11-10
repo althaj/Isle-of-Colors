@@ -11,8 +11,8 @@ namespace PSG.IsleOfColors.UI
         private Button button;
 
         [SerializeField] private bool initialState = true;
-        [SerializeField] private HighlightableButton highlightOn;
-        [SerializeField] private HighlightableButton highlightOff;
+        [SerializeField] private HighlightUI highlightOn;
+        [SerializeField] private HighlightUI highlightOff;
 
         private bool state;
         private bool initialized = false;
