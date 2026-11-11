@@ -1,50 +1,19 @@
+using System.Collections.Generic;
 using System.Linq;
 using PSG.IsleOfColors.Gameplay;
 using PSG.IsleOfColors.Managers;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace PSG.IsleOfColors.UI
 {
     public class EndGamePopup : MonoBehaviour
     {
-        [SerializeField] private GameObject popup;
+        [SerializeField] private GameObject panel;
+        [SerializeField] private GameObject background;
 
-        [Header("Player names")]
-        [SerializeField] private TextMeshProUGUI player1Name;
-        [SerializeField] private TextMeshProUGUI player2Name;
-
-        [Header("Green scoring")]
-        [SerializeField] private Image greenImage;
-        [SerializeField] private TextMeshProUGUI greenTitle;
-        [SerializeField] private TextMeshProUGUI greenScore1;
-        [SerializeField] private TextMeshProUGUI greenScore2;
-
-        [Header("Blue scoring")]
-        [SerializeField] private Image blueImage;
-        [SerializeField] private TextMeshProUGUI blueTitle;
-        [SerializeField] private TextMeshProUGUI blueScore1;
-        [SerializeField] private TextMeshProUGUI blueScore2;
-
-        [Header("Brown scoring")]
-        [SerializeField] private Image brownImage;
-        [SerializeField] private TextMeshProUGUI brownTitle;
-        [SerializeField] private TextMeshProUGUI brownScore1;
-        [SerializeField] private TextMeshProUGUI brownScore2;
-
-        [Header("Red scoring")]
-        [SerializeField] private Image redImage;
-        [SerializeField] private TextMeshProUGUI redTitle;
-        [SerializeField] private TextMeshProUGUI redScore1;
-        [SerializeField] private TextMeshProUGUI redScore2;
-
-        [Header("Total scoring")]
-        [SerializeField] private TextMeshProUGUI totalScore1;
-        [SerializeField] private TextMeshProUGUI totalScore2;
-        [SerializeField] private Image totalScore1Background;
-        [SerializeField] private Image totalScore2Background;
+        [SerializeField] private RectTransform playerCardsContainer;
+        [SerializeField] private PlayerCard playerCardPrefab;
 
         [Inject] private ApplicationManager _applicationManager;
         [Inject] private AnalyticsManager _analyticsManager;
@@ -63,55 +32,111 @@ namespace PSG.IsleOfColors.UI
 
         public void OpenPopup()
         {
-            if(_gameManager == null)
+            if (_gameManager == null)
             {
                 Debug.LogError($"[EndGamePopup::OpenPopup] Game Manager is invalid.");
                 return;
             }
 
-            if(_gameManager.Players.Count() < 2)
+            if (panel == null)
             {
-                Debug.LogError($"[EndGamePopup::OpenPopup] Not enough players in Game Mamanger.");
+                Debug.LogError($"[EndGamePopup::OpenPopup] Panel is invalid.");
                 return;
             }
 
-            Player player1 = _gameManager.Players[0];
-            Player player2 = _gameManager.Players[1];
+            if (background == null)
+            {
+                Debug.LogError($"[EndGamePopup::OpenPopup] Background is invalid.");
+                return;
+            }
 
-            player1Name.text = player1.Name;
-            player2Name.text = player2.Name;
+            if (playerCardsContainer == null)
+            {
+                Debug.LogError($"[EndGamePopup::OpenPopup] Player cards container is invalid.");
+                return;
+            }
 
-            FillColorRow(player1, player2, "Green", greenImage, greenTitle, greenScore1, greenScore2);
-            FillColorRow(player1, player2, "Blue", blueImage, blueTitle, blueScore1, blueScore2);
-            FillColorRow(player1, player2, "Brown", brownImage, brownTitle, brownScore1, brownScore2);
-            FillColorRow(player1, player2, "Red", redImage, redTitle, redScore1, redScore2);
+            Dictionary<PencilColor, int> maximumScores = GetMaximumColorScores();
+            int winningTotalScore = _gameManager.Players
+                .OrderByDescending(p => p.Score.TotalScore)
+                .Select(p => p.Score.TotalScore)
+                .First();
 
-            totalScore1.text = player1.Score.TotalScore.ToString();
-            totalScore2.text = player2.Score.TotalScore.ToString();
+            foreach (Player player in _gameManager.Players)
+            {
+                PlayerCard playerCard = Instantiate(playerCardPrefab, playerCardsContainer);
+                if (playerCard == null)
+                {
+                    Debug.LogError($"[EndGamePopup::OpenPopup] Player card failed to instantiate.");
+                    continue;
+                }
 
-            if(player1.Score.TotalScore >= player2.Score.TotalScore)
-                totalScore1Background.color = Color.white;
+                playerCard.Initialize(player, maximumScores, winningTotalScore);
+            }
 
-            if(player2.Score.TotalScore >= player1.Score.TotalScore)
-                totalScore2Background.color = Color.white;
-
-            popup.SetActive(true);
+            panel.SetActive(true);
+            background.SetActive(true);
 
             _analyticsManager.GameEnded(_gameManager, _applicationManager);
         }
 
-        private void FillColorRow(Player player1, Player player2, string colorName, Image image, TextMeshProUGUI title, TextMeshProUGUI player1Score, TextMeshProUGUI player2Score)
+        private Dictionary<PencilColor, int> GetMaximumColorScores()
         {
-            var color = _gameManager.GetColorByName(colorName);
-            image.color = color.Color;
-            title.text = _gameManager.GetScoring(color).GetName();
-            player1Score.text = player1.Score.ColorScores[color].ToString();
-            player2Score.text = player2.Score.ColorScores[color].ToString();
+            Dictionary<PencilColor, int> maximumScores = new();
+            foreach (Player player in _gameManager.Players)
+            {
+                if (player == null || player.Score == null)
+                {
+                    Debug.LogError($"[EndGamePopup::OpenPo] Player or score is invalid.");
+                    continue;
+                }
+
+                foreach (PencilColor color in player.Score.ColorScores.Keys)
+                {
+                    if (maximumScores.ContainsKey(color))
+                    {
+                        if (player.Score.ColorScores[color] > maximumScores[color])
+                        {
+                            maximumScores[color] = player.Score.ColorScores[color];
+                        }
+                    }
+                    else
+                    {
+                        maximumScores.Add(color, player.Score.ColorScores[color]);
+                    }
+                }
+            }
+
+            return maximumScores;
         }
 
         private void ClosePopup()
         {
-            popup.SetActive(false);
+            if (panel == null)
+            {
+                Debug.LogError($"[EndGamePopup::ClosePopup] Panel is invalid.");
+                return;
+            }
+
+            if (background == null)
+            {
+                Debug.LogError($"[EndGamePopup::ClosePopup] Background is invalid.");
+                return;
+            }
+
+            if (playerCardsContainer == null)
+            {
+                Debug.LogError($"[EndGamePopup::ClosePopup] Player cards container is invalid.");
+                return;
+            }
+
+            for (int i = 0; i < playerCardsContainer.childCount; i++)
+            {
+                Destroy(playerCardsContainer.GetChild(i).gameObject);
+            }
+
+            panel.SetActive(false);
+            background.SetActive(false);
         }
 
         public void CloseToMainMenu()

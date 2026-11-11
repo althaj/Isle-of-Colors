@@ -47,19 +47,17 @@ namespace PSG.IsleOfColors.UI
                 return;
             }
 
-            if (descriptionText == null)
-            {
-                Debug.LogError($"[ColorScoringPanel::OnGameInitialized] Description text is invalid.");
-                return;
-            }
-
             IScoring scoring = _gameManager.GetScoring(color);
             if (scoring == null)
                 return;
 
             colorImage.color = color.Color;
             scoringTitleText.text = scoring.GetName();
-            descriptionText.text = scoring.GetDescription();
+
+            if (descriptionText != null)
+            {
+                descriptionText.text = scoring.GetDescription();
+            }
 
             _gameManager.OnGameInitialized.RemoveListener(OnGameInitialized);
         }
